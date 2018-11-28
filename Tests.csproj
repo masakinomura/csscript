@@ -51,8 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\UnitTest\TestLiteral.cs" />
-     <None Include="Assets\UnitTest\CSScriptTest.txt" />
+     <Compile Include="Assets\CSScriptUnitTest\TestLiteral.cs" />
+     <None Include="Assets\CSScriptUnitTest\CSScriptTest.txt" />
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
  </Reference>
