@@ -1,2 +1,4 @@
-﻿33;
+﻿var myInt = 3;
+var myVal;
+33;
 hoge44;

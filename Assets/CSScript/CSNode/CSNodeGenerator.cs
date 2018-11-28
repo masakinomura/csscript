@@ -7,48 +7,55 @@ namespace CSScript {
 	public class CSNodeGenerator : CSScriptBaseVisitor<CSNode> {
 
 		public override CSNode VisitCode (CSScriptParser.CodeContext context) {
-			Debug.Log ("visit code");
-
-			CSNode code = new CSNode ();
+			CSNode node = new CSNode ();
 
 			CSScriptParser.LineContext[] lines = context.line ();
 			int len = lines.Length;
-			code._children = new CSNode[len];
+			node._children = new CSNode[len];
 
 			for (int i = 0; i < len; ++i) {
-				code._children[i] = Visit (lines[i]);
+				node._children[i] = Visit (lines[i]);
 			}
 
-			return code;
+			return node;
 		}
 
 		public override CSNode VisitLine (CSScriptParser.LineContext context) {
-			Debug.Log ("visit line");
-
-			CSNode line = new CSNode ();
+			CSNode node = new CSNode ();
 			CSScriptParser.ExpressionContext[] expressions = context.expression ();
 
 			int len = expressions.Length;
-			line._children = new CSNode[len];
+			node._children = new CSNode[len];
 
 			for (int i = 0; i < len; ++i) {
-				line._children[i] = Visit (expressions[i]);
+				node._children[i] = Visit (expressions[i]);
 			}
 
-			return line;
+			return node;
 		}
 
 		public override CSNode VisitIntAtomExp (CSScriptParser.IntAtomExpContext context) {
-			CSIntNode intNode = new CSIntNode();
+			CSIntNode node = new CSIntNode ();
 
 			int val = 0;
-			if(!int.TryParse(context.INT().GetText(), out val)) {
-				Debug.LogError("failed to parse int: " + context.INT().GetText());
+			if (!int.TryParse (context.INT ().GetText (), out val)) {
+				Debug.LogError ("failed to parse int: " + context.INT ().GetText ());
 			}
-			Debug.Log ("visit int: " + val);
-			intNode._val = val;
-			return intNode;
+
+			node._val = val;
+			return node;
 		}
 
+		public override CSNode VisitAssignmentExp (CSScriptParser.AssignmentExpContext context) {
+			CSAssignNode node = new CSAssignNode ();
+
+			return node;
+		}
+		public override CSNode VisitVariable (CSScriptParser.VariableContext context) {
+			CSVariableNode variableNode = new CSVariableNode ();
+			variableNode._variableName = context.NAME ().GetText ();
+			variableNode._declare = (context.VAR () != null);
+			return variableNode;
+		}
 	}
 }

@@ -6,47 +6,26 @@ using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace CSScript {
-	public class TestLiteral {
-
-		public CSScriptParser CreateParser (string code) {
-			AntlrInputStream inputStream = new AntlrInputStream (code);
-			CSScriptLexer lexer = new CSScriptLexer (inputStream);
-			CommonTokenStream commonTokenStream = new CommonTokenStream (lexer);
-			return new CSScriptParser (commonTokenStream);
-		}
+	public class TestLiteral : TestParse {
 
 		[Test]
 		public void IntegerLiteral () {
 
-			CSScriptParser parser = CreateParser ("123;");
-
-			CSScriptParser.CodeContext code = parser.code ();
-
-			CSNodeGenerator generator = new CSNodeGenerator ();
-
-			CSNode root = generator.Visit (code);
-
+			CSNode root = ParseScript ("123;");
 			Assert.AreEqual (typeof (CSNode), root.GetType ());
 			Assert.AreEqual (1, root.ChildCount);
 
 			CSNode line = root.GetChild (0);
-
 			Assert.AreEqual (typeof (CSNode), line.GetType ());
 			Assert.AreEqual (1, line.ChildCount);
 
-			//Antlr4.Runtime.ParserInterpreter
+			CSNode intNode = line.GetChild (0);
+			Assert.AreEqual (typeof (CSIntNode), intNode.GetType ());
+			Assert.AreEqual (0, intNode.ChildCount);
 
-			//code.li
+			Assert.AreEqual (123, root.Evaluate ().Value);
 
 		}
 
-		// A UnityTest behaves like a coroutine in PlayMode
-		// and allows you to yield null to skip a frame in EditMode
-		// [UnityTest]
-		// public IEnumerator NewTestScriptWithEnumeratorPasses () {
-		// 	// Use the Assert class to test conditions.
-		// 	// yield to skip a frame
-		// 	yield return null;
-		// }
 	}
 }

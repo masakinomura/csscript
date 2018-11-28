@@ -5,8 +5,12 @@ using UnityEngine;
 namespace CSScript {
 
 	[System.Serializable]
-	public class CSContainer : CSNode {
+	public class CSAssignNode : CSNode {
+		public int _val;
 
+		public override CSObject Evaluate (CSState state) {
+			return null;
+		}
 	}
 
 }

@@ -55,10 +55,14 @@
      <Compile Include="Assets\CSScript\Autogen\CSScriptLexer.cs" />
      <Compile Include="Assets\CSScript\Autogen\CSScriptParser.cs" />
      <Compile Include="Assets\CSScript\Autogen\CSScriptVisitor.cs" />
-     <Compile Include="Assets\CSScript\CSNode\CSContainer.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSAssignNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSIntNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSNodeGenerator.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSObject.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSScope.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSState.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSVariableNode.cs" />
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
  </Reference>
