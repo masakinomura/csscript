@@ -15,7 +15,7 @@ opinion             : TEXT ;
 */
 
 code				: line* ;
-line				: expression+ ';' NEWLINE*;
+line				: expression+ ';' EOL*;
 expression			: '(' expression ')' 					#parenthesisExp
 					| NAME									#idAtomExp
 					| INT									#intAtomExp;
@@ -54,5 +54,5 @@ LONG				: INT 'L' ;
 
 
 WHITESPACE          : (' '|'\t')+ -> skip ;
-NEWLINE             : ('\r'? '\n' | '\r')+ ;
+EOL                 : ('\r'? '\n' | '\r')+ ;
 

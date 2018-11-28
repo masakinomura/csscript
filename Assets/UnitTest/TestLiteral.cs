@@ -18,19 +18,25 @@ namespace CSScript {
 		[Test]
 		public void IntegerLiteral () {
 
-			CSScriptParser parser = CreateParser("123;");
+			CSScriptParser parser = CreateParser ("123;");
 
-			CSScriptParser.CodeContext code = parser.code();
+			CSScriptParser.CodeContext code = parser.code ();
 
-			CSNodeGenerator generator = new CSNodeGenerator();
+			CSNodeGenerator generator = new CSNodeGenerator ();
 
-			generator.Visit(code);
+			CSNode root = generator.Visit (code);
+
+			Assert.AreEqual (typeof (CSNode), root.GetType ());
+			Assert.AreEqual (1, root.ChildCount);
+
+			CSNode line = root.GetChild (0);
+
+			Assert.AreEqual (typeof (CSNode), line.GetType ());
+			Assert.AreEqual (1, line.ChildCount);
 
 			//Antlr4.Runtime.ParserInterpreter
 
 			//code.li
-
-
 
 		}
 
