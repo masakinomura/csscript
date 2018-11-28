@@ -1,0 +1,14 @@
+{
+    "name": "Tests",
+    "references": [
+        "CSScript"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
