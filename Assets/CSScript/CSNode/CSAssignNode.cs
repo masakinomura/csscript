@@ -9,9 +9,11 @@ namespace CSScript {
 		public CSNode Left { get { return _children[0]; } }
 		public CSNode Right { get { return _children[1]; } }
 
+		public CSAssignNode (int line, int column) : base (line, column) { }
+
 		public override CSObject Evaluate (CSState state) {
 			if (ChildCount != 2) {
-				Debug.LogError ("assigngment operator has invalid # of children...");
+				CSLog.E (this, "assigngment operator has invalid # of children...");
 				return null;
 			}
 			CSObject left = Left.Evaluate (state);

@@ -8,8 +8,9 @@ namespace CSScript {
 	public class CSIntNode : CSNode {
 		public int _val;
 
+		public CSIntNode (int line, int column) : base (line, column) { }
 		public override CSObject Evaluate (CSState state) {
-			return new CSObject(_val);
+			return new CSObject (this, _val);
 		}
 	}
 

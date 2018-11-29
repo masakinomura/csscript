@@ -9,7 +9,7 @@ namespace CSScript {
 		public CSScope Current {
 			get {
 				if (_current == null) {
-					Debug.LogError ("current scope is missing");
+					CSLog.E ("current scope is missing");
 				}
 				return _current;
 			}

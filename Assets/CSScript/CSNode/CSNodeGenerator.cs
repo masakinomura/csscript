@@ -16,7 +16,7 @@ namespace CSScript {
 		}
 
 		public override CSNode VisitCode (CSScriptParser.CodeContext context) {
-			CSNode node = new CSNode ();
+			CSNode node = new CSNode (context.Start.Line, context.Start.Column);
 
 			CSScriptParser.LineContext[] lines = context.line ();
 			int len = lines.Length;
@@ -30,34 +30,29 @@ namespace CSScript {
 		}
 
 		public override CSNode VisitLine (CSScriptParser.LineContext context) {
-			CSNode node = new CSNode ();
-
-			Debug.Log("line: " + context.Start.Line + " col: "  + context.Start.Column);
+			CSNode node = new CSNode (context.Start.Line, context.Start.Column);
 			EvaluateExpressions (node, context.expression ());
-
 			return node;
 		}
 
 		public override CSNode VisitIntAtomExp (CSScriptParser.IntAtomExpContext context) {
-			CSIntNode node = new CSIntNode ();
-
+			CSIntNode node = new CSIntNode (context.Start.Line, context.Start.Column);
 			int val = 0;
 			if (!int.TryParse (context.INT ().GetText (), out val)) {
-				Debug.LogError ("failed to parse int: " + context.INT ().GetText ());
+				CSLog.E (node, "failed to parse int: " + context.INT ().GetText ());
 			}
-
 			node._val = val;
 			return node;
 		}
 
 		public override CSNode VisitAssignmentExp (CSScriptParser.AssignmentExpContext context) {
-			CSAssignNode node = new CSAssignNode ();
+			CSAssignNode node = new CSAssignNode (context.Start.Line, context.Start.Column);
 			EvaluateExpressions (node, context.expression ());
 			return node;
 		}
 
 		public override CSNode VisitVariable (CSScriptParser.VariableContext context) {
-			CSVariableNode variableNode = new CSVariableNode ();
+			CSVariableNode variableNode = new CSVariableNode (context.Start.Line, context.Start.Column);
 			variableNode._variableName = context.NAME ().GetText ();
 			variableNode._declare = (context.VAR () != null);
 			return variableNode;

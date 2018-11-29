@@ -9,6 +9,14 @@ namespace CSScript {
 
 		public CSNode[] _children;
 
+		public int _line;
+		public int _column;
+
+		public CSNode (int line, int column) {
+			_line = line;
+			_column = column;
+		}
+
 		public int ChildCount {
 			get {
 				if (_children == null) {
@@ -21,21 +29,21 @@ namespace CSScript {
 
 		public CSNode GetChild (int index) {
 			if (_children == null) {
-				Debug.LogError ("_children is null");
+				CSLog.E (this, "_children is null");
 				return null;
 			}
 
 			if (index < 0 || index >= ChildCount) {
-				Debug.LogError ("index out of bound");
+				CSLog.E (this, "index out of bound");
 				return null;
 			}
 
 			return _children[index];
 		}
 
-		public CSObject Evaluate() {
-			CSState state = new CSState();
-			return Evaluate(state);
+		public CSObject Evaluate () {
+			CSState state = new CSState ();
+			return Evaluate (state);
 		}
 
 		public virtual CSObject Evaluate (CSState state) {
@@ -46,8 +54,8 @@ namespace CSScript {
 			CSObject lastResult = null;
 
 			int len = _children.Length;
-			for (int i = 0 ; i < len ; ++i) {
-				lastResult = _children[i].Evaluate(state);
+			for (int i = 0; i < len; ++i) {
+				lastResult = _children[i].Evaluate (state);
 			}
 
 			return lastResult;

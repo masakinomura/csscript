@@ -57,6 +57,7 @@
      <Compile Include="Assets\CSScript\Autogen\CSScriptVisitor.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSAssignNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSIntNode.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSLog.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSNodeGenerator.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSObject.cs" />

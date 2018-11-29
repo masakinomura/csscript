@@ -10,7 +10,7 @@ namespace CSScript {
 
 		public void AddVarible (string variableName) {
 			if (_variables.ContainsKey (variableName)) {
-				Debug.LogError ("Variable " + variableName + " already exists...");
+				CSLog.E ("Variable " + variableName + " already exists...");
 				return;
 			}
 			_variables[variableName] = null;
@@ -19,14 +19,14 @@ namespace CSScript {
 		public object GetVariable (string variableName) {
 			object val = null;
 			if (!_variables.TryGetValue (variableName, out val)) {
-				Debug.LogError ("Variable: " + variableName + " does not exist...");
+				CSLog.E ("Variable: " + variableName + " does not exist...");
 			}
 			return val;
 		}
 
 		public object SetVariable (string variableName, object val) {
 			if (!_variables.ContainsKey (variableName)) {
-				Debug.LogError ("Variable " + variableName + " does not exist...");
+				CSLog.E ("Variable " + variableName + " does not exist...");
 				return null;
 			}
 			_variables[variableName] = val;
