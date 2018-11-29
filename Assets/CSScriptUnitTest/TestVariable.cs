@@ -11,9 +11,32 @@ namespace CSScript {
 		[Test]
 		public void Declaration () {
 			CSNode root = ParseScript ("var myVar;");
-			CSState state = new CSState ();
-			root.Evaluate (state);
-			Assert.AreEqual (null, state.GetVariable ("myVar"));
+
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("myVar", obj.Name);
+			Assert.AreEqual (null, obj.Value);
+		}
+
+		[Test]
+		public void AssignInt () {
+			CSNode root = ParseScript ("var myVar = 3;");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("myVar", obj.Name);
+			Assert.AreEqual (3, obj.Value);
+		}
+
+		[Test]
+		public void AssignImmedidate () {
+			CSNode root = ParseScript ("var 4 = 3;");
+			CSObject obj = root.Evaluate ();
+
+			LogAssert.Expect (LogType.Error, "you cannot assign value to immediate");
+		}
+
+		[Test]
+		public void LineTest () {
+			CSNode root = ParseScript ("var d = 3;\n var e = 4; var h = 5;");
+			root.Evaluate ();
 		}
 	}
 }

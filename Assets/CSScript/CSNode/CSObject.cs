@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace CSScript {
+	public enum ObjectType {
+		VARIABLE,
+		IMMEDIATE,
+	}
+
 	public class CSObject {
-		public enum ObjectType {
-			VARIABLE,
-			IMMEDIATE,
-		}
 
 		object _object;
 
@@ -15,6 +16,21 @@ namespace CSScript {
 		string _nameInScope;
 
 		ObjectType _objectType;
+
+		public ObjectType ObjectType { get { return _objectType; } }
+
+		public string Name {
+			get {
+				switch (_objectType) {
+					case ObjectType.VARIABLE:
+						return _nameInScope;
+					case ObjectType.IMMEDIATE:
+						return "Immedidate";
+					default:
+						return "unknown";
+				}
+			}
+		}
 
 		public object Value {
 			get {
@@ -30,6 +46,9 @@ namespace CSScript {
 				switch (_objectType) {
 					case ObjectType.VARIABLE:
 						_scope.SetVariable (_nameInScope, value);
+						break;
+					case ObjectType.IMMEDIATE:
+						Debug.LogError ("you cannot assign value to immediate");
 						break;
 					default:
 						_object = value;

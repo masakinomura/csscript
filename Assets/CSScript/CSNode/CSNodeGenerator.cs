@@ -6,6 +6,15 @@ namespace CSScript {
 
 	public class CSNodeGenerator : CSScriptBaseVisitor<CSNode> {
 
+		void EvaluateExpressions (CSNode node, CSScriptParser.ExpressionContext[] expressions) {
+			int len = expressions.Length;
+			node._children = new CSNode[len];
+
+			for (int i = 0; i < len; ++i) {
+				node._children[i] = Visit (expressions[i]);
+			}
+		}
+
 		public override CSNode VisitCode (CSScriptParser.CodeContext context) {
 			CSNode node = new CSNode ();
 
@@ -22,14 +31,9 @@ namespace CSScript {
 
 		public override CSNode VisitLine (CSScriptParser.LineContext context) {
 			CSNode node = new CSNode ();
-			CSScriptParser.ExpressionContext[] expressions = context.expression ();
 
-			int len = expressions.Length;
-			node._children = new CSNode[len];
-
-			for (int i = 0; i < len; ++i) {
-				node._children[i] = Visit (expressions[i]);
-			}
+			Debug.Log("line: " + context.Start.Line + " col: "  + context.Start.Column);
+			EvaluateExpressions (node, context.expression ());
 
 			return node;
 		}
@@ -48,9 +52,10 @@ namespace CSScript {
 
 		public override CSNode VisitAssignmentExp (CSScriptParser.AssignmentExpContext context) {
 			CSAssignNode node = new CSAssignNode ();
-
+			EvaluateExpressions (node, context.expression ());
 			return node;
 		}
+
 		public override CSNode VisitVariable (CSScriptParser.VariableContext context) {
 			CSVariableNode variableNode = new CSVariableNode ();
 			variableNode._variableName = context.NAME ().GetText ();

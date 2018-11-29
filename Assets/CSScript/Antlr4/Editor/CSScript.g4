@@ -20,7 +20,8 @@ expression			: '(' expression ')' 					#parenthesisExp
 					| variable								#varExp
 					| NAME									#idAtomExp
 					| INT									#intAtomExp
-					| variable OP_ASSIGN expression			#assignmentExp
+					| LONG									#longAtomExp
+					| expression OP_ASSIGN expression		#assignmentExp
 					;
 
 variable			: VAR NAME | NAME;
