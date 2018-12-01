@@ -22,24 +22,18 @@ namespace CSScript {
 			_inst = null;
 		}
 
-		public static Type GetType (string typeName, string assemblyName = null) {
+		public static Type GetType (string assemblyName, string typeName, int genericArgCount = 0) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-			return _inst._GetType (typeName, assemblyName);
-		}
-
-		public static Type GetGenericType (string typeName, int argCount, string assemblyName = null) {
-			if (_inst == null) {
-				CSLog.E ("ReflectionUtil has not been initialized...");
-				return null;
+			if (genericArgCount > 0) {
+				typeName = typeName + "`" + genericArgCount;
 			}
-			typeName = typeName + "`" + argCount;
 			return _inst._GetType (typeName, assemblyName);
 		}
 
-		public static Type GetGenericType (string typeName, string assemblyName, params Type[] args) {
+		public static Type GetType (string assemblyName, string typeName, params Type[] args) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
@@ -59,13 +53,13 @@ namespace CSScript {
 
 			for (int i = 0; i < argLen; ++i) {
 				if (i != 0) {
-					sb.Append(", ");
+					sb.Append (", ");
 				}
-				sb.Append(args[i].FullName);
+				sb.Append (args[i].FullName);
 			}
 			sb.Append ("]");
-			
-			return _inst._GetType (sb.ToString(), assemblyName);
+
+			return _inst._GetType (sb.ToString (), assemblyName);
 		}
 
 		#endregion
@@ -91,10 +85,7 @@ namespace CSScript {
 			{ "dobule", typeof (double) }, // 
 			{ "string", typeof (string) }, //
 		};
-
-		AsmInfo _unityAsm;
-		AsmInfo _systemAsm;
-
+		
 		ReflectionUtil () {
 			InitializeAssemblyLookup ();
 		}
@@ -115,12 +106,6 @@ namespace CSScript {
 					_name = name,
 						_asm = asm,
 				};
-
-				if (name == "System") {
-					_systemAsm = info;
-				} else if (name == "UnityEngine") {
-					_unityAsm = info;
-				}
 				//CSLog.D ("adding: " + name);
 				_assemblyLookup[name] = info;
 			}
