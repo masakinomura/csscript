@@ -1,0 +1,11 @@
+﻿new Hoge();
+new Doge<int>.Moge<bool, string>();
+new Moge<int>();
+new Hoge(arg0);
+new Hoge(arg0, arg1, arg2);
+var myInt = 3;
+var myLong = 4L;
+var myVal;
+33;
+hoge44;
+4 = 5;

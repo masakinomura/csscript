@@ -1,6 +1,0 @@
-﻿var myInt = 3;
-var myLong = 4L;
-var myVal;
-33;
-hoge44;
-4 = 5;

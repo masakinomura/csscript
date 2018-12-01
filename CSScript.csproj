@@ -64,6 +64,8 @@
      <Compile Include="Assets\CSScript\CSNode\CSScope.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSState.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSVariableNode.cs" />
+     <Compile Include="Assets\CSScript\Reflection\ReflectionUtil.cs" />
+     <None Include="Assets\CSScript\Antlr4\Editor\CSScriptTest.txt" />
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
  </Reference>

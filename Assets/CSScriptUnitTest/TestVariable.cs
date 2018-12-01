@@ -30,7 +30,7 @@ namespace CSScript {
 			CSNode root = ParseScript ("var 4 = 3;");
 			CSObject obj = root.Evaluate ();
 
-			LogAssert.Expect (LogType.Error, "you cannot assign value to immediate");
+			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 4] you cannot assign value to immediate");
 		}
 
 		[Test]
