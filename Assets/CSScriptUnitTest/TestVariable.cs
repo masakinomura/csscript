@@ -46,8 +46,7 @@ namespace CSScript {
 
 			//position of 'h' in 'var h = 5;'
 			Assert.AreEqual(2, root._children[2]._children[0]._children[0]._line);
-			Assert.AreEqual(12, root._children[2]._children[0]._children[0]._column);
-			
+			Assert.AreEqual(12, root._children[2]._children[0]._children[0]._column);			
 		}
 	}
 }
