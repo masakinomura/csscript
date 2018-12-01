@@ -1,4 +1,4 @@
-﻿new Hoge();
+﻿new System.Collections.Generic.List<int>();
 new Doge<int>.Moge<bool, string>();
 new Moge<int>();
 new Hoge(arg0);

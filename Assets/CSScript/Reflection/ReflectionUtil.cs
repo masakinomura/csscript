@@ -49,15 +49,15 @@ namespace CSScript {
 			sb.Append (typeName);
 			sb.Append ("`");
 			sb.Append (argLen);
-			sb.Append ("[");
+			sb.Append ("[[");
 
 			for (int i = 0; i < argLen; ++i) {
 				if (i != 0) {
-					sb.Append (", ");
+					sb.Append ("], [");
 				}
 				sb.Append (args[i].FullName);
 			}
-			sb.Append ("]");
+			sb.Append ("]]");
 
 			return _inst._GetType (sb.ToString (), assemblyName);
 		}
@@ -85,7 +85,7 @@ namespace CSScript {
 			{ "dobule", typeof (double) }, // 
 			{ "string", typeof (string) }, //
 		};
-		
+
 		ReflectionUtil () {
 			InitializeAssemblyLookup ();
 		}
