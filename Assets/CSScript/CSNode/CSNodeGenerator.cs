@@ -57,5 +57,9 @@ namespace CSScript {
 			variableNode._declare = (context.VAR () != null);
 			return variableNode;
 		}
+
+		public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
+			return VisitChildren (context);
+		}
 	}
 }

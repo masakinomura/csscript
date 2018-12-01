@@ -75,3 +75,4 @@ WHITESPACE: (' ' | '\t')+ -> skip;
 
 EOL: ';' ('\r'? '\n' | '\r')*;
 
+// handle characters which failed to match any other token ErrorCharacter : . ;

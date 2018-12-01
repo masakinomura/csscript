@@ -104,6 +104,12 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParameters([NotNull] CSScriptParser.ParametersContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.vartypes"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVartypes([NotNull] CSScriptParser.VartypesContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.vartype"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

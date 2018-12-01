@@ -63,6 +63,7 @@
      <Compile Include="Assets\CSScript\CSNode\CSObject.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSScope.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSState.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSTypeNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSVariableNode.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionUtil.cs" />
      <None Include="Assets\CSScript\Antlr4\Editor\CSScriptTest.txt" />
