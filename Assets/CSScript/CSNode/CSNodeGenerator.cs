@@ -48,10 +48,17 @@ namespace CSScript {
 		public override CSNode VisitFloatAtomExp (CSScriptParser.FloatAtomExpContext context) {
 			CSFloatNode node = new CSFloatNode (context.Start.Line, context.Start.Column);
 			float val = 0;
-			if (!float.TryParse (context.FLOAT ().GetText ().Replace("f", ""), out val)) {
+			if (!float.TryParse (context.FLOAT ().GetText ().Replace ("f", ""), out val)) {
 				CSLog.E (node, "failed to parse float: #" + context.FLOAT ().GetText () + "#");
 			}
 			node._val = val;
+			return node;
+		}
+
+		public override CSNode VisitStringAtomExp (CSScriptParser.StringAtomExpContext context) {
+			CSStringNode node = new CSStringNode (context.Start.Line, context.Start.Column);
+			string str = context.STRING ().GetText ();
+			node._val = str.Substring (1, str.Length - 2);
 			return node;
 		}
 

@@ -44,6 +44,46 @@ namespace CSScript.Test {
 		}
 
 		[Test]
+		public void NewSimpleClassArgsB () {
+			CSNode root = ParseScript ("var a = new CSScript.Test.Simple(2.0f);");
+
+			CSObject obj = root.Evaluate ();
+
+			Assert.AreEqual ("a", obj.Name);
+
+			Assert.AreEqual (typeof (CSScript.Test.Simple), obj.Value.GetType ());
+			CSScript.Test.Simple s = obj.Value as CSScript.Test.Simple;
+			Assert.AreEqual (2.0f, s._b);
+		}		
+
+		[Test]
+		public void NewSimpleClassArgsString () {
+			CSNode root = ParseScript ("var a = new CSScript.Test.Simple(\"hello\");");
+
+			CSObject obj = root.Evaluate ();
+
+			Assert.AreEqual ("a", obj.Name);
+
+			Assert.AreEqual (typeof (CSScript.Test.Simple), obj.Value.GetType ());
+			CSScript.Test.Simple s = obj.Value as CSScript.Test.Simple;
+			Assert.AreEqual ("hello", s._s);
+		}		
+
+				[Test]
+		public void NewSimpleClassArgsRef () {
+			CSNode root = ParseScript ("var a = new CSScript.Test.Simple(new CSScript.Test.Simple());");
+
+			CSObject obj = root.Evaluate ();
+
+			Assert.AreEqual ("a", obj.Name);
+
+			Assert.AreEqual (typeof (CSScript.Test.Simple), obj.Value.GetType ());
+			CSScript.Test.Simple s = obj.Value as CSScript.Test.Simple;
+			Assert.AreNotEqual (null, s._i);
+		}	
+
+
+		[Test]
 		public void NewSimpleClassArgs2 () {
 			CSNode root = ParseScript ("var a = new CSScript.Test.Simple(3, 5.2f);");
 
@@ -66,7 +106,11 @@ namespace CSScript.Test {
 
 			Assert.AreEqual ("list", obj.Name);
 			Assert.AreEqual (typeof (List<int>), obj.Value.GetType ());
-		}
 
+			List<int> list = obj.Value as List<int>;
+			list.Add(34);
+			Assert.AreEqual(1, list.Count);
+			Assert.AreEqual(34, list[0]);
+		}
 	}
 }

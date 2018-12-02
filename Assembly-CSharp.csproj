@@ -606,10 +606,10 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="CSScript.csproj">
-      <Project>{04C182DB-A084-499F-4467-F27D14A11D92}</Project>      <Name>CSScript</Name>    </ProjectReference>
     <ProjectReference Include="CSTestCalss.csproj">
       <Project>{0D3F82E2-08EF-AC5C-FCB2-53584F7D0204}</Project>      <Name>CSTestCalss</Name>    </ProjectReference>
+    <ProjectReference Include="CSScript.csproj">
+      <Project>{04C182DB-A084-499F-4467-F27D14A11D92}</Project>      <Name>CSScript</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

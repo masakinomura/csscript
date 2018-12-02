@@ -1,6 +1,8 @@
 {
     "name": "CSTestCalss",
-    "references": [],
+    "references": [
+        "CSScript"
+    ],
     "optionalUnityReferences": [],
     "includePlatforms": [
         "Editor"
