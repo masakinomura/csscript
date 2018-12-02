@@ -1,7 +1,8 @@
 {
     "name": "Tests",
     "references": [
-        "CSScript"
+        "CSScript",
+        "CSTestCalss"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

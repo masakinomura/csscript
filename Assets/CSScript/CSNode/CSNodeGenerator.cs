@@ -45,8 +45,24 @@ namespace CSScript {
 			return node;
 		}
 
+		public override CSNode VisitFloatAtomExp (CSScriptParser.FloatAtomExpContext context) {
+			CSFloatNode node = new CSFloatNode (context.Start.Line, context.Start.Column);
+			float val = 0;
+			if (!float.TryParse (context.FLOAT ().GetText ().Replace("f", ""), out val)) {
+				CSLog.E (node, "failed to parse float: #" + context.FLOAT ().GetText () + "#");
+			}
+			node._val = val;
+			return node;
+		}
+
 		public override CSNode VisitAssignmentExp (CSScriptParser.AssignmentExpContext context) {
-			CSAssignNode node = new CSAssignNode (context.Start.Line, context.Start.Column);
+			CSOPAssignNode node = new CSOPAssignNode (context.Start.Line, context.Start.Column);
+			EvaluateExpressions (node, context.expression ());
+			return node;
+		}
+
+		public override CSNode VisitParameters (CSScriptParser.ParametersContext context) {
+			CSNode node = new CSNode (context.Start.Line, context.Start.Column);
 			EvaluateExpressions (node, context.expression ());
 			return node;
 		}
@@ -58,8 +74,72 @@ namespace CSScript {
 			return variableNode;
 		}
 
-		public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
-			return VisitChildren (context);
+		public override CSNode VisitNewExp (CSScriptParser.NewExpContext context) {
+			CSOPNewNode node = new CSOPNewNode (context.Start.Line, context.Start.Column);
+			node._children = new CSNode[2];
+			node._children[0] = Visit (context.vartypes ());
+			node._children[1] = Visit (context.parameters ());
+			return node;
 		}
+
+		public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
+			CSTypeNode node = new CSTypeNode (context.Start.Line, context.Start.Column);
+
+			CSScriptParser.VartypeContext[] vartypes = context.vartype ();
+			int varLen = vartypes.Length;
+
+			System.Text.StringBuilder sb = new System.Text.StringBuilder ();
+			System.Text.StringBuilder sbTemplate = new System.Text.StringBuilder ();
+			sbTemplate.Append ('[');
+
+			bool isThereTemplate = false;
+
+			for (int i = 0; i < varLen; ++i) {
+				CSScriptParser.VartypeContext next = vartypes[i];
+				if (i != 0) {
+					sb.Append ('.');
+				}
+
+				sb.Append (ReflectionUtil.GetCleanNameIfPrimitive (next.NAME ().GetText ()));
+
+				CSScriptParser.Template_typeContext template = next.template_type ();
+				if (template != null) {
+					CSScriptParser.VartypesContext[] templatetypes = template.vartypes ();
+					int tempVarCount = templatetypes.Length;
+					if (tempVarCount > 0) {
+						if (isThereTemplate) {
+							sbTemplate.Append (',');
+						} else {
+							isThereTemplate = true;
+						}
+
+						sb.Append ('`');
+						sb.Append (tempVarCount.ToString ());
+						sbTemplate.Append ('[');
+						node._children = new CSNode[tempVarCount];
+						for (int j = 0; j < tempVarCount; ++j) {
+							CSTypeNode child = VisitVartypes (templatetypes[j]) as CSTypeNode;
+							sbTemplate.Append (child._typeString);
+						}
+						sbTemplate.Append (']');
+					}
+				}
+			}
+			sbTemplate.Append (']');
+
+			if (isThereTemplate) {
+				sb.Append (sbTemplate.ToString ());
+			}
+
+			string typeString = sb.ToString ();
+			System.Type type = ReflectionUtil.GetType (null, typeString);
+			node._type = type;
+			node._typeString = typeString;
+			node._assemblyName = type.Assembly.GetCleanName ();
+			CSLog.D ("full name: " + node._typeString + " in the assembly: " + node._assemblyName);
+
+			return node;
+		}
+
 	}
 }

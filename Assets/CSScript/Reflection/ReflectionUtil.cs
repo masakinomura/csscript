@@ -22,44 +22,20 @@ namespace CSScript {
 			_inst = null;
 		}
 
-		public static Type GetType (string assemblyName, string typeName, int genericArgCount = 0) {
+		public static Type GetType (string namespaceName, string typeName) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-			if (genericArgCount > 0) {
-				typeName = typeName + "`" + genericArgCount;
-			}
-			return _inst._GetType (typeName, assemblyName);
+			return _inst._GetType (typeName, namespaceName);
 		}
 
-		public static Type GetType (string assemblyName, string typeName, params Type[] args) {
+		public static string GetCleanNameIfPrimitive (string typeName) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-
-			if (args == null || args.Length == 0) {
-				return _inst._GetType (typeName, assemblyName);
-			}
-
-			int argLen = args.Length;
-
-			StringBuilder sb = new StringBuilder ();
-			sb.Append (typeName);
-			sb.Append ("`");
-			sb.Append (argLen);
-			sb.Append ("[[");
-
-			for (int i = 0; i < argLen; ++i) {
-				if (i != 0) {
-					sb.Append ("], [");
-				}
-				sb.Append (args[i].FullName);
-			}
-			sb.Append ("]]");
-
-			return _inst._GetType (sb.ToString (), assemblyName);
+			return _inst._GetCleanNameIfPrimitive (typeName);
 		}
 
 		#endregion
@@ -83,24 +59,23 @@ namespace CSScript {
 			{ "ulong", typeof (ulong) }, // 
 			{ "float", typeof (float) }, // 
 			{ "dobule", typeof (double) }, // 
+			{ "decimal", typeof (decimal) }, // 
 			{ "string", typeof (string) }, //
+			{ "object", typeof (object) }, //
 		};
 
 		ReflectionUtil () {
 			InitializeAssemblyLookup ();
 		}
 
-		public void InitializeAssemblyLookup () {
+		void InitializeAssemblyLookup () {
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			_assemblies = currentDomain.GetAssemblies ();
 
 			int len = _assemblies.Length;
 			for (int i = 0; i < len; ++i) {
 				Assembly asm = _assemblies[i];
-				string name = asm.FullName;
-				if (name.IndexOf (',') >= 0) {
-					name = name.Split (',') [0];
-				}
+				string name = asm.GetCleanName ();
 
 				AsmInfo info = new AsmInfo () {
 					_name = name,
@@ -109,6 +84,19 @@ namespace CSScript {
 				//CSLog.D ("adding: " + name);
 				_assemblyLookup[name] = info;
 			}
+		}
+
+		string _GetCleanNameIfPrimitive (string typeName) {
+			Type type;
+			if (_shortTypeNames.TryGetValue (typeName, out type)) {
+				string name = type.AssemblyQualifiedName;
+				int pos = name.IndexOf (',');
+				if (pos >= 0) {
+					name = name.Substring (0, pos);
+				}
+				return name;
+			}
+			return typeName;
 		}
 
 		AsmInfo GetAsmInfo (string namespaceName) {
@@ -133,13 +121,18 @@ namespace CSScript {
 				pos = name.LastIndexOf ('.', name.Length - 1);
 			}
 
-			CSLog.E ("failed to load assmbly: " + namespaceName);
+			//CSLog.E ("failed to load assmbly: " + namespaceName);
 			return null;
 		}
 
 		Type _GetType (string typeName, string namespaceName) {
 			Type type = null;
-			AsmInfo info = GetAsmInfo (namespaceName);
+			AsmInfo info;
+			if (!string.IsNullOrEmpty (namespaceName)) {
+				info = GetAsmInfo (namespaceName);
+			} else {
+				info = GetAsmInfo (typeName);
+			}
 
 			type = _GetTypeWithASM (typeName, info, namespaceName);
 			if (type == null) {
@@ -154,17 +147,37 @@ namespace CSScript {
 				return type;
 			}
 
-			type = Type.GetType (typeName);
+			string fullName = null;
+			if (!string.IsNullOrEmpty (namespaceName)) {
+				fullName = namespaceName + "." + typeName;
+			}
 
+			type = Type.GetType (typeName);
 			if (type == null && info != null) {
 				type = info._asm.GetType (typeName);
-
-				if (type == null) {
-					string fullName = namespaceName + "." + typeName;
+				if (type == null && fullName != null) {
 					//CSLog.D ("full name:" + fullName + ":");
-					type = Type.GetType (fullName);
+					type = info._asm.GetType (fullName);
 					if (type == null) {
-						type = info._asm.GetType (fullName);
+						type = Type.GetType (fullName);
+					}
+				}
+			}
+
+			if (type == null) {
+				//still cannot find it. all search...
+				int len = _assemblies.Length;
+				for (int i = 0; i < len; ++i) {
+					Assembly asm = _assemblies[i];
+					type = asm.GetType (typeName);
+					if (type != null) {
+						break;
+					}
+					if (fullName != null) {
+						type = asm.GetType (fullName);
+						if (type != null) {
+							break;
+						}
 					}
 				}
 			}

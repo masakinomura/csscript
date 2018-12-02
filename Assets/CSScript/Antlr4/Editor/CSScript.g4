@@ -16,21 +16,28 @@ grammar CSScript;
 
 code: line*;
 line: expression+ EOL;
+
 expression:
 	'(' expression ')'					# parenthesisExp
+	| NEW vartypes parameters			# newExp
+	| expression OP_ASSIGN expression	# assignmentExp
 	| variable							# varExp
 	| NAME								# idAtomExp
-	| INT								# intAtomExp
 	| LONG								# longAtomExp
-	| expression OP_ASSIGN expression	# assignmentExp
-	| NEW vartypes parameters			# newExp;
+	| ULONG								# ulongAtomExp
+	| INT								# intAtomExp
+	| UINT								# uintAtomExp
+	| DECIMAL							# doubleAtomExp
+	| DOUBLE							# doubleAtomExp
+	| FLOAT								# floatAtomExp
+	| STRING							# stringAtomExp;
 
 variable: VAR NAME | NAME;
 
 parameters: '(' ')' | '(' expression (',' expression)* ')';
 
 vartypes: vartype ('.' vartype)*;
-vartype: NAME template_type*;
+vartype: NAME template_type?;
 
 template_type: '<' vartypes (',' vartypes)* '>';
 
@@ -55,6 +62,8 @@ template_type: '<' vartypes (',' vartypes)* '>';
 fragment LOWERCASE: [a-z];
 fragment UPPERCASE: [A-Z];
 fragment WORD: (LOWERCASE | UPPERCASE | '_')+;
+fragment ESCAPED_QUOTE: '\\"';
+fragment FNUMBER: [0-9]+ ('.' [0-9]+)?;
 
 OP_MUL: '*';
 VAR: 'v' 'a' 'r';
@@ -69,10 +78,15 @@ DOT: '.';
 
 NAME: WORD [0-9]*;
 INT: [0-9]+;
-LONG: INT 'L';
+UINT: INT ('u' | 'U');
+LONG: INT ('l' | 'L');
+ULONG: INT ('ul' | 'UL' | 'uL' | 'Ul');
 
-WHITESPACE: (' ' | '\t')+ -> skip;
+FLOAT: FNUMBER 'f';
+DOUBLE: FNUMBER 'd'?;
+DECIMAL: FNUMBER 'm';
+STRING: '"' ( ESCAPED_QUOTE | ~('\n' | '\r'))*? '"';
 
 EOL: ';' ('\r'? '\n' | '\r')*;
 
-// handle characters which failed to match any other token ErrorCharacter : . ;
+WHITESPACE: (' ' | '\t')+ -> skip;

@@ -6,11 +6,13 @@ namespace CSScript {
 
 	[System.Serializable]
 	public class CSTypeNode : CSNode {
-		public int _val;
+		public string _typeString;
+		public string _assemblyName;
+		public System.Type _type;
 
 		public CSTypeNode (int line, int column) : base (line, column) { }
 		public override CSObject Evaluate (CSState state) {
-			return new CSObject (this, _val);
+			return new CSObject (this, _type);
 		}
 	}
 

@@ -50,12 +50,33 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVarExp([NotNull] CSScriptParser.VarExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>ulongAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUlongAtomExp([NotNull] CSScriptParser.UlongAtomExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStringAtomExp([NotNull] CSScriptParser.StringAtomExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>newExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitNewExp([NotNull] CSScriptParser.NewExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>floatAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFloatAtomExp([NotNull] CSScriptParser.FloatAtomExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>intAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
@@ -64,12 +85,26 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitIntAtomExp([NotNull] CSScriptParser.IntAtomExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>doubleAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDoubleAtomExp([NotNull] CSScriptParser.DoubleAtomExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>parenthesisExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitParenthesisExp([NotNull] CSScriptParser.ParenthesisExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>uintAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUintAtomExp([NotNull] CSScriptParser.UintAtomExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>longAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.

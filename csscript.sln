@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csscript", "Assembly-CSharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csscript", "Tests.csproj", "{C7E8A493-1ACF-6FB5-77DD-830E8D4AE26C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csscript", "CSTestCalss.csproj", "{0D3F82E2-08EF-AC5C-FCB2-53584F7D0204}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{C7E8A493-1ACF-6FB5-77DD-830E8D4AE26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7E8A493-1ACF-6FB5-77DD-830E8D4AE26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7E8A493-1ACF-6FB5-77DD-830E8D4AE26C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D3F82E2-08EF-AC5C-FCB2-53584F7D0204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D3F82E2-08EF-AC5C-FCB2-53584F7D0204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D3F82E2-08EF-AC5C-FCB2-53584F7D0204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D3F82E2-08EF-AC5C-FCB2-53584F7D0204}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

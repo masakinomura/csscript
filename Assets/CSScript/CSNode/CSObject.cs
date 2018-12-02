@@ -6,6 +6,7 @@ namespace CSScript {
 	public enum ObjectType {
 		VARIABLE,
 		IMMEDIATE,
+		TYPE,
 	}
 
 	public class CSObject {
@@ -16,6 +17,8 @@ namespace CSScript {
 
 		CSScope _scope;
 		string _nameInScope;
+
+		System.Type _type;
 
 		ObjectType _objectType;
 
@@ -39,6 +42,8 @@ namespace CSScript {
 				switch (_objectType) {
 					case ObjectType.VARIABLE:
 						return _scope.GetVariable (_nameInScope);
+					case ObjectType.TYPE:
+						return _type;
 					default:
 						return _object;
 				}
@@ -48,6 +53,9 @@ namespace CSScript {
 				switch (_objectType) {
 					case ObjectType.VARIABLE:
 						_scope.SetVariable (_nameInScope, value);
+						break;
+					case ObjectType.TYPE:
+						CSLog.E (_node, "you cannot assign value to type");
 						break;
 					case ObjectType.IMMEDIATE:
 						CSLog.E (_node, "you cannot assign value to immediate");
@@ -73,6 +81,15 @@ namespace CSScript {
 			_scope = null;
 			_nameInScope = null;
 			_objectType = ObjectType.IMMEDIATE;
+		}
+
+		public CSObject (CSNode node, System.Type type) {
+			_node = node;
+			_object = null;
+			_scope = null;
+			_type = type;
+			_nameInScope = null;
+			_objectType = ObjectType.TYPE;
 		}
 
 	}

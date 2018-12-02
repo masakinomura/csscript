@@ -6,10 +6,10 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace CSScript {
+namespace CSScript.Test {
 	public class A<O, P> {
 		public class B<R> {
-			public class C{}
+			public class C { }
 
 		}
 	}
@@ -44,24 +44,33 @@ namespace CSScript {
 			Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List`1"));
 			Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic", "List`1"));
 
-			Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List", 1));
-			Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic", "List", 1));
+			//Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List", 1));
+			//Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic", "List", 1));
 		}
 
 		[Test]
 		public void TestGetTypeGenericSpecific () {
 			Debug.Log (typeof (List<int>).FullName);
-			Debug.Log (typeof (A<int,List<int>>.B<string>.C).FullName);
+			Debug.Log (typeof (A<int, List<int>>.B<string>.C).FullName);
 			Assert.AreEqual (typeof (List<string>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List`1[[System.String]]"));
 			Assert.AreEqual (typeof (List<int>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List`1[[System.Int32]]"));
 
 			Assert.AreEqual (typeof (List<string>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List`1[[System.String]]"));
 			Assert.AreEqual (typeof (List<int>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List`1[[System.Int32]]"));
 
-			Assert.AreEqual (typeof (List<int>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List", typeof (int)));
+			//Assert.AreEqual (typeof (List<int>), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List", typeof (int)));
 
 			Assert.AreEqual (typeof (List<int>.Enumerator), ReflectionUtil.GetType ("System.Collections.Generic", "System.Collections.Generic.List`1+Enumerator[System.Int32]"));
 		}
 
+		[Test]
+		public void TestGetTypeInAssembly () {
+			Assert.AreEqual (typeof (CSScript.CSNode), ReflectionUtil.GetType ("CSScript", "CSNode"));
+			Assert.AreEqual (typeof (System.Text.ASCIIEncoding), ReflectionUtil.GetType ("System", "Text.ASCIIEncoding"));
+			Assert.AreEqual (typeof (System.Text.ASCIIEncoding), ReflectionUtil.GetType ("System.Text", "ASCIIEncoding"));
+
+		}
+
 	}
+
 }

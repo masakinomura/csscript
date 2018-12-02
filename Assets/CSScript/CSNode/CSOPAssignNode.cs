@@ -5,11 +5,11 @@ using UnityEngine;
 namespace CSScript {
 
 	[System.Serializable]
-	public class CSAssignNode : CSNode {
+	public class CSOPAssignNode : CSNode {
 		public CSNode Left { get { return _children[0]; } }
 		public CSNode Right { get { return _children[1]; } }
 
-		public CSAssignNode (int line, int column) : base (line, column) { }
+		public CSOPAssignNode (int line, int column) : base (line, column) { }
 
 		public override CSObject Evaluate (CSState state) {
 			if (ChildCount != 2) {

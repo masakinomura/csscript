@@ -5,7 +5,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace CSScript {
+namespace CSScript.Test {
 	public class TestParse {
 
 		public CSNode ParseScript (string script) {

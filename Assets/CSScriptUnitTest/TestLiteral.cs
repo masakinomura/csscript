@@ -5,12 +5,11 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace CSScript {
+namespace CSScript.Test {
 	public class TestLiteral : TestParse {
 
 		[Test]
-		public void IntegerLiteral () {
-
+		public void IntegerInteger () {
 			CSNode root = ParseScript ("123;");
 			Assert.AreEqual (typeof (CSNode), root.GetType ());
 			Assert.AreEqual (1, root.ChildCount);
@@ -24,8 +23,12 @@ namespace CSScript {
 			Assert.AreEqual (0, intNode.ChildCount);
 
 			Assert.AreEqual (123, root.Evaluate ().Value);
-
 		}
+
+		[Test]
+		public void IntegerString () {
+		}		
+
 
 	}
 }
