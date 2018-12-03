@@ -43,12 +43,25 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLine([NotNull] CSScriptParser.LineContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.block"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBlock([NotNull] CSScriptParser.BlockContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>ulongAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitUlongAtomExp([NotNull] CSScriptParser.UlongAtomExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>usingNamespaceExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUsingNamespaceExp([NotNull] CSScriptParser.UsingNamespaceExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>newExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
@@ -163,4 +176,10 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitGeneric_parameters([NotNull] CSScriptParser.Generic_parametersContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.namespace"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNamespace([NotNull] CSScriptParser.NamespaceContext context);
 }
