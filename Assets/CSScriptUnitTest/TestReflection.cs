@@ -232,8 +232,6 @@ namespace CSScript.Test {
 				}
 			);
 
-			System.Action<int> hoge = (int a) => { Debug.Log (a); };
-
 			Assert.Throws<System.InvalidOperationException> (
 				() => {
 					ReflectionUtil.Get (s, "StringSetOnly");
