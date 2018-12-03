@@ -162,7 +162,23 @@ namespace CSScript.Test {
 			Assert.AreEqual (null, s._s);
 
 			ReflectionUtil.CallMethod (s, "SetString", new NullWithType (typeof (Simple)));
-			Assert.AreEqual (null, s._s);			
+			Assert.AreEqual (null, s._s);
+
+		}
+
+		[Test]
+		public void TestMethodGenericSimple () {
+			Simple s = new Simple ();
+			Simple s2 = new Simple ();
+			Assert.Throws<System.ArgumentException> (
+				() => {
+					ReflectionUtil.CallMethod (s, "GetG", 3);
+				}
+			);
+			Assert.AreEqual (3, ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (int) }, 3));
+			Assert.AreEqual (3.2f, ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (float) }, 3.2f));
+			Assert.AreEqual ("hoge", ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (string) }, "hoge"));
+			Assert.AreEqual (s2, ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (Simple) }, s2));
 
 		}
 	}

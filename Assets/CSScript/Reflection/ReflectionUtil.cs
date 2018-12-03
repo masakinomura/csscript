@@ -56,21 +56,21 @@ namespace CSScript {
 			return _inst._Cast (type, o);
 		}
 
-		public static MethodInfo GetCallableMethod (Type toSearch, string methodName, BindingFlags bindingFlags, params object[] args) {
+		// public static MethodInfo GetCallableMethod (Type toSearch, string methodName, BindingFlags bindingFlags, Type[] genericTypes, params object[] args) {
+		// 	if (_inst == null) {
+		// 		CSLog.E ("ReflectionUtil has not been initialized...");
+		// 		return null;
+		// 	}
+
+		// 	return _inst._GetCallableMethod (toSearch, methodName, bindingFlags, genericTypes, args);
+		// }
+
+		public static object CallMethod<R> (object target, string methodName, BindingFlags bindingFlags, params object[] args) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-
-			return _inst._GetCallableMethod (toSearch, methodName, bindingFlags, args);
-		}
-
-		public static object CallMethod (object target, string methodName, BindingFlags bindingFlags, params object[] args) {
-			if (_inst == null) {
-				CSLog.E ("ReflectionUtil has not been initialized...");
-				return null;
-			}
-			return _inst._CallMethod(target, methodName, bindingFlags, args);
+			return _inst._CallMethod (target, methodName, bindingFlags, null, args);
 		}
 
 		public static object CallMethod (object target, string methodName, params object[] args) {
@@ -78,8 +78,24 @@ namespace CSScript {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-			return _inst._CallMethod(target, methodName, BindingFlags.Public | BindingFlags.NonPublic, args);
-		}		
+			return _inst._CallMethod (target, methodName, BindingFlags.Public | BindingFlags.NonPublic, null, args);
+		}
+
+		public static object CallMethod (object target, string methodName, BindingFlags bindingFlags, Type[] genericTypes, params object[] args) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return null;
+			}
+			return _inst._CallMethod (target, methodName, bindingFlags, genericTypes, args);
+		}
+
+		public static object CallMethod (object target, string methodName, Type[] genericTypes, params object[] args) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return null;
+			}
+			return _inst._CallMethod (target, methodName, BindingFlags.Public | BindingFlags.NonPublic, genericTypes, args);
+		}
 
 		#endregion
 

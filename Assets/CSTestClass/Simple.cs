@@ -61,6 +61,10 @@ namespace CSScript.Test {
 		public void SetString (Simple s) {
 			_i = s;
 		}
+
+		public G GetG<G> (G g) {
+			return g;
+		}
 	}
 
 	public class GenricOne<T> {

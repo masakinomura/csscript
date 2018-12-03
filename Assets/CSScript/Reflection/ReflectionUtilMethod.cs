@@ -28,7 +28,7 @@ namespace CSScript {
 			return args;
 		}
 
-		object _CallMethod (object target, string methodName, BindingFlags bindingFlags, params object[] args) {
+		object _CallMethod (object target, string methodName, BindingFlags bindingFlags, Type[] genericTypes, params object[] args) {
 			Type targetType;
 			bool isStatic;
 			if (target is Type) {
@@ -43,7 +43,7 @@ namespace CSScript {
 				bindingFlags &= ~BindingFlags.Static;
 			}
 
-			MethodInfo method = _GetCallableMethod (targetType, methodName, bindingFlags, args);
+			MethodInfo method = _GetCallableMethod (targetType, methodName, bindingFlags, genericTypes, args);
 			if (method == null) {
 				throw new System.MissingMethodException (methodName + " cannot be found..");
 			}
@@ -71,7 +71,7 @@ namespace CSScript {
 			return (min <= count && count <= max);
 		}
 
-		MethodInfo _GetCallableMethod (Type toSearch, string methodName, BindingFlags bindingFlags, params object[] args) {
+		MethodInfo _GetCallableMethod (Type toSearch, string methodName, BindingFlags bindingFlags, Type[] genericTypes, params object[] args) {
 
 			MethodInfo[] methods = toSearch.GetMethods (bindingFlags);
 			MethodInfo candidate = null;
@@ -89,6 +89,14 @@ namespace CSScript {
 				if (method.Name != methodName) {
 					// skip function names don't match
 					continue;
+				}
+
+				if (method.IsGenericMethodDefinition) {
+					if (genericTypes == null) {
+						throw new System.ArgumentException ("For generic function, generic type argements are needed");
+					} else {
+						method = method.MakeGenericMethod (genericTypes);
+					}
 				}
 
 				ParameterInfo[] parameters = method.GetParameters ();
