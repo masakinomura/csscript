@@ -45,6 +45,22 @@ namespace CSScript.Test {
 			CSLog.D ("instance one");
 			_i = i;
 		}
+
+		public int GetInt () {
+			return _a;
+		}
+
+		public void SetInt (int a) {
+			_a = a;
+		}
+
+		public void SetString (string str) {
+			_s = str;
+		}
+
+		public void SetString (Simple s) {
+			_i = s;
+		}
 	}
 
 	public class GenricOne<T> {

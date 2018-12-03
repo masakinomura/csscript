@@ -124,6 +124,47 @@ namespace CSScript.Test {
 			Assert.AreEqual (4, s._a);
 		}
 
+		[Test]
+		public void TestMethodSimple () {
+			Simple s = new Simple ();
+			s._a = 44;
+			Assert.AreEqual (44, ReflectionUtil.CallMethod (s, "GetInt"));
+			ReflectionUtil.CallMethod (s, "SetInt", 55);
+			Assert.AreEqual (55, s._a);
+		}
+
+		[Test]
+		public void TestMethodSimpleImplicitCast () {
+			Simple s = new Simple ();
+
+			ReflectionUtil.CallMethod (s, "SetInt", 3.4f);
+			Assert.AreEqual (3, s._a);
+		}
+
+		[Test]
+		public void TestMethodSimpleImplicitCast2 () {
+			Simple s = new Simple ();
+			Simple s2 = new Simple ();
+
+			ReflectionUtil.CallMethod (s, "SetString", "hoge");
+			Assert.AreEqual ("hoge", s._s);
+
+			ReflectionUtil.CallMethod (s, "SetString", s2);
+			Assert.AreEqual (s2, s._i);
+
+			Assert.Throws<System.Reflection.AmbiguousMatchException> (
+				() => {
+					ReflectionUtil.CallMethod (s, "SetString", new object[] { null });
+				}
+			);
+
+			ReflectionUtil.CallMethod (s, "SetString", new NullWithType (typeof (string)));
+			Assert.AreEqual (null, s._s);
+
+			ReflectionUtil.CallMethod (s, "SetString", new NullWithType (typeof (Simple)));
+			Assert.AreEqual (null, s._s);			
+
+		}
 	}
 
 }
