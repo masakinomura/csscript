@@ -71,6 +71,7 @@
      <Compile Include="Assets\CSScript\Reflection\ReflectionExtension.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionUtil.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionUtilCast.cs" />
+     <Compile Include="Assets\CSScript\Reflection\ReflectionUtilGetSet.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionUtilGetType.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionUtilMethod.cs" />
      <None Include="Assets\CSScript\Antlr4\Editor\CSScriptTest.txt" />

@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace CSScript.Test {
 	public class Simple {
+
+		static string HELLO = "HELLO";
 		public int _a = 1;
 		public float _b = 2.0f;
 
@@ -65,6 +67,8 @@ namespace CSScript.Test {
 		public G GetG<G> (G g) {
 			return g;
 		}
+
+		public int IntProperty { get; set; }
 	}
 
 	public class GenericOne<T> {

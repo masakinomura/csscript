@@ -93,7 +93,12 @@ namespace CSScript {
 				_castMethods[type] = method;
 			}
 
-			object ret = method.Invoke (this, new object[] { o });
+			object ret = null;
+			try {
+				ret = method.Invoke (this, new object[] { o });
+			} catch (System.Reflection.TargetInvocationException e) {
+				throw e.InnerException;
+			}
 			return ret;
 		}
 	}

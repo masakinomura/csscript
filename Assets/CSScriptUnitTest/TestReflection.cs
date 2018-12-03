@@ -184,11 +184,11 @@ namespace CSScript.Test {
 		[Test]
 		public void TestMethodGenericSimple2 () {
 			GenericOne<int> gi = new GenericOne<int> ();
-			Assert.AreEqual (3, ReflectionUtil.CallMethod (gi, "GetInt"));
+			Assert.AreEqual (3, ReflectionUtil.CallMethod (gi, "GetInt", System.Reflection.BindingFlags.Public));
 			Assert.AreEqual (4, ReflectionUtil.CallMethod (gi, "GetT", 4));
 			Assert.AreEqual (4.3f, ReflectionUtil.CallMethod (gi, "GetS", new System.Type[] { typeof (float) }, 4.3f));
 
-			Assert.AreEqual ("hoge", ReflectionUtil.CallMethod (gi, "Get2", new System.Type[] { typeof (string) }, "hoge", 5));
+			Assert.AreEqual ("hoge", ReflectionUtil.CallMethod (gi, "Get2", System.Reflection.BindingFlags.Public, new System.Type[] { typeof (string) }, "hoge", 5));
 			Assert.AreEqual (5, gi._pa);
 		}
 
@@ -197,6 +197,26 @@ namespace CSScript.Test {
 			Assert.AreEqual ("doge", ReflectionUtil.CallMethod (typeof (GenericOne<int>), "GetStr"));
 		}
 
-	}
+		[Test]
+		public void TestGetterSetter () {
+			Simple s = new Simple ();
+			ReflectionUtil.Set (s, "_a", 44);
+			Assert.AreEqual (44, ReflectionUtil.Get (s, "_a"));
 
+			ReflectionUtil.Set (typeof (Simple), "HELLO", "HELLO WORLD");
+			Assert.AreEqual ("HELLO WORLD", ReflectionUtil.Get (typeof (Simple), "HELLO"));
+
+			ReflectionUtil.Set (s, "IntProperty", 44);
+			Assert.AreEqual (44, ReflectionUtil.Get (s, "IntProperty"));
+
+			ReflectionUtil.Set (s, "IntProperty", 1.1);
+			Assert.AreEqual (1, ReflectionUtil.Get (s, "IntProperty"));
+
+			Assert.Throws<System.InvalidCastException> (
+				() => {
+					ReflectionUtil.Set (s, "IntProperty", "1");
+				}
+			);
+		}
+	}
 }
