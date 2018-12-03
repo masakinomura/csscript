@@ -35,7 +35,6 @@ namespace CSScript {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return false;
 			}
-
 			return _inst._CanCast (type, o);
 		}
 
@@ -52,7 +51,6 @@ namespace CSScript {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return false;
 			}
-
 			return _inst._Cast (type, o);
 		}
 
@@ -61,7 +59,6 @@ namespace CSScript {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-
 			return _inst._Get (target, name, BindingFlags.Public | BindingFlags.NonPublic);
 		}
 
@@ -70,7 +67,6 @@ namespace CSScript {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-
 			return _inst._Get (target, name, bindingFlags);
 		}
 
@@ -78,7 +74,6 @@ namespace CSScript {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 			}
-
 			_inst._Set (target, name, BindingFlags.Public | BindingFlags.NonPublic, value);
 		}
 
@@ -86,9 +81,23 @@ namespace CSScript {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 			}
-
 			_inst._Set (target, name, bindingFlags, value);
+		}
 
+		public static bool HasField (object target, string name) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return false;
+			}
+			return _inst._HasField (target, name, BindingFlags.Public | BindingFlags.NonPublic);
+		}
+
+		public static bool HasField (object target, string name, BindingFlags bindingFlags, object value) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return false;
+			}
+			return _inst._HasField (target, name, bindingFlags);
 		}
 
 		public static object CallMethod (object target, string methodName, params object[] args) {
