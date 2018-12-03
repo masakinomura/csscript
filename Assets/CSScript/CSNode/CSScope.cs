@@ -16,6 +16,14 @@ namespace CSScript {
 			_variables[variableName] = null;
 		}
 
+		public bool HasVariable (string variableName) {
+			return _variables.ContainsKey (variableName);
+		}
+
+		public bool TryGetVariable (string variableName, out object val) {
+			return _variables.TryGetValue (variableName, out val);
+		}
+
 		public object GetVariable (string variableName) {
 			object val = null;
 			if (!_variables.TryGetValue (variableName, out val)) {
