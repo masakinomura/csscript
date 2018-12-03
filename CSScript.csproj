@@ -70,6 +70,8 @@
      <Compile Include="Assets\CSScript\CSNode\CSVariableNode.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionExtension.cs" />
      <Compile Include="Assets\CSScript\Reflection\ReflectionUtil.cs" />
+     <Compile Include="Assets\CSScript\Reflection\ReflectionUtilCast.cs" />
+     <Compile Include="Assets\CSScript\Reflection\ReflectionUtilGetType.cs" />
      <None Include="Assets\CSScript\Antlr4\Editor\CSScriptTest.txt" />
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

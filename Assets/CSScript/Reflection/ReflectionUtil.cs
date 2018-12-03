@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace CSScript {
 
-	public class ReflectionUtil {
+	public partial class ReflectionUtil {
 		#region StaticPublicAPI
 
 		public static void Initialize () {
@@ -22,6 +22,23 @@ namespace CSScript {
 			_inst = null;
 		}
 
+		public static string GetCleanNameIfPrimitive (string typeName) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return null;
+			}
+			return _inst._GetCleanNameIfPrimitive (typeName);
+		}
+
+		public static bool CanCast (Type type, object o) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return false;
+			}
+
+			return _inst._CanCast (type, o);
+		}
+
 		public static Type GetType (string namespaceName, string typeName) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
@@ -30,12 +47,13 @@ namespace CSScript {
 			return _inst._GetType (typeName, namespaceName);
 		}
 
-		public static string GetCleanNameIfPrimitive (string typeName) {
+		public static object Cast (Type type, object o) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
-				return null;
+				return false;
 			}
-			return _inst._GetCleanNameIfPrimitive (typeName);
+
+			return _inst._Cast (type, o);
 		}
 
 		#endregion
@@ -47,6 +65,7 @@ namespace CSScript {
 
 		static ReflectionUtil _inst;
 		Assembly[] _assemblies;
+
 		Dictionary<string, AsmInfo> _assemblyLookup = new Dictionary<string, AsmInfo> ();
 		Dictionary<string, Type> _shortTypeNames = new Dictionary<string, Type> () { //
 			{ "char", typeof (char) }, //
@@ -66,6 +85,7 @@ namespace CSScript {
 
 		ReflectionUtil () {
 			InitializeAssemblyLookup ();
+			InitializeCast ();
 		}
 
 		void InitializeAssemblyLookup () {
@@ -123,65 +143,6 @@ namespace CSScript {
 
 			//CSLog.E ("failed to load assmbly: " + namespaceName);
 			return null;
-		}
-
-		Type _GetType (string typeName, string namespaceName) {
-			Type type = null;
-			AsmInfo info;
-			if (!string.IsNullOrEmpty (namespaceName)) {
-				info = GetAsmInfo (namespaceName);
-			} else {
-				info = GetAsmInfo (typeName);
-			}
-
-			type = _GetTypeWithASM (typeName, info, namespaceName);
-			if (type == null) {
-				CSLog.D ("type: " + typeName + " cannot be found");
-			}
-			return type;
-		}
-
-		Type _GetTypeWithASM (string typeName, AsmInfo info, string namespaceName) {
-			Type type;
-			if (_shortTypeNames.TryGetValue (typeName, out type)) {
-				return type;
-			}
-
-			string fullName = null;
-			if (!string.IsNullOrEmpty (namespaceName)) {
-				fullName = namespaceName + "." + typeName;
-			}
-
-			type = Type.GetType (typeName);
-			if (type == null && info != null) {
-				type = info._asm.GetType (typeName);
-				if (type == null && fullName != null) {
-					//CSLog.D ("full name:" + fullName + ":");
-					type = info._asm.GetType (fullName);
-					if (type == null) {
-						type = Type.GetType (fullName);
-					}
-				}
-			}
-
-			if (type == null) {
-				//still cannot find it. all search...
-				int len = _assemblies.Length;
-				for (int i = 0; i < len; ++i) {
-					Assembly asm = _assemblies[i];
-					type = asm.GetType (typeName);
-					if (type != null) {
-						break;
-					}
-					if (fullName != null) {
-						type = asm.GetType (fullName);
-						if (type != null) {
-							break;
-						}
-					}
-				}
-			}
-			return type;
 		}
 	}
 }

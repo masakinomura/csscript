@@ -71,6 +71,59 @@ namespace CSScript.Test {
 
 		}
 
+		[Test]
+		public void TestCanCastSimple () {
+			Assert.True (ReflectionUtil.CanCast (typeof (float), 4));
+			Assert.True (ReflectionUtil.CanCast (typeof (float), 3.3f));
+			Assert.True (ReflectionUtil.CanCast (typeof (float), 5.5));
+			Assert.True (ReflectionUtil.CanCast (typeof (double), 6f));
+			Assert.False (ReflectionUtil.CanCast (typeof (string), 3.3f));
+			Assert.True (ReflectionUtil.CanCast (typeof (Simple), new Simple ()));
+			Assert.True (ReflectionUtil.CanCast (typeof (Simple), 3));
+			Assert.False (ReflectionUtil.CanCast (typeof (System.Text.ASCIIEncoding), new Simple ()));
+
+			Assert.True (ReflectionUtil.CanCast (typeof (System.DateTime), System.DateTime.Now));
+
+			Assert.False (ReflectionUtil.CanCast (typeof (int), "3"));
+		}
+
+		[Test]
+		public void TestCanCastInterface () {
+			Assert.True (ReflectionUtil.CanCast (typeof (ITest), new ClassWithInterface ()));
+			Assert.True (ReflectionUtil.CanCast (typeof (ITest), new ChildClass ()));
+		}
+
+		[Test]
+		public void TestCanCastInheritance () {
+			Assert.True (ReflectionUtil.CanCast (typeof (ClassWithInterface), new ChildClass ()));
+			Assert.True (ReflectionUtil.CanCast (typeof (ClassWithInterface), new GroundChildClass ()));
+			Assert.False (ReflectionUtil.CanCast (typeof (ChildClass), new ClassWithInterface ()));
+		}
+
+		[Test]
+		public void TestCanCastGeneric () {
+			Assert.False (ReflectionUtil.CanCast (typeof (GenricOne<>), new GenricOne<int> ()));
+			Assert.True (ReflectionUtil.CanCast (typeof (GenricOne<int>), new GenricOne<int> ()));
+			Assert.False (ReflectionUtil.CanCast (typeof (GenricOne<int>), new GenricOne<string> ()));
+		}
+
+		[Test]
+		public void TestCastNumber () {
+			Assert.AreEqual (typeof (float), ReflectionUtil.Cast (typeof (float), 3).GetType ());
+			Assert.AreEqual (typeof (int), ReflectionUtil.Cast (typeof (int), 3.4).GetType ());
+			Assert.AreEqual (3, ReflectionUtil.Cast (typeof (int), 3.4));
+
+		}
+
+		[Test]
+		public void TestCastImplecit () {
+			//Assert.AreEqual (true, (bool)new Simple ());
+			Assert.AreEqual (true, ReflectionUtil.Cast (typeof (bool), new Simple ()));
+
+			Simple s = ReflectionUtil.Cast (typeof (Simple), 4) as Simple;
+			Assert.AreEqual (4, s._a);
+		}
+
 	}
 
 }

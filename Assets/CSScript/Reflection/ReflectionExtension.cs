@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 public static class ReflectionExtension {
 
@@ -14,16 +15,16 @@ public static class ReflectionExtension {
 	}
 
 	public static bool IsInteger (this object value) {
-		return value.GetType().IsInteger();
+		return value.GetType ().IsInteger ();
 	}
 
 	public static bool IsFloat (this object value) {
-		return value.GetType().IsFloat();
+		return value.GetType ().IsFloat ();
 	}
 
 	public static bool IsNumeric (this object value) {
-		return value.GetType().IsNumeric();
-	}	
+		return value.GetType ().IsNumeric ();
+	}
 
 	public static bool IsInteger (this Type type) {
 		switch (Type.GetTypeCode (type)) {
@@ -49,7 +50,7 @@ public static class ReflectionExtension {
 				return true;
 			default:
 				return false;
-		}		
+		}
 	}
 
 	public static bool IsNumeric (this Type type) {
@@ -69,6 +70,41 @@ public static class ReflectionExtension {
 			default:
 				return false;
 		}
+	}
+
+	public static MethodInfo GetMethodWithReturnTypeAndParemterTypes (this Type toSearch, string methodName, BindingFlags bindingFlags, Type returnType, params Type[] paramTypes) {
+		return Array.Find (
+			toSearch.GetMethods (bindingFlags),
+			delegate (MethodInfo inf) {
+				if (inf.Name != methodName || inf.ReturnType != returnType) {
+					return false;
+				}
+				ParameterInfo[] parameters = inf.GetParameters ();
+				if (paramTypes == null && parameters == null) {
+					return true;
+				}
+
+				if (paramTypes != null && parameters == null) {
+					return false;
+				}
+
+				if (paramTypes == null && parameters != null) {
+					return false;
+				}
+
+				if (paramTypes.Length != parameters.Length) {
+					return false;
+				}
+
+				int len = parameters.Length;
+				for (int i = 0; i < len; ++i) {
+					if (parameters[i].ParameterType != paramTypes[i]) {
+						return false;
+					}
+				}
+				return true;
+			}
+		);
 	}
 
 }

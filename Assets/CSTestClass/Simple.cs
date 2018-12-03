@@ -13,11 +13,18 @@ namespace CSScript.Test {
 
 		public Simple () { }
 
+		public static explicit operator bool (Simple x) {
+			return x._a == 1;
+		}
+
+		public static implicit operator Simple (int a) {
+			return new Simple (a);
+		}
+
 		public Simple (int a) {
 			CSLog.D ("int one");
 			_a = a;
 		}
-
 		public Simple (float b) {
 			CSLog.D ("float one");
 			_b = b;
@@ -35,12 +42,30 @@ namespace CSScript.Test {
 		}
 
 		public Simple (Simple i) {
-			CSLog.D("instance one");
+			CSLog.D ("instance one");
 			_i = i;
 		}
 	}
 
 	public class GenricOne<T> {
 		public T pa;
+	}
+
+	public interface ITest {
+		void Test ();
+	}
+
+	public class ClassWithInterface : ITest {
+		void ITest.Test () {
+			CSLog.D ("Test is called");
+		}
+	}
+
+	public class ChildClass : ClassWithInterface {
+
+	}
+
+	public class GroundChildClass : ChildClass {
+
 	}
 }
