@@ -109,9 +109,9 @@ namespace CSScript {
 
 				sb.Append (ReflectionUtil.GetCleanNameIfPrimitive (next.NAME ().GetText ()));
 
-				CSScriptParser.Template_typeContext template = next.template_type ();
-				if (template != null) {
-					CSScriptParser.VartypesContext[] templatetypes = template.vartypes ();
+				CSScriptParser.Generic_parametersContext genericParameters = next.generic_parameters ();
+				if (genericParameters != null) {
+					CSScriptParser.VartypesContext[] templatetypes = genericParameters.vartypes ();
 					int tempVarCount = templatetypes.Length;
 					if (tempVarCount > 0) {
 						if (isThereTemplate) {

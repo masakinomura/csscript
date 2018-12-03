@@ -13,7 +13,9 @@ namespace CSScript.Test {
 
 		public string _s;
 
-		public Simple () { }
+		public Simple () {
+			_s = HELLO;
+		}
 
 		public static explicit operator bool (Simple x) {
 			return x._a == 1;

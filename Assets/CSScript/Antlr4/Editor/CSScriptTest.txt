@@ -1,4 +1,7 @@
-﻿var a = new CSScript.Test.Simple(3, 5.2f);
+﻿a.GetString<int, float>(2, 3.4f);
+var ret = s.GetInt(2,3,4);
+var ret = s.GetInt();
+var a = new CSScript.Test.Simple(3, 5.2f);
 34uL;
 2.3f;
 5.1;

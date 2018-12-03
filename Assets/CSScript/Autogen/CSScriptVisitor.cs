@@ -43,13 +43,6 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLine([NotNull] CSScriptParser.LineContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>varExp</c>
-	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitVarExp([NotNull] CSScriptParser.VarExpContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>ulongAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
@@ -57,19 +50,47 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitUlongAtomExp([NotNull] CSScriptParser.UlongAtomExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>stringAtomExp</c>
-	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitStringAtomExp([NotNull] CSScriptParser.StringAtomExpContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>newExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitNewExp([NotNull] CSScriptParser.NewExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>funcExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFuncExp([NotNull] CSScriptParser.FuncExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>idAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIdAtomExp([NotNull] CSScriptParser.IdAtomExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>assignmentExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAssignmentExp([NotNull] CSScriptParser.AssignmentExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>varExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVarExp([NotNull] CSScriptParser.VarExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStringAtomExp([NotNull] CSScriptParser.StringAtomExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>floatAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
@@ -113,20 +134,6 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLongAtomExp([NotNull] CSScriptParser.LongAtomExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>idAtomExp</c>
-	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitIdAtomExp([NotNull] CSScriptParser.IdAtomExpContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>assignmentExp</c>
-	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitAssignmentExp([NotNull] CSScriptParser.AssignmentExpContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.variable"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -151,9 +158,9 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVartype([NotNull] CSScriptParser.VartypeContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.template_type"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.generic_parameters"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitTemplate_type([NotNull] CSScriptParser.Template_typeContext context);
+	Result VisitGeneric_parameters([NotNull] CSScriptParser.Generic_parametersContext context);
 }

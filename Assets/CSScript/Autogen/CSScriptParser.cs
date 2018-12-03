@@ -37,10 +37,10 @@ public partial class CSScriptParser : Parser {
 		ULONG=15, FLOAT=16, DOUBLE=17, DECIMAL=18, STRING=19, EOL=20, WHITESPACE=21;
 	public const int
 		RULE_code = 0, RULE_line = 1, RULE_expression = 2, RULE_variable = 3, 
-		RULE_parameters = 4, RULE_vartypes = 5, RULE_vartype = 6, RULE_template_type = 7;
+		RULE_parameters = 4, RULE_vartypes = 5, RULE_vartype = 6, RULE_generic_parameters = 7;
 	public static readonly string[] ruleNames = {
 		"code", "line", "expression", "variable", "parameters", "vartypes", "vartype", 
-		"template_type"
+		"generic_parameters"
 	};
 
 	private static readonly string[] _LiteralNames = {
@@ -194,32 +194,12 @@ public partial class CSScriptParser : Parser {
 			base.CopyFrom(context);
 		}
 	}
-	public partial class VarExpContext : ExpressionContext {
-		public VariableContext variable() {
-			return GetRuleContext<VariableContext>(0);
-		}
-		public VarExpContext(ExpressionContext context) { CopyFrom(context); }
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitVarExp(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
 	public partial class UlongAtomExpContext : ExpressionContext {
 		public ITerminalNode ULONG() { return GetToken(CSScriptParser.ULONG, 0); }
 		public UlongAtomExpContext(ExpressionContext context) { CopyFrom(context); }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUlongAtomExp(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class StringAtomExpContext : ExpressionContext {
-		public ITerminalNode STRING() { return GetToken(CSScriptParser.STRING, 0); }
-		public StringAtomExpContext(ExpressionContext context) { CopyFrom(context); }
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitStringAtomExp(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -235,6 +215,64 @@ public partial class CSScriptParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNewExp(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class FuncExpContext : ExpressionContext {
+		public VartypesContext vartypes() {
+			return GetRuleContext<VartypesContext>(0);
+		}
+		public ParametersContext parameters() {
+			return GetRuleContext<ParametersContext>(0);
+		}
+		public FuncExpContext(ExpressionContext context) { CopyFrom(context); }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitFuncExp(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class IdAtomExpContext : ExpressionContext {
+		public ITerminalNode NAME() { return GetToken(CSScriptParser.NAME, 0); }
+		public IdAtomExpContext(ExpressionContext context) { CopyFrom(context); }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitIdAtomExp(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class AssignmentExpContext : ExpressionContext {
+		public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		public ITerminalNode OP_ASSIGN() { return GetToken(CSScriptParser.OP_ASSIGN, 0); }
+		public AssignmentExpContext(ExpressionContext context) { CopyFrom(context); }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAssignmentExp(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class VarExpContext : ExpressionContext {
+		public VariableContext variable() {
+			return GetRuleContext<VariableContext>(0);
+		}
+		public VarExpContext(ExpressionContext context) { CopyFrom(context); }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitVarExp(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class StringAtomExpContext : ExpressionContext {
+		public ITerminalNode STRING() { return GetToken(CSScriptParser.STRING, 0); }
+		public StringAtomExpContext(ExpressionContext context) { CopyFrom(context); }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitStringAtomExp(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -295,30 +333,6 @@ public partial class CSScriptParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class IdAtomExpContext : ExpressionContext {
-		public ITerminalNode NAME() { return GetToken(CSScriptParser.NAME, 0); }
-		public IdAtomExpContext(ExpressionContext context) { CopyFrom(context); }
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitIdAtomExp(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class AssignmentExpContext : ExpressionContext {
-		public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		public ITerminalNode OP_ASSIGN() { return GetToken(CSScriptParser.OP_ASSIGN, 0); }
-		public AssignmentExpContext(ExpressionContext context) { CopyFrom(context); }
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAssignmentExp(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
 
 	[RuleVersion(0)]
 	public ExpressionContext expression() {
@@ -336,7 +350,7 @@ public partial class CSScriptParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 48;
+			State = 51;
 			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
 			case 1:
 				{
@@ -361,58 +375,59 @@ public partial class CSScriptParser : Parser {
 				break;
 			case 3:
 				{
-				_localctx = new VarExpContext(_localctx);
+				_localctx = new FuncExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 38; variable();
+				State = 38; vartypes();
+				State = 39; parameters();
 				}
 				break;
 			case 4:
 				{
-				_localctx = new IdAtomExpContext(_localctx);
+				_localctx = new VarExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 39; Match(NAME);
+				State = 41; variable();
 				}
 				break;
 			case 5:
 				{
-				_localctx = new LongAtomExpContext(_localctx);
+				_localctx = new IdAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 40; Match(LONG);
+				State = 42; Match(NAME);
 				}
 				break;
 			case 6:
 				{
-				_localctx = new UlongAtomExpContext(_localctx);
+				_localctx = new LongAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 41; Match(ULONG);
+				State = 43; Match(LONG);
 				}
 				break;
 			case 7:
 				{
-				_localctx = new IntAtomExpContext(_localctx);
+				_localctx = new UlongAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 42; Match(INT);
+				State = 44; Match(ULONG);
 				}
 				break;
 			case 8:
 				{
-				_localctx = new UintAtomExpContext(_localctx);
+				_localctx = new IntAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 43; Match(UINT);
+				State = 45; Match(INT);
 				}
 				break;
 			case 9:
 				{
-				_localctx = new DoubleAtomExpContext(_localctx);
+				_localctx = new UintAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 44; Match(DECIMAL);
+				State = 46; Match(UINT);
 				}
 				break;
 			case 10:
@@ -420,28 +435,36 @@ public partial class CSScriptParser : Parser {
 				_localctx = new DoubleAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 45; Match(DOUBLE);
+				State = 47; Match(DECIMAL);
 				}
 				break;
 			case 11:
 				{
-				_localctx = new FloatAtomExpContext(_localctx);
+				_localctx = new DoubleAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 46; Match(FLOAT);
+				State = 48; Match(DOUBLE);
 				}
 				break;
 			case 12:
 				{
+				_localctx = new FloatAtomExpContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 49; Match(FLOAT);
+				}
+				break;
+			case 13:
+				{
 				_localctx = new StringAtomExpContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 47; Match(STRING);
+				State = 50; Match(STRING);
 				}
 				break;
 			}
 			Context.Stop = TokenStream.Lt(-1);
-			State = 55;
+			State = 58;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,3,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
@@ -453,14 +476,14 @@ public partial class CSScriptParser : Parser {
 					{
 					_localctx = new AssignmentExpContext(new ExpressionContext(_parentctx, _parentState));
 					PushNewRecursionContext(_localctx, _startState, RULE_expression);
-					State = 50;
+					State = 53;
 					if (!(Precpred(Context, 11))) throw new FailedPredicateException(this, "Precpred(Context, 11)");
-					State = 51; Match(OP_ASSIGN);
-					State = 52; expression(12);
+					State = 54; Match(OP_ASSIGN);
+					State = 55; expression(12);
 					}
 					} 
 				}
-				State = 57;
+				State = 60;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,3,Context);
 			}
@@ -497,19 +520,19 @@ public partial class CSScriptParser : Parser {
 		VariableContext _localctx = new VariableContext(Context, State);
 		EnterRule(_localctx, 6, RULE_variable);
 		try {
-			State = 61;
+			State = 64;
 			switch (TokenStream.La(1)) {
 			case VAR:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 58; Match(VAR);
-				State = 59; Match(NAME);
+				State = 61; Match(VAR);
+				State = 62; Match(NAME);
 				}
 				break;
 			case NAME:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 60; Match(NAME);
+				State = 63; Match(NAME);
 				}
 				break;
 			default:
@@ -552,35 +575,35 @@ public partial class CSScriptParser : Parser {
 		EnterRule(_localctx, 8, RULE_parameters);
 		int _la;
 		try {
-			State = 76;
+			State = 79;
 			switch ( Interpreter.AdaptivePredict(TokenStream,6,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 63; Match(PARENTHESIS_START);
-				State = 64; Match(PARENTHESIS_END);
+				State = 66; Match(PARENTHESIS_START);
+				State = 67; Match(PARENTHESIS_END);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 65; Match(PARENTHESIS_START);
-				State = 66; expression(0);
-				State = 71;
+				State = 68; Match(PARENTHESIS_START);
+				State = 69; expression(0);
+				State = 74;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.La(1);
 				while (_la==COMMA) {
 					{
 					{
-					State = 67; Match(COMMA);
-					State = 68; expression(0);
+					State = 70; Match(COMMA);
+					State = 71; expression(0);
 					}
 					}
-					State = 73;
+					State = 76;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.La(1);
 				}
-				State = 74; Match(PARENTHESIS_END);
+				State = 77; Match(PARENTHESIS_END);
 				}
 				break;
 			}
@@ -623,18 +646,18 @@ public partial class CSScriptParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 78; vartype();
-			State = 83;
+			State = 81; vartype();
+			State = 86;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.La(1);
 			while (_la==DOT) {
 				{
 				{
-				State = 79; Match(DOT);
-				State = 80; vartype();
+				State = 82; Match(DOT);
+				State = 83; vartype();
 				}
 				}
-				State = 85;
+				State = 88;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.La(1);
 			}
@@ -653,8 +676,8 @@ public partial class CSScriptParser : Parser {
 
 	public partial class VartypeContext : ParserRuleContext {
 		public ITerminalNode NAME() { return GetToken(CSScriptParser.NAME, 0); }
-		public Template_typeContext template_type() {
-			return GetRuleContext<Template_typeContext>(0);
+		public Generic_parametersContext generic_parameters() {
+			return GetRuleContext<Generic_parametersContext>(0);
 		}
 		public VartypeContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -676,12 +699,12 @@ public partial class CSScriptParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 86; Match(NAME);
-			State = 88;
+			State = 89; Match(NAME);
+			State = 91;
 			_la = TokenStream.La(1);
 			if (_la==LESS_THAN) {
 				{
-				State = 87; template_type();
+				State = 90; generic_parameters();
 				}
 			}
 
@@ -698,50 +721,50 @@ public partial class CSScriptParser : Parser {
 		return _localctx;
 	}
 
-	public partial class Template_typeContext : ParserRuleContext {
+	public partial class Generic_parametersContext : ParserRuleContext {
 		public VartypesContext[] vartypes() {
 			return GetRuleContexts<VartypesContext>();
 		}
 		public VartypesContext vartypes(int i) {
 			return GetRuleContext<VartypesContext>(i);
 		}
-		public Template_typeContext(ParserRuleContext parent, int invokingState)
+		public Generic_parametersContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_template_type; } }
+		public override int RuleIndex { get { return RULE_generic_parameters; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitTemplate_type(this);
+			if (typedVisitor != null) return typedVisitor.VisitGeneric_parameters(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public Template_typeContext template_type() {
-		Template_typeContext _localctx = new Template_typeContext(Context, State);
-		EnterRule(_localctx, 14, RULE_template_type);
+	public Generic_parametersContext generic_parameters() {
+		Generic_parametersContext _localctx = new Generic_parametersContext(Context, State);
+		EnterRule(_localctx, 14, RULE_generic_parameters);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 90; Match(LESS_THAN);
-			State = 91; vartypes();
-			State = 96;
+			State = 93; Match(LESS_THAN);
+			State = 94; vartypes();
+			State = 99;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.La(1);
 			while (_la==COMMA) {
 				{
 				{
-				State = 92; Match(COMMA);
-				State = 93; vartypes();
+				State = 95; Match(COMMA);
+				State = 96; vartypes();
 				}
 				}
-				State = 98;
+				State = 101;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.La(1);
 			}
-			State = 99; Match(GREATER_THAN);
+			State = 102; Match(GREATER_THAN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -769,43 +792,44 @@ public partial class CSScriptParser : Parser {
 	}
 
 	public static readonly string _serializedATN =
-		"\x3\x430\xD6D1\x8206\xAD2D\x4417\xAEF1\x8D80\xAADD\x3\x17h\x4\x2\t\x2"+
+		"\x3\x430\xD6D1\x8206\xAD2D\x4417\xAEF1\x8D80\xAADD\x3\x17k\x4\x2\t\x2"+
 		"\x4\x3\t\x3\x4\x4\t\x4\x4\x5\t\x5\x4\x6\t\x6\x4\a\t\a\x4\b\t\b\x4\t\t"+
 		"\t\x3\x2\a\x2\x14\n\x2\f\x2\xE\x2\x17\v\x2\x3\x3\x6\x3\x1A\n\x3\r\x3\xE"+
 		"\x3\x1B\x3\x3\x3\x3\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3"+
-		"\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x5\x4"+
-		"\x33\n\x4\x3\x4\x3\x4\x3\x4\a\x4\x38\n\x4\f\x4\xE\x4;\v\x4\x3\x5\x3\x5"+
-		"\x3\x5\x5\x5@\n\x5\x3\x6\x3\x6\x3\x6\x3\x6\x3\x6\x3\x6\a\x6H\n\x6\f\x6"+
-		"\xE\x6K\v\x6\x3\x6\x3\x6\x5\x6O\n\x6\x3\a\x3\a\x3\a\a\aT\n\a\f\a\xE\a"+
-		"W\v\a\x3\b\x3\b\x5\b[\n\b\x3\t\x3\t\x3\t\x3\t\a\t\x61\n\t\f\t\xE\t\x64"+
-		"\v\t\x3\t\x3\t\x3\t\x2\x3\x6\n\x2\x4\x6\b\n\f\xE\x10\x2\x2s\x2\x15\x3"+
-		"\x2\x2\x2\x4\x19\x3\x2\x2\x2\x6\x32\x3\x2\x2\x2\b?\x3\x2\x2\x2\nN\x3\x2"+
-		"\x2\x2\fP\x3\x2\x2\x2\xEX\x3\x2\x2\x2\x10\\\x3\x2\x2\x2\x12\x14\x5\x4"+
-		"\x3\x2\x13\x12\x3\x2\x2\x2\x14\x17\x3\x2\x2\x2\x15\x13\x3\x2\x2\x2\x15"+
-		"\x16\x3\x2\x2\x2\x16\x3\x3\x2\x2\x2\x17\x15\x3\x2\x2\x2\x18\x1A\x5\x6"+
-		"\x4\x2\x19\x18\x3\x2\x2\x2\x1A\x1B\x3\x2\x2\x2\x1B\x19\x3\x2\x2\x2\x1B"+
-		"\x1C\x3\x2\x2\x2\x1C\x1D\x3\x2\x2\x2\x1D\x1E\a\x16\x2\x2\x1E\x5\x3\x2"+
-		"\x2\x2\x1F \b\x4\x1\x2 !\a\t\x2\x2!\"\x5\x6\x4\x2\"#\a\n\x2\x2#\x33\x3"+
-		"\x2\x2\x2$%\a\x5\x2\x2%&\x5\f\a\x2&\'\x5\n\x6\x2\'\x33\x3\x2\x2\x2(\x33"+
-		"\x5\b\x5\x2)\x33\a\r\x2\x2*\x33\a\x10\x2\x2+\x33\a\x11\x2\x2,\x33\a\xE"+
-		"\x2\x2-\x33\a\xF\x2\x2.\x33\a\x14\x2\x2/\x33\a\x13\x2\x2\x30\x33\a\x12"+
-		"\x2\x2\x31\x33\a\x15\x2\x2\x32\x1F\x3\x2\x2\x2\x32$\x3\x2\x2\x2\x32(\x3"+
-		"\x2\x2\x2\x32)\x3\x2\x2\x2\x32*\x3\x2\x2\x2\x32+\x3\x2\x2\x2\x32,\x3\x2"+
-		"\x2\x2\x32-\x3\x2\x2\x2\x32.\x3\x2\x2\x2\x32/\x3\x2\x2\x2\x32\x30\x3\x2"+
-		"\x2\x2\x32\x31\x3\x2\x2\x2\x33\x39\x3\x2\x2\x2\x34\x35\f\r\x2\x2\x35\x36"+
-		"\a\x6\x2\x2\x36\x38\x5\x6\x4\xE\x37\x34\x3\x2\x2\x2\x38;\x3\x2\x2\x2\x39"+
-		"\x37\x3\x2\x2\x2\x39:\x3\x2\x2\x2:\a\x3\x2\x2\x2;\x39\x3\x2\x2\x2<=\a"+
-		"\x4\x2\x2=@\a\r\x2\x2>@\a\r\x2\x2?<\x3\x2\x2\x2?>\x3\x2\x2\x2@\t\x3\x2"+
-		"\x2\x2\x41\x42\a\t\x2\x2\x42O\a\n\x2\x2\x43\x44\a\t\x2\x2\x44I\x5\x6\x4"+
-		"\x2\x45\x46\a\v\x2\x2\x46H\x5\x6\x4\x2G\x45\x3\x2\x2\x2HK\x3\x2\x2\x2"+
-		"IG\x3\x2\x2\x2IJ\x3\x2\x2\x2JL\x3\x2\x2\x2KI\x3\x2\x2\x2LM\a\n\x2\x2M"+
-		"O\x3\x2\x2\x2N\x41\x3\x2\x2\x2N\x43\x3\x2\x2\x2O\v\x3\x2\x2\x2PU\x5\xE"+
-		"\b\x2QR\a\f\x2\x2RT\x5\xE\b\x2SQ\x3\x2\x2\x2TW\x3\x2\x2\x2US\x3\x2\x2"+
-		"\x2UV\x3\x2\x2\x2V\r\x3\x2\x2\x2WU\x3\x2\x2\x2XZ\a\r\x2\x2Y[\x5\x10\t"+
-		"\x2ZY\x3\x2\x2\x2Z[\x3\x2\x2\x2[\xF\x3\x2\x2\x2\\]\a\a\x2\x2]\x62\x5\f"+
-		"\a\x2^_\a\v\x2\x2_\x61\x5\f\a\x2`^\x3\x2\x2\x2\x61\x64\x3\x2\x2\x2\x62"+
-		"`\x3\x2\x2\x2\x62\x63\x3\x2\x2\x2\x63\x65\x3\x2\x2\x2\x64\x62\x3\x2\x2"+
-		"\x2\x65\x66\a\b\x2\x2\x66\x11\x3\x2\x2\x2\f\x15\x1B\x32\x39?INUZ\x62";
+		"\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4"+
+		"\x3\x4\x3\x4\x5\x4\x36\n\x4\x3\x4\x3\x4\x3\x4\a\x4;\n\x4\f\x4\xE\x4>\v"+
+		"\x4\x3\x5\x3\x5\x3\x5\x5\x5\x43\n\x5\x3\x6\x3\x6\x3\x6\x3\x6\x3\x6\x3"+
+		"\x6\a\x6K\n\x6\f\x6\xE\x6N\v\x6\x3\x6\x3\x6\x5\x6R\n\x6\x3\a\x3\a\x3\a"+
+		"\a\aW\n\a\f\a\xE\aZ\v\a\x3\b\x3\b\x5\b^\n\b\x3\t\x3\t\x3\t\x3\t\a\t\x64"+
+		"\n\t\f\t\xE\tg\v\t\x3\t\x3\t\x3\t\x2\x3\x6\n\x2\x4\x6\b\n\f\xE\x10\x2"+
+		"\x2w\x2\x15\x3\x2\x2\x2\x4\x19\x3\x2\x2\x2\x6\x35\x3\x2\x2\x2\b\x42\x3"+
+		"\x2\x2\x2\nQ\x3\x2\x2\x2\fS\x3\x2\x2\x2\xE[\x3\x2\x2\x2\x10_\x3\x2\x2"+
+		"\x2\x12\x14\x5\x4\x3\x2\x13\x12\x3\x2\x2\x2\x14\x17\x3\x2\x2\x2\x15\x13"+
+		"\x3\x2\x2\x2\x15\x16\x3\x2\x2\x2\x16\x3\x3\x2\x2\x2\x17\x15\x3\x2\x2\x2"+
+		"\x18\x1A\x5\x6\x4\x2\x19\x18\x3\x2\x2\x2\x1A\x1B\x3\x2\x2\x2\x1B\x19\x3"+
+		"\x2\x2\x2\x1B\x1C\x3\x2\x2\x2\x1C\x1D\x3\x2\x2\x2\x1D\x1E\a\x16\x2\x2"+
+		"\x1E\x5\x3\x2\x2\x2\x1F \b\x4\x1\x2 !\a\t\x2\x2!\"\x5\x6\x4\x2\"#\a\n"+
+		"\x2\x2#\x36\x3\x2\x2\x2$%\a\x5\x2\x2%&\x5\f\a\x2&\'\x5\n\x6\x2\'\x36\x3"+
+		"\x2\x2\x2()\x5\f\a\x2)*\x5\n\x6\x2*\x36\x3\x2\x2\x2+\x36\x5\b\x5\x2,\x36"+
+		"\a\r\x2\x2-\x36\a\x10\x2\x2.\x36\a\x11\x2\x2/\x36\a\xE\x2\x2\x30\x36\a"+
+		"\xF\x2\x2\x31\x36\a\x14\x2\x2\x32\x36\a\x13\x2\x2\x33\x36\a\x12\x2\x2"+
+		"\x34\x36\a\x15\x2\x2\x35\x1F\x3\x2\x2\x2\x35$\x3\x2\x2\x2\x35(\x3\x2\x2"+
+		"\x2\x35+\x3\x2\x2\x2\x35,\x3\x2\x2\x2\x35-\x3\x2\x2\x2\x35.\x3\x2\x2\x2"+
+		"\x35/\x3\x2\x2\x2\x35\x30\x3\x2\x2\x2\x35\x31\x3\x2\x2\x2\x35\x32\x3\x2"+
+		"\x2\x2\x35\x33\x3\x2\x2\x2\x35\x34\x3\x2\x2\x2\x36<\x3\x2\x2\x2\x37\x38"+
+		"\f\r\x2\x2\x38\x39\a\x6\x2\x2\x39;\x5\x6\x4\xE:\x37\x3\x2\x2\x2;>\x3\x2"+
+		"\x2\x2<:\x3\x2\x2\x2<=\x3\x2\x2\x2=\a\x3\x2\x2\x2><\x3\x2\x2\x2?@\a\x4"+
+		"\x2\x2@\x43\a\r\x2\x2\x41\x43\a\r\x2\x2\x42?\x3\x2\x2\x2\x42\x41\x3\x2"+
+		"\x2\x2\x43\t\x3\x2\x2\x2\x44\x45\a\t\x2\x2\x45R\a\n\x2\x2\x46G\a\t\x2"+
+		"\x2GL\x5\x6\x4\x2HI\a\v\x2\x2IK\x5\x6\x4\x2JH\x3\x2\x2\x2KN\x3\x2\x2\x2"+
+		"LJ\x3\x2\x2\x2LM\x3\x2\x2\x2MO\x3\x2\x2\x2NL\x3\x2\x2\x2OP\a\n\x2\x2P"+
+		"R\x3\x2\x2\x2Q\x44\x3\x2\x2\x2Q\x46\x3\x2\x2\x2R\v\x3\x2\x2\x2SX\x5\xE"+
+		"\b\x2TU\a\f\x2\x2UW\x5\xE\b\x2VT\x3\x2\x2\x2WZ\x3\x2\x2\x2XV\x3\x2\x2"+
+		"\x2XY\x3\x2\x2\x2Y\r\x3\x2\x2\x2ZX\x3\x2\x2\x2[]\a\r\x2\x2\\^\x5\x10\t"+
+		"\x2]\\\x3\x2\x2\x2]^\x3\x2\x2\x2^\xF\x3\x2\x2\x2_`\a\a\x2\x2`\x65\x5\f"+
+		"\a\x2\x61\x62\a\v\x2\x2\x62\x64\x5\f\a\x2\x63\x61\x3\x2\x2\x2\x64g\x3"+
+		"\x2\x2\x2\x65\x63\x3\x2\x2\x2\x65\x66\x3\x2\x2\x2\x66h\x3\x2\x2\x2g\x65"+
+		"\x3\x2\x2\x2hi\a\b\x2\x2i\x11\x3\x2\x2\x2\f\x15\x1B\x35<\x42LQX]\x65";
 	public static readonly ATN _ATN =
 		new ATNDeserializer().Deserialize(_serializedATN.ToCharArray());
 }
