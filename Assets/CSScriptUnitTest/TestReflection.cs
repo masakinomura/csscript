@@ -102,9 +102,9 @@ namespace CSScript.Test {
 
 		[Test]
 		public void TestCanCastGeneric () {
-			Assert.False (ReflectionUtil.CanCast (typeof (GenricOne<>), new GenricOne<int> ()));
-			Assert.True (ReflectionUtil.CanCast (typeof (GenricOne<int>), new GenricOne<int> ()));
-			Assert.False (ReflectionUtil.CanCast (typeof (GenricOne<int>), new GenricOne<string> ()));
+			Assert.False (ReflectionUtil.CanCast (typeof (GenericOne<>), new GenericOne<int> ()));
+			Assert.True (ReflectionUtil.CanCast (typeof (GenericOne<int>), new GenericOne<int> ()));
+			Assert.False (ReflectionUtil.CanCast (typeof (GenericOne<int>), new GenericOne<string> ()));
 		}
 
 		[Test]
@@ -179,8 +179,19 @@ namespace CSScript.Test {
 			Assert.AreEqual (3.2f, ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (float) }, 3.2f));
 			Assert.AreEqual ("hoge", ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (string) }, "hoge"));
 			Assert.AreEqual (s2, ReflectionUtil.CallMethod (s, "GetG", new System.Type[] { typeof (Simple) }, s2));
-
 		}
+
+		[Test]
+		public void TestMethodGenericSimple2 () {
+			GenericOne<int> gi = new GenericOne<int> ();
+			Assert.AreEqual (3, ReflectionUtil.CallMethod (gi, "GetInt"));
+			Assert.AreEqual (4, ReflectionUtil.CallMethod (gi, "GetT", 4));
+			Assert.AreEqual (4.3f, ReflectionUtil.CallMethod (gi, "GetS", new System.Type[] { typeof (float) }, 4.3f));
+
+			Assert.AreEqual ("hoge", ReflectionUtil.CallMethod (gi, "Get2", new System.Type[] { typeof (string) }, "hoge", 5));
+			Assert.AreEqual (5, gi._pa);
+		}
+
 	}
 
 }

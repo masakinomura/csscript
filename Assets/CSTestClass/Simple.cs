@@ -67,8 +67,25 @@ namespace CSScript.Test {
 		}
 	}
 
-	public class GenricOne<T> {
-		public T pa;
+	public class GenericOne<T> {
+		public T _pa;
+
+		public int GetInt () {
+			return 3;
+		}
+
+		public T GetT (T t) {
+			return t;
+		}
+
+		public S GetS<S> (S s) {
+			return s;
+		}
+
+		public S Get2<S>(S s, T t) {
+			_pa = t;
+			return s;
+		}
 	}
 
 	public interface ITest {
