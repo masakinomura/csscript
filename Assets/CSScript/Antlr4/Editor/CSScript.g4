@@ -15,7 +15,7 @@ expression:
 	| NEW vartypes parameters								# newExp
 	| (vartypes '.')? NAME generic_parameters? parameters	# funcExp
 	| expression OP_ASSIGN expression						# assignmentExp
-	| variable												# varExp
+	| local_variable										# varExp
 	| NAME													# idAtomExp
 	| LONG													# longAtomExp
 	| ULONG													# ulongAtomExp
@@ -26,7 +26,7 @@ expression:
 	| FLOAT													# floatAtomExp
 	| STRING												# stringAtomExp;
 
-variable: VAR NAME | NAME;
+local_variable: VAR NAME | NAME;
 
 parameters: '(' ')' | '(' expression (',' expression)* ')';
 

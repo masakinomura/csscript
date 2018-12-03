@@ -134,11 +134,11 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLongAtomExp([NotNull] CSScriptParser.LongAtomExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.variable"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.local_variable"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitVariable([NotNull] CSScriptParser.VariableContext context);
+	Result VisitLocal_variable([NotNull] CSScriptParser.Local_variableContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.parameters"/>.
 	/// </summary>

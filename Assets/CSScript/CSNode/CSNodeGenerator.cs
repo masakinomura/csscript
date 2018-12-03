@@ -5,6 +5,7 @@ using UnityEngine;
 namespace CSScript {
 
 	public class CSNodeGenerator : CSScriptBaseVisitor<CSNode> {
+		CSState _state = new CSState ();
 
 		void EvaluateExpressions (CSNode node, CSScriptParser.ExpressionContext[] expressions) {
 			int len = expressions.Length;
@@ -74,10 +75,15 @@ namespace CSScript {
 			return node;
 		}
 
-		public override CSNode VisitVariable (CSScriptParser.VariableContext context) {
+		public override CSNode VisitLocal_variable (CSScriptParser.Local_variableContext context) {
 			CSVariableNode variableNode = new CSVariableNode (context.Start.Line, context.Start.Column);
 			variableNode._variableName = context.NAME ().GetText ();
-			variableNode._declare = (context.VAR () != null);
+			if (context.VAR () != null) {
+				variableNode._declare = true;
+				_state.AddVariable(variableNode._variableName);
+			} else {
+				variableNode._declare = false;
+			}
 			return variableNode;
 		}
 
