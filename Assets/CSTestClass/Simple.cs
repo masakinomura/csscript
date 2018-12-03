@@ -82,9 +82,13 @@ namespace CSScript.Test {
 			return s;
 		}
 
-		public S Get2<S>(S s, T t) {
+		public S Get2<S> (S s, T t) {
 			_pa = t;
 			return s;
+		}
+
+		public static string GetStr () {
+			return "doge";
 		}
 	}
 

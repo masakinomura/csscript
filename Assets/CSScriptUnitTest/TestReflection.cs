@@ -192,6 +192,11 @@ namespace CSScript.Test {
 			Assert.AreEqual (5, gi._pa);
 		}
 
+		[Test]
+		public void TestStaticMethod () {
+			Assert.AreEqual ("doge", ReflectionUtil.CallMethod (typeof (GenericOne<int>), "GetStr"));
+		}
+
 	}
 
 }
