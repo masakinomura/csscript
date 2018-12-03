@@ -218,5 +218,38 @@ namespace CSScript.Test {
 				}
 			);
 		}
+
+		[Test]
+		public void TestGetterSetterReadWriteOnly () {
+			Simple s = new Simple ();
+
+			ReflectionUtil.Set (s, "StringSetOnly", "hoge");
+			Assert.AreEqual ("hoge", ReflectionUtil.Get (s, "StringGetOnly"));
+
+			Assert.Throws<System.InvalidOperationException> (
+				() => {
+					ReflectionUtil.Set (s, "StringGetOnly", "1");
+				}
+			);
+
+			System.Action<int> hoge = (int a) => { Debug.Log (a); };
+
+			Assert.Throws<System.InvalidOperationException> (
+				() => {
+					ReflectionUtil.Get (s, "StringSetOnly");
+				}
+			);
+		}
+
+		[Test]
+		public void TestHasField () {
+			Assert.True (ReflectionUtil.HasField (typeof (Simple), "HELLO"));
+			Assert.False (ReflectionUtil.HasField (typeof (Simple), "hello"));
+
+			Simple s = new Simple ();
+			Assert.False (ReflectionUtil.HasField (s, "HELLO"));
+			Assert.True (ReflectionUtil.HasField (s, "_s"));
+			Assert.False (ReflectionUtil.HasField (s, "_ssss"));
+		}
 	}
 }

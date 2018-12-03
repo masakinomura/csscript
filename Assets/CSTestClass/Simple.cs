@@ -71,6 +71,9 @@ namespace CSScript.Test {
 		}
 
 		public int IntProperty { get; set; }
+
+		public string StringGetOnly { get { return _s; } }
+		public string StringSetOnly { set { _s = value; } }
 	}
 
 	public class GenericOne<T> {
