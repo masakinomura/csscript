@@ -244,8 +244,6 @@ namespace CSScript {
 					selector.Add (name);
 				} else {
 					currentTypeString = GetTypeString (vartypes, varLen);
-
-					Debug.Log(currentTypeString);
 					currentType = ReflectionUtil.GetType (currentTypeString);
 				}
 			}
