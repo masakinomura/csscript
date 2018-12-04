@@ -8,11 +8,13 @@ namespace CSScript {
 	public class CSOPNewNode : CSNode {
 		public CSTypeNode NewType { get { return _children[0] as CSTypeNode; } }
 		public CSNode NewParameters { get { return _children[1]; } }
+		public CSArrayIndexNode ArrayIndex { get { return _children[2] as CSArrayIndexNode; } }
+		public bool IsArray { get { return _children[2] != null; } }
 
 		public CSOPNewNode (int line, int column) : base (line, column) { }
 
 		public override CSObject Evaluate (CSState state) {
-			if (ChildCount != 2) {
+			if (ChildCount != 3) {
 				CSLog.E (this, "new operator has invalid # of children...");
 				return null;
 			}
@@ -22,25 +24,30 @@ namespace CSScript {
 				return null;
 			}
 
-			object[] parameters = null;
+			object newInstance = null;
+			if (IsArray) {
 
-			if (NewParameters != null && NewParameters.ChildCount > 0) {
-				CSNode[] pchildren = NewParameters._children;
-				int pCount = pchildren.Length;
-				parameters = new object[pCount];
-				for (int i = 0; i < pCount; ++i) {
-					parameters[i] = pchildren[i].Evaluate(state).Value;
+			} else {
+
+				object[] parameters = null;
+
+				if (NewParameters != null && NewParameters.ChildCount > 0) {
+					CSNode[] pchildren = NewParameters._children;
+					int pCount = pchildren.Length;
+					parameters = new object[pCount];
+					for (int i = 0; i < pCount; ++i) {
+						parameters[i] = pchildren[i].Evaluate (state).Value;
+					}
+				}
+
+				if (parameters == null) {
+					newInstance = System.Activator.CreateInstance (NewType._type);
+				} else {
+					newInstance = System.Activator.CreateInstance (NewType._type, parameters);
 				}
 			}
 
-			object newInstance;
-			if (parameters == null) {
-				newInstance = System.Activator.CreateInstance (NewType._type);
-			} else {
-				newInstance = System.Activator.CreateInstance (NewType._type, parameters);
-			}
-
-			CSObject obj = new CSObject (this, newInstance);
+			CSObject obj = CSObject.TempVariableObject (this, NewType._type, newInstance);
 			return obj;
 		}
 	}

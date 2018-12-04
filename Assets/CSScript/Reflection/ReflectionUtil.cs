@@ -157,6 +157,20 @@ namespace CSScript {
 			{ "decimal", typeof (decimal) }, // 
 			{ "string", typeof (string) }, //
 			{ "object", typeof (object) }, //
+
+			{ "char[]", typeof (char[]) }, //
+			{ "byte[]", typeof (byte[]) }, //
+			{ "short[]", typeof (short[]) }, //
+			{ "ushort[]", typeof (ushort[]) }, //
+			{ "int[]", typeof (int[]) }, //
+			{ "uint[]", typeof (uint[]) }, // 
+			{ "long[]", typeof (long[]) }, // 
+			{ "ulong[]", typeof (ulong[]) }, // 
+			{ "float[]", typeof (float[]) }, // 
+			{ "dobule[]", typeof (double[]) }, // 
+			{ "decimal[]", typeof (decimal[]) }, // 
+			{ "string[]", typeof (string[]) }, //
+			{ "object[]", typeof (object[]) }, //			
 		};
 
 		ReflectionUtil () {
