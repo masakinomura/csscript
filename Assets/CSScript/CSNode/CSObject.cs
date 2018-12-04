@@ -90,6 +90,14 @@ namespace CSScript {
 			}
 		}
 
+		public object GetAs (System.Type type) {
+			if (type == Type) {
+				return Value;
+			} else {
+				return ReflectionUtil.Cast (type, Value);
+			}
+		}
+
 		public static CSObject ImmediateObject (CSNode node, System.Type type, object val) {
 			if (val == null) {
 				CSLog.E (node, "val cannot be null");

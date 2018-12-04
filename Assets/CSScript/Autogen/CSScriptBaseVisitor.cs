@@ -313,7 +313,7 @@ public partial class CSScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Resu
 	/// <return>The visitor result.</return>
 	public virtual Result VisitClass_initializer_element([NotNull] CSScriptParser.Class_initializer_elementContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.array_intializer"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.array_initializer"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -321,7 +321,7 @@ public partial class CSScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Resu
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitArray_intializer([NotNull] CSScriptParser.Array_intializerContext context) { return VisitChildren(context); }
+	public virtual Result VisitArray_initializer([NotNull] CSScriptParser.Array_initializerContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.dictionary_initializer"/>.
 	/// <para>

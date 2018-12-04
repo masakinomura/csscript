@@ -11,10 +11,16 @@ namespace CSScript {
 		public CSArrayIndexNode ArrayIndex { get { return _children[2] as CSArrayIndexNode; } }
 		public bool IsArray { get { return _children[2] != null; } }
 
+		public CSArrayInitializerNode ArrayInitializer { get { return _children[3] as CSArrayInitializerNode; } }
+
+		public CSNode[] _arrayInitializer;
+		public KeyValuePair<CSNode, CSNode>[] _dictionaryInitializer;
+		public KeyValuePair<string, CSNode>[] _objectInitializer;
+
 		public CSOPNewNode (int line, int column) : base (line, column) { }
 
 		public override CSObject Evaluate (CSState state) {
-			if (ChildCount != 3) {
+			if (ChildCount != 6) {
 				CSLog.E (this, "new operator has invalid # of children...");
 				return null;
 			}
@@ -29,11 +35,21 @@ namespace CSScript {
 			if (IsArray) {
 				type = NewType._arrayType;
 				int count = ArrayIndex.EvaluateIndex ();
-				if (count < 0) {
-					CSLog.E ("Implement this");
-					newInstance = null;
+				if (ArrayInitializer != null) {
+					object[] elements = ArrayInitializer.EvaluateElements (state, NewType._type);
+					int len = elements.Length;
+					int allocCount = (len > count? len : count);
+					newInstance = System.Activator.CreateInstance (type, allocCount);
+					System.Array array = newInstance as System.Array;
+					for (int i = 0; i < len; ++i) {
+						array.SetValue(elements[i], i);
+					}
 				} else {
-					newInstance = System.Activator.CreateInstance (type, count);
+					if (count < 0) {
+						throw new System.ArgumentException ("array needs an initializer or count");
+					} else {
+						newInstance = System.Activator.CreateInstance (type, count);
+					}
 				}
 			} else {
 

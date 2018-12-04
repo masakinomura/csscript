@@ -43,14 +43,14 @@ array_index: '[' expression? ']';
 
 initializer:
 	class_initializer
-	| array_intializer
+	| array_initializer
 	| dictionary_initializer;
 
 class_initializer:
 	'{' class_initializer_element (',' class_initializer_element)* '}';
 class_initializer_element: NAME '=' expression;
 
-array_intializer: '{' expression (',' expression)* '}';
+array_initializer: '{' expression (',' expression)* '}';
 
 dictionary_initializer:
 	'{' dictionary_initializer_element (

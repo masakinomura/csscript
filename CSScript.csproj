@@ -56,6 +56,9 @@
      <Compile Include="Assets\CSScript\Autogen\CSScriptParser.cs" />
      <Compile Include="Assets\CSScript\Autogen\CSScriptVisitor.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSArrayIndexNode.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSArrayInitializerNode.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSClassInitializerNode.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSDictionaryInitializerNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSFloatNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSIntNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSLog.cs" />

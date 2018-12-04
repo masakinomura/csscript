@@ -214,11 +214,11 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitClass_initializer_element([NotNull] CSScriptParser.Class_initializer_elementContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.array_intializer"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.array_initializer"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitArray_intializer([NotNull] CSScriptParser.Array_intializerContext context);
+	Result VisitArray_initializer([NotNull] CSScriptParser.Array_initializerContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.dictionary_initializer"/>.
 	/// </summary>

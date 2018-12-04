@@ -41,12 +41,12 @@ public partial class CSScriptParser : Parser {
 		RULE_code = 0, RULE_line = 1, RULE_block = 2, RULE_expression = 3, RULE_local_variable = 4, 
 		RULE_parameters = 5, RULE_vartypes = 6, RULE_vartype = 7, RULE_generic_parameters = 8, 
 		RULE_namespace = 9, RULE_array_index = 10, RULE_initializer = 11, RULE_class_initializer = 12, 
-		RULE_class_initializer_element = 13, RULE_array_intializer = 14, RULE_dictionary_initializer = 15, 
+		RULE_class_initializer_element = 13, RULE_array_initializer = 14, RULE_dictionary_initializer = 15, 
 		RULE_dictionary_initializer_element = 16;
 	public static readonly string[] ruleNames = {
 		"code", "line", "block", "expression", "local_variable", "parameters", 
 		"vartypes", "vartype", "generic_parameters", "namespace", "array_index", 
-		"initializer", "class_initializer", "class_initializer_element", "array_intializer", 
+		"initializer", "class_initializer", "class_initializer_element", "array_initializer", 
 		"dictionary_initializer", "dictionary_initializer_element"
 	};
 
@@ -1083,8 +1083,8 @@ public partial class CSScriptParser : Parser {
 		public Class_initializerContext class_initializer() {
 			return GetRuleContext<Class_initializerContext>(0);
 		}
-		public Array_intializerContext array_intializer() {
-			return GetRuleContext<Array_intializerContext>(0);
+		public Array_initializerContext array_initializer() {
+			return GetRuleContext<Array_initializerContext>(0);
 		}
 		public Dictionary_initializerContext dictionary_initializer() {
 			return GetRuleContext<Dictionary_initializerContext>(0);
@@ -1117,7 +1117,7 @@ public partial class CSScriptParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 165; array_intializer();
+				State = 165; array_initializer();
 				}
 				break;
 			case 3:
@@ -1236,29 +1236,29 @@ public partial class CSScriptParser : Parser {
 		return _localctx;
 	}
 
-	public partial class Array_intializerContext : ParserRuleContext {
+	public partial class Array_initializerContext : ParserRuleContext {
 		public ExpressionContext[] expression() {
 			return GetRuleContexts<ExpressionContext>();
 		}
 		public ExpressionContext expression(int i) {
 			return GetRuleContext<ExpressionContext>(i);
 		}
-		public Array_intializerContext(ParserRuleContext parent, int invokingState)
+		public Array_initializerContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_array_intializer; } }
+		public override int RuleIndex { get { return RULE_array_initializer; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ICSScriptVisitor<TResult> typedVisitor = visitor as ICSScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitArray_intializer(this);
+			if (typedVisitor != null) return typedVisitor.VisitArray_initializer(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public Array_intializerContext array_intializer() {
-		Array_intializerContext _localctx = new Array_intializerContext(Context, State);
-		EnterRule(_localctx, 28, RULE_array_intializer);
+	public Array_initializerContext array_initializer() {
+		Array_initializerContext _localctx = new Array_initializerContext(Context, State);
+		EnterRule(_localctx, 28, RULE_array_initializer);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);

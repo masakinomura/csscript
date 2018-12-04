@@ -122,12 +122,37 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewIistArray () {
+		public void NewListArray () {
 			CSNode root = ParseScript ("var a = new System.Collections.Generic.List<int>[2];");
 			CSObject obj = root.Evaluate ();
 			Assert.AreEqual (typeof (List<int>[]), obj.Type);
 			List<int>[] arr = obj.GetAs<List<int>[]> ();
 			Assert.AreEqual (2, arr.Length);
+		}
+
+		[Test]
+		public void NewIntArrayWithInitializer () {
+			CSNode root = ParseScript ("var a = new int[]{1,2,3};");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (int[]), obj.Type);
+			int[] arr = obj.GetAs<int[]> ();
+			Assert.AreEqual (3, arr.Length);
+
+			Assert.AreEqual (1, arr[0]);
+			Assert.AreEqual (2, arr[1]);
+			Assert.AreEqual (3, arr[2]);
+		}
+
+		[Test]
+		public void NewClassArrayWithInitializer () {
+			CSNode root = ParseScript ("var a = new CSScript.Test.Simple[]{new CSScript.Test.Simple(1), new CSScript.Test.Simple(2)};");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (Simple[]), obj.Type);
+			Simple[] arr = obj.GetAs<Simple[]> ();
+			Assert.AreEqual (2, arr.Length);
+
+			Assert.AreEqual (1, arr[0]._a);
+			Assert.AreEqual (2, arr[1]._a);
 		}
 
 	}
