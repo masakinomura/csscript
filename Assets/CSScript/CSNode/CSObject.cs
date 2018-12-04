@@ -4,19 +4,17 @@ using UnityEngine;
 
 namespace CSScript {
 	public enum ObjectType {
-		VARIABLE,
+		LOCAL_VARIABLE,
+		TEMP_VARIABLE,
 		IMMEDIATE,
-		TYPE,
 	}
 
 	public class CSObject {
-
 		CSNode _node;
-
 		object _object;
 
 		CSScope _scope;
-		string _nameInScope;
+		string _selector;
 
 		System.Type _type;
 
@@ -27,8 +25,8 @@ namespace CSScript {
 		public string Name {
 			get {
 				switch (_objectType) {
-					case ObjectType.VARIABLE:
-						return _nameInScope;
+					case ObjectType.LOCAL_VARIABLE:
+						return _selector;
 					case ObjectType.IMMEDIATE:
 						return "Immedidate";
 					default:
@@ -40,56 +38,113 @@ namespace CSScript {
 		public object Value {
 			get {
 				switch (_objectType) {
-					case ObjectType.VARIABLE:
-						return _scope.GetVariable (_nameInScope);
-					case ObjectType.TYPE:
-						return _type;
+					case ObjectType.LOCAL_VARIABLE:
+						return _scope.GetVariable (_selector);
+					case ObjectType.IMMEDIATE:
+						return _object;
+					case ObjectType.TEMP_VARIABLE:
+						return _object;
 					default:
 						return _object;
 				}
 			}
 
-			set {
-				switch (_objectType) {
-					case ObjectType.VARIABLE:
-						_scope.SetVariable (_nameInScope, value);
-						break;
-					case ObjectType.TYPE:
-						CSLog.E (_node, "you cannot assign value to type");
-						break;
-					case ObjectType.IMMEDIATE:
-						CSLog.E (_node, "you cannot assign value to immediate");
-						break;
-					default:
-						_object = value;
-						break;
-				}
+			// set {
+			// 	switch (_objectType) {
+			// 		case ObjectType.VARIABLE:
+			// 			_scope.SetVariable (_nameInScope, value);
+			// 			break;
+			// 		case ObjectType.TYPE:
+			// 			CSLog.E (_node, "you cannot assign value to type");
+			// 			break;
+			// 		case ObjectType.IMMEDIATE:
+			// 			CSLog.E (_node, "you cannot assign value to immediate");
+			// 			break;
+			// 		default:
+			// 			_object = value;
+			// 			break;
+			// 	}
+			// }
+		}
+
+		public System.Type Type { get { return _type; } }
+
+		private CSObject () { }
+
+		public static CSObject LocalVariableObject (CSNode node, System.Type type, CSScope scope, string name) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = null,
+					_scope = scope,
+					_selector = name,
+					_objectType = ObjectType.LOCAL_VARIABLE,
+			};
+			return obj;
+		}
+
+		public static CSObject ImmediateObject (CSNode node, System.Type type, object val) {
+			if (val == null) {
+				CSLog.E (node, "val cannot be null");
+				return null;
 			}
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = val,
+					_type = val.GetType (),
+					_scope = null,
+					_selector = null,
+					_objectType = ObjectType.IMMEDIATE,
+			};
+			return obj;
 		}
 
-		public CSObject (CSNode node, CSScope scope, string name) {
-			_node = node;
-			_object = null;
-			_scope = scope;
-			_nameInScope = name;
-			_objectType = ObjectType.VARIABLE;
+		public static CSObject TempVariableObject (CSNode node, System.Type type, object val, params string[] selectors) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = val,
+					_scope = null,
+					_type = type,
+					_selector = null,
+					_objectType = ObjectType.TEMP_VARIABLE,
+			};
+
+			if (selectors != null && selectors.Length > 0) {
+				CSLog.E (node, "implement me!!!");
+			}
+			return obj;
 		}
 
-		public CSObject (CSNode node, object val) {
-			_node = node;
-			_object = val;
-			_scope = null;
-			_nameInScope = null;
-			_objectType = ObjectType.IMMEDIATE;
+		public static CSObject TempVariableObject (CSNode node, CSObject inObj, params string[] selectors) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = inObj.Value,
+					_scope = null,
+					_type = inObj.Type,
+					_selector = null,
+					_objectType = ObjectType.TEMP_VARIABLE,
+			};
+
+			if (selectors != null && selectors.Length > 0) {
+				CSLog.E (node, "implement me!!!");
+			}
+			return obj;
 		}
 
-		public CSObject (CSNode node, System.Type type) {
-			_node = node;
-			_object = null;
-			_scope = null;
-			_type = type;
-			_nameInScope = null;
-			_objectType = ObjectType.TYPE;
+		public CSObject Assign (CSObject obj) {
+
+			if (ObjectType == ObjectType.LOCAL_VARIABLE) {
+				_scope.SetVariable (_selector, obj.Value);
+				_type = obj.Type;
+
+			} else if (ObjectType == ObjectType.TEMP_VARIABLE) {
+				_object = obj.Value;
+				_type = obj.Type;
+				_selector = null;
+			} else {
+				CSLog.E (_node, "cannot assign to " + _objectType.ToString ());
+			}
+
+			return this;
 		}
 
 	}

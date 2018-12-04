@@ -10,7 +10,7 @@ namespace CSScript {
 
 		public CSFloatNode (int line, int column) : base (line, column) { }
 		public override CSObject Evaluate (CSState state) {
-			return new CSObject (this, _val);
+			return CSObject.ImmediateObject (this, typeof (float), _val);
 		}
 	}
 

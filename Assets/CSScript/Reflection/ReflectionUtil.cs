@@ -38,12 +38,12 @@ namespace CSScript {
 			return _inst._CanCast (type, o);
 		}
 
-		public static Type GetType (string namespaceName, string typeName) {
+		public static Type GetType (string typeName, params string[] namespaceNames) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
 				return null;
 			}
-			return _inst._GetType (typeName, namespaceName);
+			return _inst._GetType (typeName, namespaceNames);
 		}
 
 		public static object Cast (Type type, object o) {

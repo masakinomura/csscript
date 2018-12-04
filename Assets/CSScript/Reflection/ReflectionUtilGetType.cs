@@ -10,27 +10,46 @@ namespace CSScript {
 	public partial class ReflectionUtil {
 		Dictionary<KeyValuePair<string, string>, Type> _typeCache = new Dictionary<KeyValuePair<string, string>, Type> ();
 
-		Type _GetType (string typeName, string namespaceName) {
+		Type _GetType (string typeName, params string[] namespaceNames) {
 			Type type = null;
 
-			KeyValuePair<string, string> key = new KeyValuePair<string, string> (namespaceName, typeName);
-			if (_inst._typeCache.TryGetValue (key, out type)) {
-				return type;
+			if (namespaceNames == null || namespaceNames.Length == 0) {
+				namespaceNames = new string[] { null };
 			}
 
-			AsmInfo info;
-			if (!string.IsNullOrEmpty (namespaceName)) {
-				info = GetAsmInfo (namespaceName);
-			} else {
-				info = GetAsmInfo (typeName);
+			int len = namespaceNames.Length;
+			for (int i = 0; i < len; ++i) {
+				string namespaceName = namespaceNames[i];
+
+				KeyValuePair<string, string> key = new KeyValuePair<string, string> (namespaceName, typeName);
+				Type cachedType;
+				if (_inst._typeCache.TryGetValue (key, out cachedType)) {
+					if (cachedType != null) {
+						if (type != null) {
+							throw new AmbiguousMatchException ("type: " + typeName + " is ambigours. the type exists in " + type.ToString () + " and " + cachedType.ToString ());
+						} else {
+							type = cachedType;
+						}
+					}
+				} else {
+					AsmInfo info;
+					if (!string.IsNullOrEmpty (namespaceName)) {
+						info = GetAsmInfo (namespaceName);
+					} else {
+						info = GetAsmInfo (typeName);
+					}
+
+					Type nextType = _GetTypeWithASM (typeName, info, namespaceName);
+					_typeCache[key] = nextType;
+					if (nextType != null) {
+						type = nextType;
+					}
+				}
 			}
 
-			type = _GetTypeWithASM (typeName, info, namespaceName);
 			if (type == null) {
 				CSLog.D ("type: " + typeName + " cannot be found");
 			}
-
-			_typeCache[key] = type;
 
 			return type;
 		}

@@ -18,9 +18,8 @@ namespace CSScript {
 			}
 			CSObject left = Left.Evaluate (state);
 			CSObject right = Right.Evaluate (state);
-
-			left.Value = right.Value;
-			return left;
+			
+			return left.Assign(right);
 		}
 	}
 

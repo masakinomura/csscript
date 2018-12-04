@@ -29,7 +29,7 @@ namespace CSScript.Test {
 		public void AssignImmedidate () {
 			CSNode root = ParseScript ("var 4 = 3;");
 			root.Evaluate ();
-			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 4] you cannot assign value to immediate");
+			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 4] cannot assign to IMMEDIATE");
 		}
 
 		[Test]
