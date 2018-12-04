@@ -14,8 +14,9 @@ block: CURLY_BRACE_START line* CURLY_BRACE_END;
 
 expression:
 	'(' expression ')'										# parenthesisExp
-	| NEW vartypes parameters								# newExp
+	| NEW vartypes (parameters | array_index) initializer?	# newExp
 	| (vartypes '.')? NAME generic_parameters? parameters	# funcExp
+	| expression array_index								# arrayIndexExp
 	| expression OP_ASSIGN expression						# assignmentExp
 	| local_variable										# varExp
 	| USING namespace										# usingNamespaceExp
@@ -38,11 +39,30 @@ vartype: NAME generic_parameters?;
 
 generic_parameters: '<' vartypes (',' vartypes)* '>';
 namespace: NAME (. NAME)*;
+array_index: '[' expression? ']';
+
+initializer:
+	class_initializer
+	| array_intializer
+	| dictionary_initializer;
+
+class_initializer:
+	'{' class_initializer_element (',' class_initializer_element)* '}';
+class_initializer_element: NAME '=' expression;
+
+array_intializer: '{' expression (',' expression)* '}';
+
+dictionary_initializer:
+	'{' dictionary_initializer_element (
+		',' dictionary_initializer_element
+	)* '}';
+
+dictionary_initializer_element:
+	'{' expression ',' expression '}';
 
 /*
  * Lexer Rules
  */
-
 fragment LOWERCASE: [a-z];
 fragment UPPERCASE: [A-Z];
 fragment WORD: (LOWERCASE | UPPERCASE | '_')+;
@@ -58,6 +78,8 @@ LESS_THAN: '<';
 GREATER_THAN: '>';
 PARENTHESIS_START: '(';
 PARENTHESIS_END: ')';
+RECTANGLE_BRACE_START: '[';
+RECTANGLE_BRACE_END: ']';
 CURLY_BRACE_START: '{';
 CURLY_BRACE_END: '}';
 COMMA: ',';

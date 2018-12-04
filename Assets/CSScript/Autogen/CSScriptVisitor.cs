@@ -112,6 +112,13 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFloatAtomExp([NotNull] CSScriptParser.FloatAtomExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>arrayIndexExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArrayIndexExp([NotNull] CSScriptParser.ArrayIndexExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>intAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
@@ -182,4 +189,46 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitNamespace([NotNull] CSScriptParser.NamespaceContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.array_index"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArray_index([NotNull] CSScriptParser.Array_indexContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.initializer"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitInitializer([NotNull] CSScriptParser.InitializerContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.class_initializer"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitClass_initializer([NotNull] CSScriptParser.Class_initializerContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.class_initializer_element"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitClass_initializer_element([NotNull] CSScriptParser.Class_initializer_elementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.array_intializer"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArray_intializer([NotNull] CSScriptParser.Array_intializerContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.dictionary_initializer"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDictionary_initializer([NotNull] CSScriptParser.Dictionary_initializerContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.dictionary_initializer_element"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDictionary_initializer_element([NotNull] CSScriptParser.Dictionary_initializer_elementContext context);
 }

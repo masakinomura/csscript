@@ -1,4 +1,16 @@
-﻿{
+﻿var a = new CSScript.Test.Simple();
+var ret = s.GetInt()[1];
+var d = new Dictionary<string, int>() {
+	{"hoge", 3}, 
+	{"doge", 4}
+};
+
+var a = new int[3];
+var a = new int[] {1,2,3};
+var s = new Simple() {_a = 3};
+
+
+{
 	var a = 0;
 	var b = "hoge";
 }
@@ -6,7 +18,7 @@
 using System.Text;using System;
 a.GetString<int, float>(2, 3.4f);
 var ret = s.GetInt(2,3,4);
-var ret = s.GetInt();
+
 var a = new CSScript.Test.Simple(3, 5.2f);
 34uL;
 2.3f;
