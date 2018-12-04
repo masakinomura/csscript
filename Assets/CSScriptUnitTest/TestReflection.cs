@@ -37,7 +37,7 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (int[]), ReflectionUtil.GetType ("int[]"));
 			Assert.AreEqual (typeof (System.Int32[]), ReflectionUtil.GetType ("System.Int32[]", "System"));
 			Assert.AreEqual (typeof (System.Int32[]), ReflectionUtil.GetType ("Int32[]", "System"));
-		}		
+		}
 
 		[Test]
 		public void TestGetTypeClass () {
@@ -55,6 +55,11 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("System.Collections.Generic.List`1", "System.Collections.Generic"));
 			Assert.AreEqual (typeof (List<>), ReflectionUtil.GetType ("List`1", "System.Collections.Generic"));
 
+		}
+
+		[Test]
+		public void TestGetDictionaryType () {
+			Assert.AreEqual (typeof (Dictionary<string, Simple>), System.Type.GetType (typeof (Dictionary<string, Simple>).AssemblyQualifiedName));
 		}
 
 		[Test]

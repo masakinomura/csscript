@@ -59,6 +59,7 @@
      <Compile Include="Assets\CSScript\CSNode\CSArrayInitializerNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSClassInitializerNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSDictionaryInitializerNode.cs" />
+     <Compile Include="Assets\CSScript\CSNode\CSErrorListener.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSFloatNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSIntNode.cs" />
      <Compile Include="Assets\CSScript\CSNode\CSLog.cs" />

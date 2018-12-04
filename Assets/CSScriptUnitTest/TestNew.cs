@@ -155,5 +155,29 @@ namespace CSScript.Test {
 			Assert.AreEqual (2, arr[1]._a);
 		}
 
+		[Test]
+		public void NewDictionaryWithInitializer () {
+			Debug.Log (typeof (Dictionary<string, Simple>));
+			CSNode root = ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>(){" +
+				"	{\"hoge\", new CSScript.Test.Simple (1)}," +
+				"	{\"moge\", new CSScript.Test.Simple (2)}," +
+				"};");
+
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (Dictionary<string, Simple>), obj.Type);
+			Dictionary<string, Simple> dict = obj.GetAs<Dictionary<string, Simple>> ();
+			Assert.AreEqual (2, dict.Count);
+
+			Assert.AreEqual (1, dict["hoge"]._a);
+			Assert.AreEqual (2, dict["moge"]._a);
+		}
+
+		[Test]
+		public void TestParserError () {
+			Debug.Log (typeof (Dictionary<string, Simple>));
+			CSNode root = ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>;");
+			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 80] extraneous input ';' expecting {'(', '[', '.'}");
+		}
+
 	}
 }

@@ -83,7 +83,7 @@ namespace CSScript {
 		}
 
 		public T GetAs<T> () {
-			if (typeof (T) == Type) {
+			if (typeof (T) == typeof (object) || typeof (T) == Type) {
 				return (T) Value;
 			} else {
 				return (T) ReflectionUtil.Cast (typeof (T), Value);
@@ -91,7 +91,7 @@ namespace CSScript {
 		}
 
 		public object GetAs (System.Type type) {
-			if (type == Type) {
+			if (type == typeof (object) || type == Type) {
 				return Value;
 			} else {
 				return ReflectionUtil.Cast (type, Value);

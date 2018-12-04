@@ -13,6 +13,7 @@ namespace CSScript.Test {
 			CSScriptLexer lexer = new CSScriptLexer (inputStream);
 			CommonTokenStream commonTokenStream = new CommonTokenStream (lexer);
 			CSScriptParser parser = new CSScriptParser (commonTokenStream);
+			parser.AddErrorListener (new CSDebugLogListener ());
 			CSScriptParser.CodeContext code = parser.code ();
 			CSNodeGenerator generator = new CSNodeGenerator ();
 			return generator.Visit (code);

@@ -29,6 +29,7 @@ namespace CSScript.Test {
 		public void AssignImmedidate () {
 			CSNode root = ParseScript ("var 4 = 3;");
 			root.Evaluate ();
+			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 4] missing NAME at '4'");
 			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 4] cannot assign to IMMEDIATE");
 		}
 
@@ -37,16 +38,16 @@ namespace CSScript.Test {
 			CSNode root = ParseScript ("var d = 3;\n var e = 4; var h = 5;");
 
 			//position of '3' in 'var d = 3;'
-			Assert.AreEqual(1, root._children[0]._children[0]._children[1]._line);
-			Assert.AreEqual(8, root._children[0]._children[0]._children[1]._column);
+			Assert.AreEqual (1, root._children[0]._children[0]._children[1]._line);
+			Assert.AreEqual (8, root._children[0]._children[0]._children[1]._column);
 
 			//position of 'e' in 'var e = 4;'
-			Assert.AreEqual(2, root._children[1]._children[0]._children[0]._line);
-			Assert.AreEqual(1, root._children[1]._children[0]._children[0]._column);
+			Assert.AreEqual (2, root._children[1]._children[0]._children[0]._line);
+			Assert.AreEqual (1, root._children[1]._children[0]._children[0]._column);
 
 			//position of 'h' in 'var h = 5;'
-			Assert.AreEqual(2, root._children[2]._children[0]._children[0]._line);
-			Assert.AreEqual(12, root._children[2]._children[0]._children[0]._column);			
+			Assert.AreEqual (2, root._children[2]._children[0]._children[0]._line);
+			Assert.AreEqual (12, root._children[2]._children[0]._children[0]._column);
 		}
 	}
 }

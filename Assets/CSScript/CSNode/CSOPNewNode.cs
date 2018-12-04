@@ -12,6 +12,7 @@ namespace CSScript {
 		public bool IsArray { get { return _children[2] != null; } }
 
 		public CSArrayInitializerNode ArrayInitializer { get { return _children[3] as CSArrayInitializerNode; } }
+		public CSDictionaryInitializerNode DictionaryInitializer { get { return _children[4] as CSDictionaryInitializerNode; } }
 
 		public CSNode[] _arrayInitializer;
 		public KeyValuePair<CSNode, CSNode>[] _dictionaryInitializer;
@@ -42,7 +43,7 @@ namespace CSScript {
 					newInstance = System.Activator.CreateInstance (type, allocCount);
 					System.Array array = newInstance as System.Array;
 					for (int i = 0; i < len; ++i) {
-						array.SetValue(elements[i], i);
+						array.SetValue (elements[i], i);
 					}
 				} else {
 					if (count < 0) {
@@ -69,6 +70,32 @@ namespace CSScript {
 					newInstance = System.Activator.CreateInstance (type);
 				} else {
 					newInstance = System.Activator.CreateInstance (type, parameters);
+				}
+
+				CSDictionaryInitializerNode dictInitializer = DictionaryInitializer;
+				if (dictInitializer != null) {
+					IDictionary dict = newInstance as IDictionary;
+					if (dict == null) {
+						throw new System.InvalidOperationException ("you cannot use a dictionary initializer on non dictionary object");
+					}
+
+					System.Type keyType = typeof (object);
+					System.Type valueType = typeof (object);
+
+					System.Type[] genericTypes = NewType._type.GetGenericArguments ();
+
+					if (genericTypes != null) {
+						if (genericTypes.Length > 2) {
+							keyType = genericTypes[0];
+							valueType = genericTypes[1];
+						}
+					}
+
+					int len = dictInitializer.Count;
+					for (int i = 0; i < len; ++i) {
+						KeyValuePair<object, object> element = dictInitializer.Evaluate (state, i, keyType, valueType);
+						dict.Add(element.Key, element.Value);
+					}
 				}
 			}
 

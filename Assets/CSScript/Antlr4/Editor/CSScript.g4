@@ -47,7 +47,7 @@ initializer:
 	| dictionary_initializer;
 
 class_initializer:
-	'{' class_initializer_element (',' class_initializer_element)* '}';
+	'{' class_initializer_element (',' class_initializer_element)* ','? '}';
 class_initializer_element: NAME '=' expression;
 
 array_initializer: '{' expression (',' expression)* '}';
@@ -55,7 +55,7 @@ array_initializer: '{' expression (',' expression)* '}';
 dictionary_initializer:
 	'{' dictionary_initializer_element (
 		',' dictionary_initializer_element
-	)* '}';
+	)* ','? '}';
 
 dictionary_initializer_element:
 	'{' expression ',' expression '}';

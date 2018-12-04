@@ -155,11 +155,11 @@ namespace CSScript {
 				node._children = new CSNode[len];
 				for (int i = 0; i < len; ++i) {
 					CSScriptParser.Class_initializer_elementContext element = elements[i];
-					node._variableNames[i] = element.NAME().GetText();
+					node._variableNames[i] = element.NAME ().GetText ();
 					node._children[i] = Visit (element.expression ());
 				}
 			}
-			
+
 			return node;
 		}
 
@@ -193,6 +193,9 @@ namespace CSScript {
 						sb.Append (tempVarCount.ToString ());
 						sbTemplate.Append ('[');
 						for (int j = 0; j < tempVarCount; ++j) {
+							if (j != 0) {
+								sbTemplate.Append ("], [");
+							}
 							CSTypeNode child = VisitVartypes (templatetypes[j]) as CSTypeNode;
 							sbTemplate.Append (child._typeString);
 						}
@@ -241,6 +244,8 @@ namespace CSScript {
 					selector.Add (name);
 				} else {
 					currentTypeString = GetTypeString (vartypes, varLen);
+
+					Debug.Log(currentTypeString);
 					currentType = ReflectionUtil.GetType (currentTypeString);
 				}
 			}
@@ -250,7 +255,7 @@ namespace CSScript {
 			CSTypeNode node = new CSTypeNode (context.Start.Line, context.Start.Column);
 			node._type = currentType;
 			node._arrayType = ReflectionUtil.GetType (currentTypeString + "[]");
-			node._typeString = currentTypeString;
+			node._typeString = currentType.AssemblyQualifiedName;
 			node._assemblyName = currentType.Assembly.GetCleanName ();
 			//CSLog.D ("full name: " + node._typeString + " in the assembly: " + node._assemblyName);
 

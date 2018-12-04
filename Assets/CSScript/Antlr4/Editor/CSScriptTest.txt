@@ -1,4 +1,10 @@
-﻿var a = new CSScript.Test.Simple();
+﻿var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>() {
+	{"hoge", new CSScript.Test.Simple (1)},
+	{"moge", new CSScript.Test.Simple (2)},
+};
+
+
+var a = new CSScript.Test.Simple();
 var ret = s.GetInt()[1];
 var d = new Dictionary<string, int>() {
 	{"hoge", 3}, 

@@ -27,5 +27,9 @@ namespace CSScript {
 		public static void E (CSNode node, string msg) {
 			Debug.LogError ("[CSScript line: " + node._line + " col: " + node._column + "] " + msg);
 		}
+
+		public static void E (int line, int column, string msg) {
+			Debug.LogError ("[CSScript line: " + line + " col: " + column + "] " + msg);
+		}		
 	}
 }
