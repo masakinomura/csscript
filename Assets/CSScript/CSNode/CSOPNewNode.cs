@@ -25,8 +25,16 @@ namespace CSScript {
 			}
 
 			object newInstance = null;
+			System.Type type = null;
 			if (IsArray) {
-
+				type = NewType._arrayType;
+				int count = ArrayIndex.EvaluateIndex ();
+				if (count < 0) {
+					CSLog.E ("Implement this");
+					newInstance = null;
+				} else {
+					newInstance = System.Activator.CreateInstance (type, count);
+				}
 			} else {
 
 				object[] parameters = null;
@@ -40,14 +48,15 @@ namespace CSScript {
 					}
 				}
 
+				type = NewType._type;
 				if (parameters == null) {
-					newInstance = System.Activator.CreateInstance (NewType._type);
+					newInstance = System.Activator.CreateInstance (type);
 				} else {
-					newInstance = System.Activator.CreateInstance (NewType._type, parameters);
+					newInstance = System.Activator.CreateInstance (type, parameters);
 				}
 			}
 
-			CSObject obj = CSObject.TempVariableObject (this, NewType._type, newInstance);
+			CSObject obj = CSObject.TempVariableObject (this, type, newInstance);
 			return obj;
 		}
 	}

@@ -18,6 +18,9 @@ namespace CSScript {
 				return CSObject.ImmediateObject (this, typeof (int), -1);
 			}
 		}
-	}
 
+		public int EvaluateIndex () {
+			return Evaluate ().GetAs<int> ();
+		}
+	}
 }

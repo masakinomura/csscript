@@ -54,7 +54,7 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (CSScript.Test.Simple), obj.Value.GetType ());
 			CSScript.Test.Simple s = obj.Value as CSScript.Test.Simple;
 			Assert.AreEqual (2.0f, s._b);
-		}		
+		}
 
 		[Test]
 		public void NewSimpleClassArgsString () {
@@ -67,9 +67,9 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (CSScript.Test.Simple), obj.Value.GetType ());
 			CSScript.Test.Simple s = obj.Value as CSScript.Test.Simple;
 			Assert.AreEqual ("hello", s._s);
-		}		
+		}
 
-				[Test]
+		[Test]
 		public void NewSimpleClassArgsRef () {
 			CSNode root = ParseScript ("var a = new CSScript.Test.Simple(new CSScript.Test.Simple());");
 
@@ -80,8 +80,7 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (CSScript.Test.Simple), obj.Value.GetType ());
 			CSScript.Test.Simple s = obj.Value as CSScript.Test.Simple;
 			Assert.AreNotEqual (null, s._i);
-		}	
-
+		}
 
 		[Test]
 		public void NewSimpleClassArgs2 () {
@@ -108,9 +107,28 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (List<int>), obj.Value.GetType ());
 
 			List<int> list = obj.Value as List<int>;
-			list.Add(34);
-			Assert.AreEqual(1, list.Count);
-			Assert.AreEqual(34, list[0]);
+			list.Add (34);
+			Assert.AreEqual (1, list.Count);
+			Assert.AreEqual (34, list[0]);
 		}
+
+		[Test]
+		public void NewIntArray () {
+			CSNode root = ParseScript ("var a = new int[32];");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (int[]), obj.Type);
+			int[] arr = obj.GetAs<int[]> ();
+			Assert.AreEqual (32, arr.Length);
+		}
+
+		[Test]
+		public void NewIistArray () {
+			CSNode root = ParseScript ("var a = new System.Collections.Generic.List<int>[2];");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (List<int>[]), obj.Type);
+			List<int>[] arr = obj.GetAs<List<int>[]> ();
+			Assert.AreEqual (2, arr.Length);
+		}
+
 	}
 }

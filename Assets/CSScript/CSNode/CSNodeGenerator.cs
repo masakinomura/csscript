@@ -198,11 +198,10 @@ namespace CSScript {
 
 			return node;
 		}
-
-		public override CSNode VisitArrayIndexExp (CSScriptParser.ArrayIndexExpContext context) {
+		public override CSNode VisitArray_index (CSScriptParser.Array_indexContext context) {
 			CSArrayIndexNode node = new CSArrayIndexNode (context.Start.Line, context.Start.Column);
 
-			if (context.expression () == null) {
+			if (context.expression () != null) {
 				node._children = new CSNode[1];
 				node._children[0] = Visit (context.expression ());
 			} else {
