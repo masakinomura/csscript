@@ -179,5 +179,22 @@ namespace CSScript.Test {
 			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 80] extraneous input ';' expecting {'(', '[', '.'}");
 		}
 
+		[Test]
+		public void NewClassWithInitializer () {
+			Debug.Log (typeof (Dictionary<string, Simple>));
+			CSNode root = ParseScript ("var a = new  CSScript.Test.Simple(){" +
+				"_a = 4," +
+				"_s = \"doge\"," +
+				"_i = new CSScript.Test.Simple(66)," +
+				"};");
+
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (Simple), obj.Type);
+			Simple s = obj.GetAs<Simple> ();
+			Assert.AreEqual (4, s._a);
+			Assert.AreEqual ("doge", s._s);
+			Assert.AreEqual (66, s._i._a);
+		}
+
 	}
 }

@@ -13,6 +13,7 @@ namespace CSScript {
 
 		public CSArrayInitializerNode ArrayInitializer { get { return _children[3] as CSArrayInitializerNode; } }
 		public CSDictionaryInitializerNode DictionaryInitializer { get { return _children[4] as CSDictionaryInitializerNode; } }
+		public CSClassInitializerNode ClassInitializer { get { return _children[5] as CSClassInitializerNode; } }
 
 		public CSNode[] _arrayInitializer;
 		public KeyValuePair<CSNode, CSNode>[] _dictionaryInitializer;
@@ -94,7 +95,16 @@ namespace CSScript {
 					int len = dictInitializer.Count;
 					for (int i = 0; i < len; ++i) {
 						KeyValuePair<object, object> element = dictInitializer.Evaluate (state, i, keyType, valueType);
-						dict.Add(element.Key, element.Value);
+						dict.Add (element.Key, element.Value);
+					}
+				}
+
+				CSClassInitializerNode classInitializer = ClassInitializer;
+				if (classInitializer != null) {
+					int len = classInitializer.Count;
+					for (int i = 0; i < len; ++i) {
+						KeyValuePair<string, object> element = classInitializer.Evaluate (state, i, newInstance);
+						ReflectionUtil.Set (newInstance, element.Key, element.Value);
 					}
 				}
 			}

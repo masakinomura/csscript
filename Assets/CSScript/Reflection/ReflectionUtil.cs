@@ -84,6 +84,14 @@ namespace CSScript {
 			_inst._Set (target, name, bindingFlags, value);
 		}
 
+		public static Type GetFieldType (object target, string name) {
+			if (_inst == null) {
+				CSLog.E ("ReflectionUtil has not been initialized...");
+				return null;
+			}
+			return _inst._GetFieldType (target, name, BindingFlags.Public | BindingFlags.NonPublic);
+		}
+
 		public static bool HasField (object target, string name) {
 			if (_inst == null) {
 				CSLog.E ("ReflectionUtil has not been initialized...");
