@@ -149,17 +149,24 @@ namespace CSScript {
 		public CSObject Assign (CSObject obj) {
 
 			if (ObjectType == ObjectType.LOCAL_VARIABLE) {
-				_scope.SetVariable (_selector, obj.Value);
-				_type = obj.Type;
+
+				if (_type == null) {
+					_scope.SetVariable (_selector, obj.Value);
+					_type = obj.Type;
+				} else {
+					_scope.SetVariable (_selector, obj.GetAs (_type));
+				}
 
 			} else if (ObjectType == ObjectType.TEMP_VARIABLE) {
-				_object = obj.Value;
-				_type = obj.Type;
-				_selector = null;
+				if (_type == null) {
+					_object = obj.Value;
+					_type = obj.Type;
+				} else {
+					_object = obj.GetAs(_type);	
+				}								
 			} else {
 				CSLog.E (_node, "cannot assign to " + _objectType.ToString ());
 			}
-
 			return this;
 		}
 

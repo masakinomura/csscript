@@ -1,4 +1,6 @@
-﻿var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>() {
+﻿List<int, string> list = new List<int, string>();
+
+var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>() {
 	{"hoge", new CSScript.Test.Simple (1)},
 	{"moge", new CSScript.Test.Simple (2)},
 };

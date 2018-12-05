@@ -75,14 +75,18 @@ namespace CSScript {
 			return node;
 		}
 
-		public override CSNode VisitLocal_variable (CSScriptParser.Local_variableContext context) {
+		public override CSNode VisitVarDeclExp (CSScriptParser.VarDeclExpContext context) {
 			CSVariableNode variableNode = new CSVariableNode (context.Start.Line, context.Start.Column);
 			variableNode._variableName = context.NAME ().GetText ();
-			if (context.VAR () != null) {
-				variableNode._declare = true;
-				_state.AddVariable (variableNode._variableName);
-			} else {
-				variableNode._declare = false;
+			_state.AddVariable (variableNode._variableName);
+
+			CSScriptParser.VartypesContext vartypes = context.vartypes ();
+			if (vartypes != null) {
+				CSTypeNode typeNode = Visit (vartypes) as CSTypeNode;
+				if (typeNode == null) {
+					CSLog.E (variableNode, "failed to get the type");
+				}
+				variableNode._type = typeNode._type;
 			}
 			return variableNode;
 		}

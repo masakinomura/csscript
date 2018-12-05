@@ -18,7 +18,7 @@ expression:
 	| (vartypes '.')? NAME generic_parameters? parameters	# funcExp
 	| expression array_index								# arrayIndexExp
 	| expression OP_ASSIGN expression						# assignmentExp
-	| local_variable										# varExp
+	| (VAR | vartypes) NAME									# varDeclExp
 	| USING namespace										# usingNamespaceExp
 	| NAME													# idAtomExp
 	| LONG													# longAtomExp
@@ -30,7 +30,6 @@ expression:
 	| FLOAT													# floatAtomExp
 	| STRING												# stringAtomExp;
 
-local_variable: VAR NAME | NAME;
 
 parameters: '(' ')' | '(' expression (',' expression)* ')';
 
