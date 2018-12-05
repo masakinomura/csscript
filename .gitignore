@@ -2,3 +2,8 @@
 /Library/
 /obj/
 /Temp/
+/Assembly-CSharp.csproj
+/CSScript.csproj
+/CSTestCalss.csproj
+/Tests.csproj
+/csscript.sln
