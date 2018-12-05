@@ -52,7 +52,7 @@ namespace CSScript {
 			try {
 				_Cast (type, o);
 				canCast = true;
-			} catch (Exception e) {
+			} catch (Exception) {
 				//CSLog.D (e.Message);
 				canCast = false;
 			}

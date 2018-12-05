@@ -12,15 +12,12 @@ namespace CSScript {
 		public bool _HasField (object target, string name, BindingFlags bindingFlags) {
 
 			System.Type type;
-			bool isStatic;
 			if (target is System.Type) {
 				type = target as System.Type;
-				isStatic = true;
 				bindingFlags |= BindingFlags.Static;
 				bindingFlags &= ~BindingFlags.Instance;
 			} else {
 				type = target.GetType ();
-				isStatic = false;
 				bindingFlags |= BindingFlags.Instance;
 				bindingFlags &= ~BindingFlags.Static;
 			}
@@ -49,15 +46,12 @@ namespace CSScript {
 
 		public Type _GetFieldType (object target, string name, BindingFlags bindingFlags) {
 			System.Type type;
-			bool isStatic;
 			if (target is System.Type) {
 				type = target as System.Type;
-				isStatic = true;
 				bindingFlags |= BindingFlags.Static;
 				bindingFlags &= ~BindingFlags.Instance;
 			} else {
 				type = target.GetType ();
-				isStatic = false;
 				bindingFlags |= BindingFlags.Instance;
 				bindingFlags &= ~BindingFlags.Static;
 			}

@@ -175,7 +175,7 @@ namespace CSScript.Test {
 		[Test]
 		public void TestParserError () {
 			Debug.Log (typeof (Dictionary<string, Simple>));
-			CSNode root = ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>;");
+			ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>;");
 			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 80] extraneous input ';' expecting {'(', '[', '.'}");
 		}
 

@@ -16,7 +16,6 @@ namespace CSScript {
 		}
 
 		public KeyValuePair<string, object> Evaluate (CSState state, int index, object target) {
-			System.Type fieldType = ReflectionUtil.GetFieldType (target, _variableNames[index]);
 			KeyValuePair<string, object> element = new KeyValuePair<string, object> (
 				_variableNames[index],
 				_children[index].Evaluate (state).Value);
