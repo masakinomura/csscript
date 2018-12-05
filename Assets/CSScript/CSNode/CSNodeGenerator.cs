@@ -76,7 +76,7 @@ namespace CSScript {
 		}
 
 		public override CSNode VisitVarDeclExp (CSScriptParser.VarDeclExpContext context) {
-			CSVariableNode variableNode = new CSVariableNode (context.Start.Line, context.Start.Column);
+			CSLocalVariableNode variableNode = new CSLocalVariableNode (context.Start.Line, context.Start.Column);
 			variableNode._variableName = context.NAME ().GetText ();
 			_state.AddVariable (variableNode._variableName);
 
@@ -86,7 +86,11 @@ namespace CSScript {
 				if (typeNode == null) {
 					CSLog.E (variableNode, "failed to get the type");
 				}
-				variableNode._type = typeNode._type;
+				if (context.arraytype () != null) {
+					variableNode._type = typeNode._arrayType;
+				} else {
+					variableNode._type = typeNode._type;
+				}
 			}
 			return variableNode;
 		}
@@ -170,6 +174,7 @@ namespace CSScript {
 		string GetTypeString (CSScriptParser.VartypeContext[] vartypes, int varCount) {
 			System.Text.StringBuilder sb = new System.Text.StringBuilder ();
 			System.Text.StringBuilder sbTemplate = new System.Text.StringBuilder ();
+
 			sbTemplate.Append ('[');
 
 			bool isThereTemplate = false;
@@ -216,6 +221,57 @@ namespace CSScript {
 			string typeString = sb.ToString ();
 			return typeString;
 		}
+
+		CSNode ProcessDot (CSNode left, CSNode right) {
+			return null;
+		}
+
+		// string[] GetSelector(CSScriptParser.VartypeContext[] vartypes, int start) {
+		// 	List<string> selectors = new List<string>();
+		// 	int len = vartypes.Length;
+		// 	for (int i = start ; i < len ; ++i) {
+
+		// 	}
+		// }
+
+		//case1: namespace only 	= System.Text
+		//case2: type 				= System.Collections.Generics.List<int>
+		//case3: local variable 	= varName
+		//case4: member variable	= varName.selector
+		//case5: property			= varName.Type
+		//case6: static variable	= Simple._member
+
+		// public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
+		// 	int NAMESPACE = 0;
+		// 	int TYPE = 1;
+		// 	int VARIABLE = 2;
+		// 	int STATIC_VARIABLE = 3;
+
+		// 	CSScriptParser.VartypeContext[] vartypes = context.vartype ();
+		// 	int varLen = vartypes.Length;
+		// 	if (vartypes == null || varLen == 0) {
+		// 		CSLog.E (context.Start.Line, context.Start.Column, "missing variable type...");
+		// 		return null;
+		// 	}
+
+		// 	int curProcess = NAMESPACE;
+
+		// 	string currentStirng = "";
+
+		// 	string variableName = "";
+
+		// 	for (int i = 0; i < varLen; ++i) {
+		// 		CSScriptParser.VartypeContext next = vartypes[i];
+		// 		string name = next.NAME ().GetText ();
+
+		// 		if (i == 0 && _state.HasVariable (name)) {
+		// 			variableName = name;
+		// 			curProcess = VARIABLE;
+
+		// 			break;
+		// 		}
+		// 	}
+		// }
 
 		public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
 			CSScriptParser.VartypeContext[] vartypes = context.vartype ();

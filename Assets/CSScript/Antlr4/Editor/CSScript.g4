@@ -13,14 +13,15 @@ line: (expression+ EOL) | block;
 block: CURLY_BRACE_START line* CURLY_BRACE_END;
 
 expression:
-	'(' expression ')'										# parenthesisExp
-	| NEW vartypes (parameters | array_index) initializer?	# newExp
-	| (vartypes '.')? NAME generic_parameters? parameters	# funcExp
+	NEW vartypes (parameters | array_index) initializer?	# newExp
+	| (VAR | (vartypes arraytype?)) NAME					# varDeclExp
+	| vartypes? NAME generic_parameters? parameters			# funcExp
 	| expression array_index								# arrayIndexExp
-	| expression OP_ASSIGN expression						# assignmentExp
-	| (VAR | vartypes) NAME									# varDeclExp
 	| USING namespace										# usingNamespaceExp
-	| NAME													# idAtomExp
+	| '(' expression ')'									# parenthesisExp
+	| selector												# variableExp
+	| expression DOT expression								# dotExp
+	| expression OP_ASSIGN expression						# assignmentExp
 	| LONG													# longAtomExp
 	| ULONG													# ulongAtomExp
 	| INT													# intAtomExp
@@ -30,13 +31,16 @@ expression:
 	| FLOAT													# floatAtomExp
 	| STRING												# stringAtomExp;
 
-
 parameters: '(' ')' | '(' expression (',' expression)* ')';
 
 vartypes: vartype ('.' vartype)*;
 vartype: NAME generic_parameters?;
+arraytype: '[' ']';
+
+selector: NAME (generic_parameters)?;
 
 generic_parameters: '<' vartypes (',' vartypes)* '>';
+
 namespace: NAME (. NAME)*;
 array_index: '[' expression? ']';
 

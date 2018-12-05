@@ -56,6 +56,13 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitUlongAtomExp([NotNull] CSScriptParser.UlongAtomExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>dotExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDotExp([NotNull] CSScriptParser.DotExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>usingNamespaceExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
@@ -77,12 +84,12 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFuncExp([NotNull] CSScriptParser.FuncExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>idAtomExp</c>
+	/// Visit a parse tree produced by the <c>variableExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitIdAtomExp([NotNull] CSScriptParser.IdAtomExpContext context);
+	Result VisitVariableExp([NotNull] CSScriptParser.VariableExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>assignmentExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
@@ -171,6 +178,18 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitVartype([NotNull] CSScriptParser.VartypeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.arraytype"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArraytype([NotNull] CSScriptParser.ArraytypeContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.selector"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSelector([NotNull] CSScriptParser.SelectorContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.generic_parameters"/>.
 	/// </summary>

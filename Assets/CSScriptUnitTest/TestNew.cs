@@ -196,5 +196,13 @@ namespace CSScript.Test {
 			Assert.AreEqual (66, s._i._a);
 		}
 
+		[Test]
+		public void TestTypeInt () {
+			CSNode root = ParseScript ("int[] a = new int[3];");
+			CSObject obj = root.Evaluate ();
+
+			Assert.AreEqual (typeof (int[]), obj.Type);
+		}
+
 	}
 }

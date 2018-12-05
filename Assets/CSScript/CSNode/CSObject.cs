@@ -9,6 +9,7 @@ namespace CSScript {
 		IMMEDIATE,
 	}
 
+
 	public class CSObject {
 		CSNode _node;
 		object _object;
@@ -77,6 +78,7 @@ namespace CSScript {
 					_object = null,
 					_scope = scope,
 					_selector = name,
+					_type = type,
 					_objectType = ObjectType.LOCAL_VARIABLE,
 			};
 			return obj;
