@@ -113,7 +113,7 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewIntArray () {
+		public void NewArrayInt () {
 			CSNode root = ParseScript ("var a = new int[32];");
 			CSObject obj = root.Evaluate ();
 			Assert.AreEqual (typeof (int[]), obj.Type);
@@ -122,7 +122,7 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewListArray () {
+		public void NewArrayList () {
 			CSNode root = ParseScript ("var a = new System.Collections.Generic.List<int>[2];");
 			CSObject obj = root.Evaluate ();
 			Assert.AreEqual (typeof (List<int>[]), obj.Type);
@@ -131,7 +131,7 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewIntArrayWithInitializer () {
+		public void NewInitializerIntArray () {
 			CSNode root = ParseScript ("var a = new int[]{1,2,3};");
 			CSObject obj = root.Evaluate ();
 			Assert.AreEqual (typeof (int[]), obj.Type);
@@ -144,7 +144,7 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewClassArrayWithInitializer () {
+		public void NewInitializerClassArray () {
 			CSNode root = ParseScript ("var a = new CSScript.Test.Simple[]{new CSScript.Test.Simple(1), new CSScript.Test.Simple(2)};");
 			CSObject obj = root.Evaluate ();
 			Assert.AreEqual (typeof (Simple[]), obj.Type);
@@ -156,7 +156,7 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewDictionaryWithInitializer () {
+		public void NewInitializerDictionary () {
 			Debug.Log (typeof (Dictionary<string, Simple>));
 			CSNode root = ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>(){" +
 				"	{\"hoge\", new CSScript.Test.Simple (1)}," +
@@ -180,7 +180,7 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void NewClassWithInitializer () {
+		public void NewInitializerClass () {
 			Debug.Log (typeof (Dictionary<string, Simple>));
 			CSNode root = ParseScript ("var a = new  CSScript.Test.Simple(){" +
 				"_a = 4," +
