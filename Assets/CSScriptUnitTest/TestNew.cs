@@ -197,12 +197,19 @@ namespace CSScript.Test {
 		}
 
 		[Test]
-		public void TestTypeInt () {
+		public void TestTypeIntArray () {
 			CSNode root = ParseScript ("int[] a = new int[3];");
 			CSObject obj = root.Evaluate ();
-
 			Assert.AreEqual (typeof (int[]), obj.Type);
+			Assert.AreEqual (3, obj.GetAs<int[]> ().Length);
 		}
 
+		[Test]
+		public void TestTypeDictionaryAraray () {
+			CSNode root = ParseScript ("System.Collections.Generic.Dictionary<string, int>[] a = new System.Collections.Generic.Dictionary<string, int>[3];");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (System.Collections.Generic.Dictionary<string, int>[]), obj.Type);
+			Assert.AreEqual (3, obj.GetAs<System.Collections.Generic.Dictionary<string, int>[]> ().Length);
+		}
 	}
 }
