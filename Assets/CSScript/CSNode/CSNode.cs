@@ -43,10 +43,10 @@ namespace CSScript {
 
 		public CSObject Evaluate () {
 			CSState state = new CSState ();
-			return Evaluate (state);
+			return Evaluate (state, null);
 		}
 
-		public virtual CSObject Evaluate (CSState state) {
+		public virtual CSObject Evaluate (CSState state, CSObject curObj) {
 			if (_children == null) {
 				return null;
 			}
@@ -55,7 +55,7 @@ namespace CSScript {
 
 			int len = _children.Length;
 			for (int i = 0; i < len; ++i) {
-				lastResult = _children[i].Evaluate (state);
+				lastResult = _children[i].Evaluate (state, curObj);
 			}
 
 			return lastResult;

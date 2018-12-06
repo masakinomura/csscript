@@ -8,12 +8,12 @@ namespace CSScript {
 
 		Dictionary<string, CSObject> _variables = new Dictionary<string, CSObject> ();
 
-		public void AddVarible (string variableName) {
+		public void AddVarible (string variableName, CSObject obj) {
 			if (_variables.ContainsKey (variableName)) {
 				CSLog.E ("Variable " + variableName + " already exists...");
 				return;
 			}
-			_variables[variableName] = null;
+			_variables[variableName] = obj;
 		}
 
 		public bool HasVariable (string variableName) {

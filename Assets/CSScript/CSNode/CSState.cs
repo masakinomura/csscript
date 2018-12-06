@@ -31,8 +31,8 @@ namespace CSScript {
 			return false;
 		}
 
-		public CSScope AddVariable (string variableName) {
-			Current.AddVarible (variableName);
+		public CSScope AddVariable (string variableName, CSObject obj) {
+			Current.AddVarible (variableName, obj);
 			return Current;
 		}
 

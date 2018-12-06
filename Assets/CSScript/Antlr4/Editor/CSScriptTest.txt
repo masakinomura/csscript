@@ -1,4 +1,6 @@
-﻿123;
+﻿CSScript.Test.Simple s = new CSScript.Test.Simple(33); int b = s._a;
+
+123;
 
 a.b.c<int,float>.D(3,4).e[3].Prop;
 

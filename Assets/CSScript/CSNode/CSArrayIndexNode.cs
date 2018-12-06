@@ -11,9 +11,9 @@ namespace CSScript {
 		public CSNode IndexNode { get { return _children[0]; } }
 
 		public CSArrayIndexNode (int line, int column) : base (line, column) { }
-		public override CSObject Evaluate (CSState state) {
+		public override CSObject Evaluate (CSState state, CSObject curObj) {
 			if (IsIndexed) {
-				return IndexNode.Evaluate (state);
+				return IndexNode.Evaluate (state, curObj);
 			} else {
 				return CSObject.ImmediateObject (this, typeof (int), -1);
 			}

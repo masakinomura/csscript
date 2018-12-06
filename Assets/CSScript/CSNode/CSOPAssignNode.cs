@@ -11,15 +11,15 @@ namespace CSScript {
 
 		public CSOPAssignNode (int line, int column) : base (line, column) { }
 
-		public override CSObject Evaluate (CSState state) {
+		public override CSObject Evaluate (CSState state, CSObject curObj) {
 			if (ChildCount != 2) {
 				CSLog.E (this, "assigngment operator has invalid # of children...");
 				return null;
 			}
-			CSObject left = Left.Evaluate (state);
-			CSObject right = Right.Evaluate (state);
-			
-			return left.Assign(right);
+			CSObject left = Left.Evaluate (state, curObj);
+			CSObject right = Right.Evaluate (state, curObj);
+
+			return left.Assign (right);
 		}
 	}
 

@@ -109,5 +109,22 @@ namespace CSScript.Test {
 			Assert.AreEqual("Hoge", obj.Name);
 			Assert.AreEqual("HelloWorld", obj.GetAs<string>());
 		}		
+	
+		[Test]
+		public void TestLocalVariable () {
+			CSNode root = ParseScript ("int a = 33; int b = a;");
+			CSObject obj = root.Evaluate();
+			Assert.AreEqual("b", obj.Name);
+			Assert.AreEqual(33, obj.GetAs<int>());
+		}			
+
+
+		[Test]
+		public void TestLocalVariable2 () {
+			CSNode root = ParseScript ("CSScript.Test.Simple s = new CSScript.Test.Simple(33); int b = s._a;");
+			CSObject obj = root.Evaluate();
+			Assert.AreEqual("b", obj.Name);
+			Assert.AreEqual(33, obj.GetAs<int>());
+		}			
 	}
 }

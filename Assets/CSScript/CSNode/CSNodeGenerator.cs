@@ -79,7 +79,6 @@ namespace CSScript {
 			CSLocalVariableNode variableNode = new CSLocalVariableNode (context.Start.Line, context.Start.Column);
 			variableNode._declaration = true;
 			variableNode._variableName = context.NAME ().GetText ();
-			_state.AddVariable (variableNode._variableName);
 
 			CSScriptParser.VartypesContext vartypes = context.vartypes ();
 			if (vartypes != null) {
@@ -93,6 +92,10 @@ namespace CSScript {
 					variableNode._type = typeNode._type;
 				}
 			}
+
+			CSObject objForComplier = CSObject.LocalVariableObject (variableNode, variableNode._type, variableNode._variableName, null);
+			_state.AddVariable (variableNode._variableName, objForComplier);
+
 			return variableNode;
 		}
 

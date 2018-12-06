@@ -21,7 +21,7 @@ namespace CSScript {
 
 		public CSOPNewNode (int line, int column) : base (line, column) { }
 
-		public override CSObject Evaluate (CSState state) {
+		public override CSObject Evaluate (CSState state, CSObject curObj) {
 			if (ChildCount != 6) {
 				CSLog.E (this, "new operator has invalid # of children...");
 				return null;
@@ -38,7 +38,7 @@ namespace CSScript {
 				type = NewType._arrayType;
 				int count = ArrayIndex.EvaluateIndex ();
 				if (ArrayInitializer != null) {
-					object[] elements = ArrayInitializer.EvaluateElements (state, NewType._type);
+					object[] elements = ArrayInitializer.EvaluateElements (state, curObj, NewType._type);
 					int len = elements.Length;
 					int allocCount = (len > count? len : count);
 					newInstance = System.Activator.CreateInstance (type, allocCount);
@@ -62,7 +62,7 @@ namespace CSScript {
 					int pCount = pchildren.Length;
 					parameters = new object[pCount];
 					for (int i = 0; i < pCount; ++i) {
-						parameters[i] = pchildren[i].Evaluate (state).Value;
+						parameters[i] = pchildren[i].Evaluate (state, curObj).Value;
 					}
 				}
 
@@ -94,7 +94,7 @@ namespace CSScript {
 
 					int len = dictInitializer.Count;
 					for (int i = 0; i < len; ++i) {
-						KeyValuePair<object, object> element = dictInitializer.Evaluate (state, i, keyType, valueType);
+						KeyValuePair<object, object> element = dictInitializer.Evaluate (state, curObj, i, keyType, valueType);
 						dict.Add (element.Key, element.Value);
 					}
 				}
@@ -103,7 +103,7 @@ namespace CSScript {
 				if (classInitializer != null) {
 					int len = classInitializer.Count;
 					for (int i = 0; i < len; ++i) {
-						KeyValuePair<string, object> element = classInitializer.Evaluate (state, i, newInstance);
+						KeyValuePair<string, object> element = classInitializer.Evaluate (state, curObj, i, newInstance);
 						ReflectionUtil.Set (newInstance, element.Key, element.Value);
 					}
 				}

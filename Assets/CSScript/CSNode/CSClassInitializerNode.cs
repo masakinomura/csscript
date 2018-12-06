@@ -11,14 +11,14 @@ namespace CSScript {
 
 		public int Count { get { return (_variableNames != null?_variableNames.Length : 0); } }
 
-		public override CSObject Evaluate (CSState state) {
+		public override CSObject Evaluate (CSState state, CSObject curObj) {
 			return null;
 		}
 
-		public KeyValuePair<string, object> Evaluate (CSState state, int index, object target) {
+		public KeyValuePair<string, object> Evaluate (CSState state, CSObject curObj, int index, object target) {
 			KeyValuePair<string, object> element = new KeyValuePair<string, object> (
 				_variableNames[index],
-				_children[index].Evaluate (state).Value);
+				_children[index].Evaluate (state, curObj).Value);
 			return element;
 		}
 	}
