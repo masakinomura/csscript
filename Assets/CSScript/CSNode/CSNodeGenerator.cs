@@ -269,6 +269,28 @@ namespace CSScript {
 		// 	}
 		// }
 
+		public override CSNode VisitSelectorExp (CSScriptParser.SelectorExpContext context) {
+			CSSelectorNode node = new CSSelectorNode (context.Start.Line, context.Start.Column);
+			node._val = context.NAME ().GetText ();
+			return node;
+		}
+
+		// CSNode EvaluateSelector (CSNode left, CSScriptParser.SelectorExpContext context) {
+
+		// 	if (left == null) {
+		// 		if (_state.HasVariable (name)) {
+		// 			CSVariableNode node = new CSVariableNode (context.Start.Line, context.Start.Column);
+		// 			node._nameInScope = name;
+		// 			return node;
+
+		// 		} else {
+		// 			CSNamespaceNode node = new CSNamespaceNode (context.Start.Line, context.Start.Column);
+		// 			node._namespace = name;
+		// 			return node;
+		// 		}
+		// 	}
+		// }
+
 		public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
 			CSScriptParser.VartypeContext[] vartypes = context.vartype ();
 			int varLen = vartypes.Length;
@@ -326,6 +348,10 @@ namespace CSScript {
 			}
 
 			return node;
+		}
+
+		public override CSNode VisitDotExp (CSScriptParser.DotExpContext context) {
+			return null;
 		}
 
 	}

@@ -18,8 +18,8 @@ expression:
 	| vartypes? NAME generic_parameters? parameters			# funcExp
 	| expression array_index								# arrayIndexExp
 	| USING namespace										# usingNamespaceExp
+	| NAME (generic_parameters)?							# selectorExp
 	| '(' expression ')'									# parenthesisExp
-	| selector												# variableExp
 	| expression DOT expression								# dotExp
 	| expression OP_ASSIGN expression						# assignmentExp
 	| LONG													# longAtomExp
@@ -36,8 +36,6 @@ parameters: '(' ')' | '(' expression (',' expression)* ')';
 vartypes: vartype ('.' vartype)*;
 vartype: NAME generic_parameters?;
 arraytype: '[' ']';
-
-selector: NAME (generic_parameters)?;
 
 generic_parameters: '<' vartypes (',' vartypes)* '>';
 

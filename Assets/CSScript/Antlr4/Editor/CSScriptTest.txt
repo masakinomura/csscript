@@ -1,5 +1,7 @@
-﻿int[] aaa = new int[3];
+﻿System.Test.Simple._a = "hello";
+a.b.c.D().e[3].Prop;
 
+int[] aaa = new int[3];
 
 var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>() {
 	{"hoge", new CSScript.Test.Simple (1)},

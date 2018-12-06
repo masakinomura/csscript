@@ -84,12 +84,12 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFuncExp([NotNull] CSScriptParser.FuncExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>variableExp</c>
+	/// Visit a parse tree produced by the <c>selectorExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitVariableExp([NotNull] CSScriptParser.VariableExpContext context);
+	Result VisitSelectorExp([NotNull] CSScriptParser.SelectorExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>assignmentExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
@@ -184,12 +184,6 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitArraytype([NotNull] CSScriptParser.ArraytypeContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.selector"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSelector([NotNull] CSScriptParser.SelectorContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.generic_parameters"/>.
 	/// </summary>

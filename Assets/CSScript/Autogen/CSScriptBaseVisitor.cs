@@ -113,7 +113,7 @@ public partial class CSScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Resu
 	/// <return>The visitor result.</return>
 	public virtual Result VisitFuncExp([NotNull] CSScriptParser.FuncExpContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.variableExp"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.selectorExp"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -121,7 +121,7 @@ public partial class CSScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Resu
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitVariableExp([NotNull] CSScriptParser.VariableExpContext context) { return VisitChildren(context); }
+	public virtual Result VisitSelectorExp([NotNull] CSScriptParser.SelectorExpContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.assignmentExp"/>.
 	/// <para>
@@ -262,16 +262,6 @@ public partial class CSScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Resu
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitArraytype([NotNull] CSScriptParser.ArraytypeContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.selector"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitSelector([NotNull] CSScriptParser.SelectorContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.generic_parameters"/>.
 	/// <para>
