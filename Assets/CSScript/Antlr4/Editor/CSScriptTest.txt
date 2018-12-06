@@ -1,5 +1,7 @@
-﻿System.Test.Simple._a = "hello";
-a.b.c.D().e[3].Prop;
+﻿a.b.c.D().e[3].Prop;
+
+System.Test.Simple._a = "hello";
+
 
 int[] aaa = new int[3];
 
