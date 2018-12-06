@@ -77,6 +77,7 @@ namespace CSScript {
 
 		public override CSNode VisitVarDeclExp (CSScriptParser.VarDeclExpContext context) {
 			CSLocalVariableNode variableNode = new CSLocalVariableNode (context.Start.Line, context.Start.Column);
+			variableNode._declaration = true;
 			variableNode._variableName = context.NAME ().GetText ();
 			_state.AddVariable (variableNode._variableName);
 
@@ -171,7 +172,35 @@ namespace CSScript {
 			return node;
 		}
 
-		string GetTypeString (CSScriptParser.VartypeContext[] vartypes, int varCount, int typeStart) {
+		string GetTypeString (
+			CSScriptParser.VartypeContext[] vartypes,
+			int varCount,
+			int typeStart) {
+
+			return _GetTypeString (vartypes, varCount, typeStart,
+				(vartype) => { return ((CSScriptParser.VartypeContext) vartype).NAME ().GetText (); },
+				(vartype) => { return ((CSScriptParser.VartypeContext) vartype).generic_parameters (); }
+			);
+		}
+
+		string GetTypeString (
+			CSScriptParser.SelectorContext[] vartypes,
+			int varCount,
+			int typeStart) {
+
+			return _GetTypeString (vartypes, varCount, typeStart,
+				(vartype) => { return ((CSScriptParser.SelectorContext) vartype).NAME ().GetText (); },
+				(vartype) => { return ((CSScriptParser.SelectorContext) vartype).generic_parameters (); }
+			);
+		}
+
+		string _GetTypeString (
+			object[] vartypes,
+			int varCount,
+			int typeStart,
+			System.Func<object, string> getName,
+			System.Func<object, CSScriptParser.Generic_parametersContext> getGenericParams) {
+
 			System.Text.StringBuilder sb = new System.Text.StringBuilder ();
 			System.Text.StringBuilder sbTemplate = new System.Text.StringBuilder ();
 
@@ -180,7 +209,7 @@ namespace CSScript {
 			bool isThereTemplate = false;
 
 			for (int i = 0; i < varCount; ++i) {
-				CSScriptParser.VartypeContext next = vartypes[i];
+				object next = vartypes[i];
 				if (i != 0) {
 					if (typeStart >= 0 && typeStart < i) {
 						sb.Append ('+');
@@ -189,9 +218,11 @@ namespace CSScript {
 					}
 				}
 
-				sb.Append (ReflectionUtil.GetCleanNameIfPrimitive (next.NAME ().GetText ()));
+				string name = getName (next);
 
-				CSScriptParser.Generic_parametersContext genericParameters = next.generic_parameters ();
+				sb.Append (ReflectionUtil.GetCleanNameIfPrimitive (name));
+
+				CSScriptParser.Generic_parametersContext genericParameters = getGenericParams (next);
 				if (genericParameters != null) {
 					CSScriptParser.VartypesContext[] templatetypes = genericParameters.vartypes ();
 					int tempVarCount = templatetypes.Length;
@@ -226,75 +257,6 @@ namespace CSScript {
 			return typeString;
 		}
 
-		// string[] GetSelector(CSScriptParser.VartypeContext[] vartypes, int start) {
-		// 	List<string> selectors = new List<string>();
-		// 	int len = vartypes.Length;
-		// 	for (int i = start ; i < len ; ++i) {
-
-		// 	}
-		// }
-
-		//case1: namespace only 	= System.Text
-		//case2: type 				= System.Collections.Generics.List<int>
-		//case3: local variable 	= varName
-		//case4: member variable	= varName.selector
-		//case5: property			= varName.Type
-		//case6: static variable	= Simple._member
-
-		// public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
-		// 	int NAMESPACE = 0;
-		// 	int TYPE = 1;
-		// 	int VARIABLE = 2;
-		// 	int STATIC_VARIABLE = 3;
-
-		// 	CSScriptParser.VartypeContext[] vartypes = context.vartype ();
-		// 	int varLen = vartypes.Length;
-		// 	if (vartypes == null || varLen == 0) {
-		// 		CSLog.E (context.Start.Line, context.Start.Column, "missing variable type...");
-		// 		return null;
-		// 	}
-
-		// 	int curProcess = NAMESPACE;
-
-		// 	string currentStirng = "";
-
-		// 	string variableName = "";
-
-		// 	for (int i = 0; i < varLen; ++i) {
-		// 		CSScriptParser.VartypeContext next = vartypes[i];
-		// 		string name = next.NAME ().GetText ();
-
-		// 		if (i == 0 && _state.HasVariable (name)) {
-		// 			variableName = name;
-		// 			curProcess = VARIABLE;
-
-		// 			break;
-		// 		}
-		// 	}
-		// }
-
-		public override CSNode VisitSelectorExp (CSScriptParser.SelectorExpContext context) {
-			CSSelectorNode node = new CSSelectorNode (context.Start.Line, context.Start.Column);
-			node._val = context.NAME ().GetText ();
-			return node;
-		}
-
-		// CSNode EvaluateSelector (CSNode left, CSScriptParser.SelectorExpContext context) {
-
-		// 	if (left == null) {
-		// 		if (_state.HasVariable (name)) {
-		// 			CSVariableNode node = new CSVariableNode (context.Start.Line, context.Start.Column);
-		// 			node._nameInScope = name;
-		// 			return node;
-
-		// 		} else {
-		// 			CSNamespaceNode node = new CSNamespaceNode (context.Start.Line, context.Start.Column);
-		// 			node._namespace = name;
-		// 			return node;
-		// 		}
-		// 	}
-		// }
-
 		public override CSNode VisitVartypes (CSScriptParser.VartypesContext context) {
 			CSScriptParser.VartypeContext[] vartypes = context.vartype ();
 			int varLen = vartypes.Length;
@@ -313,8 +275,6 @@ namespace CSScript {
 				}
 			}
 
-			//string typeString = GetTypeString (vartypes, varLen);
-			//System.Type type = ReflectionUtil.GetType (typeString);
 			CSTypeNode node = new CSTypeNode (context.Start.Line, context.Start.Column);
 			node._type = currentType;
 			node._arrayType = ReflectionUtil.GetType (currentTypeString + "[]");
@@ -324,6 +284,103 @@ namespace CSScript {
 
 			return node;
 		}
+
+		string[] GetSelectorStrings (CSScriptParser.SelectorContext[] selectors, int start) {
+			List<string> strings = new List<string> ();
+			int len = selectors.Length;
+			for (int i = start; i < len; ++i) {
+				strings.Add (selectors[i].NAME ().GetText ());
+			}
+			return strings.ToArray ();
+		}
+
+		public override CSNode VisitSelectorExp (CSScriptParser.SelectorExpContext context) {
+			CSScriptParser.SelectorContext[] selectors = context.selector ();
+			int selectorLen = selectors.Length;
+
+			string firstName = selectors[0].NAME ().GetText ();
+			if (_state.HasVariable (firstName)) {
+				CSLocalVariableNode node = new CSLocalVariableNode (context.Start.Line, context.Start.Column);
+				node._declaration = false;
+				node._variableName = firstName;
+				if (selectorLen == 1) {
+					return node;
+				} else {
+					CSSelectorNode selectorNode = new CSSelectorNode (context.Start.Line, context.Start.Column);
+					selectorNode._selectors = GetSelectorStrings (selectors, 1);
+					CSOPDotNode dotNode = new CSOPDotNode (context.Start.Line, context.Start.Column);
+					dotNode._children = new CSNode[2];
+					dotNode._children[0] = node;
+					dotNode._children[1] = selectorNode;
+					return dotNode;
+				}
+			}
+
+			string currentTypeString = null;
+			System.Type currentType = null;
+			int typeStart = -1;
+			int typeEnd = 0;
+
+			for (int i = 0; i < selectorLen; ++i) {
+				CSScriptParser.SelectorContext next = selectors[i];
+				string name = next.NAME ().GetText ();
+				currentTypeString = GetTypeString (selectors, i + 1, typeStart);
+				System.Type nextType = ReflectionUtil.GetType (currentTypeString);
+
+				if (typeStart == -1 && nextType != null) {
+					typeStart = i;
+				}
+
+				if (currentType != null && nextType == null) {
+					typeEnd = i;
+					break;
+				}
+				currentType = nextType;
+			}
+
+			if (currentType != null) {
+				if (selectorLen <= typeEnd) {
+					CSLog.E (context.Start.Line, context.Start.Column, "Type cannot be a variable");
+					return null;
+				}
+
+				CSStaticVariableNode node = new CSStaticVariableNode (context.Start.Line, context.Start.Column);
+				string varName = selectors[typeEnd].NAME ().GetText ();
+				node._variableName = varName;
+				node._staticType = currentType;
+				node._type = ReflectionUtil.GetFieldType (currentType, varName);
+
+				if (selectorLen == typeEnd + 1) {
+					return node;
+				} else {
+					CSSelectorNode selectorNode = new CSSelectorNode (context.Start.Line, context.Start.Column);
+					selectorNode._selectors = GetSelectorStrings (selectors, typeEnd + 1);
+					CSOPDotNode dotNode = new CSOPDotNode (context.Start.Line, context.Start.Column);
+					dotNode._children = new CSNode[2];
+					dotNode._children[0] = node;
+					dotNode._children[1] = selectorNode;
+					return dotNode;
+				}
+			} else {
+				CSSelectorNode node = new CSSelectorNode (context.Start.Line, context.Start.Column);
+				node._selectors = GetSelectorStrings (selectors, 0);
+				return node;
+			}
+
+		}
+
+		public override CSNode VisitDotExp (CSScriptParser.DotExpContext context) {
+			CSScriptParser.ExpressionContext[] expressions = context.expression ();
+			if (expressions == null || expressions.Length != 2) {
+				CSLog.E (context.Start.Line, context.Start.Column, "invalid # of children...");
+				return null;
+			}
+			CSNode left = Visit (expressions[0]);
+			CSNode right = Visit (expressions[1]);
+
+			return null;
+		}
+
 		public override CSNode VisitArray_index (CSScriptParser.Array_indexContext context) {
 			CSArrayIndexNode node = new CSArrayIndexNode (context.Start.Line, context.Start.Column);
 
@@ -335,10 +392,6 @@ namespace CSScript {
 			}
 
 			return node;
-		}
-
-		public override CSNode VisitDotExp (CSScriptParser.DotExpContext context) {
-			return null;
 		}
 
 	}

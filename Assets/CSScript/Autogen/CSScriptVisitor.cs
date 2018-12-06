@@ -185,6 +185,12 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitArraytype([NotNull] CSScriptParser.ArraytypeContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.selector"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSelector([NotNull] CSScriptParser.SelectorContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.generic_parameters"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

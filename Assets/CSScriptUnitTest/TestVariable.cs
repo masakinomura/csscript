@@ -93,5 +93,13 @@ namespace CSScript.Test {
 			Assert.AreEqual (3, obj.GetAs<System.Collections.Generic.Dictionary<string, int>> () ["hoge"]);
 
 		}
+
+		[Test]
+		public void TestStaticVariables () {
+			CSNode root = ParseScript ("CSScript.Test.Simple.HELLO = \"HelloWorld\"; CSScript.Test.Simple.HELLO;");
+			CSObject obj = root.Evaluate();
+			Assert.AreEqual("HELLO", obj.Name);
+			Assert.AreEqual("HelloWorld", obj.GetAs<string>());
+		}
 	}
 }

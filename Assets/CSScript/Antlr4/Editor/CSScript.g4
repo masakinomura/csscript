@@ -8,19 +8,19 @@ grammar CSScript;
  */
 
 code: line*;
-line: (expression+ EOL) | block;
+line: (expression+ ';'); // | block;
 
 block: CURLY_BRACE_START line* CURLY_BRACE_END;
 
 expression:
 	NEW vartypes (parameters | array_index) initializer?	# newExp
 	| (VAR | (vartypes arraytype?)) NAME					# varDeclExp
-	| vartypes? NAME generic_parameters? parameters			# funcExp
-	| expression array_index								# arrayIndexExp
 	| USING namespace										# usingNamespaceExp
-	| NAME (generic_parameters)?							# selectorExp
-	| '(' expression ')'									# parenthesisExp
 	| expression DOT expression								# dotExp
+	| selector ('.' selector)*								# selectorExp
+	| NAME generic_parameters? parameters					# funcExp
+	| expression array_index								# arrayIndexExp
+	| '(' expression ')'									# parenthesisExp
 	| expression OP_ASSIGN expression						# assignmentExp
 	| LONG													# longAtomExp
 	| ULONG													# ulongAtomExp
@@ -36,6 +36,8 @@ parameters: '(' ')' | '(' expression (',' expression)* ')';
 vartypes: vartype ('.' vartype)*;
 vartype: NAME generic_parameters?;
 arraytype: '[' ']';
+
+selector: NAME (generic_parameters)?;
 
 generic_parameters: '<' vartypes (',' vartypes)* '>';
 
@@ -68,8 +70,9 @@ fragment LOWERCASE: [a-z];
 fragment UPPERCASE: [A-Z];
 fragment WORD: (LOWERCASE | UPPERCASE | '_')+;
 fragment ESCAPED_QUOTE: '\\"';
-fragment FNUMBER: [0-9]+ ('.' [0-9]+)?;
+fragment FNUMBER: [0-9]+ ('\.' [0-9]+)?;
 
+EOL: ';';
 OP_MUL: '*';
 VAR: 'var';
 NEW: 'new';
@@ -86,7 +89,7 @@ CURLY_BRACE_END: '}';
 COMMA: ',';
 DOT: '.';
 
-NAME: WORD [0-9]* WORD*;
+NAME: WORD (WORD | [0-9])*;
 INT: [0-9]+;
 UINT: INT ('u' | 'U');
 LONG: INT ('l' | 'L');
@@ -96,8 +99,6 @@ FLOAT: FNUMBER 'f';
 DOUBLE: FNUMBER 'd'?;
 DECIMAL: FNUMBER 'm';
 STRING: '"' ( ESCAPED_QUOTE | ~('\n' | '\r'))*? '"';
-
-EOL: ';';
 
 WHITESPACE: (' ' | '\t')+ -> skip;
 NEWLINE: ('\r'? '\n' | '\r')+ -> skip;

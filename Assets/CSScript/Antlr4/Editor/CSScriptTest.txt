@@ -1,4 +1,6 @@
-﻿a.b.c.D().e[3].Prop;
+﻿123;
+
+a.b.c<int,float>.D(3,4).e[3].Prop;
 
 System.Test.Simple._a = "hello";
 

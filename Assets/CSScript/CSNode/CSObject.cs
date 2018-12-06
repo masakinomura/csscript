@@ -6,6 +6,9 @@ namespace CSScript {
 	public enum ObjectType {
 		VARIABLE,
 		IMMEDIATE,
+		STATIC,
+		TEMP,
+		LOCAL,
 	}
 
 	public class CSObject {
@@ -16,12 +19,14 @@ namespace CSScript {
 
 		System.Type _type;
 
+		System.Type _staticType;
+
 		ObjectType _objectType;
 
 		public ObjectType ObjectType { get { return _objectType; } }
 
 		public string Name { get { return _name; } }
-		public object Value { get { return _object; } }
+
 		public System.Type Type { get { return _type; } }
 
 		private CSObject () { }
@@ -47,8 +52,9 @@ namespace CSScript {
 				_node = node,
 					_object = val,
 					_type = type,
-					_objectType = ObjectType.VARIABLE,
+					_objectType = ObjectType.LOCAL,
 					_name = name,
+					_staticType = null,
 			};
 			return obj;
 		}
@@ -64,37 +70,91 @@ namespace CSScript {
 					_type = val.GetType (),
 					_objectType = ObjectType.IMMEDIATE,
 					_name = "immedidate",
+					_staticType = null,
 			};
 			return obj;
 		}
 
-		public static CSObject VariableObject (CSNode node, System.Type type, object val, params string[] selectors) {
+		public static CSObject VariableObject (CSNode node, System.Type type, object parent, string name) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = parent,
+					_type = type,
+					_objectType = ObjectType.VARIABLE,
+					_name = name,
+					_staticType = null,
+			};
+
+			return obj;
+		}
+
+		public static CSObject TempVariableObject (CSNode node, System.Type type, object val) {
 			CSObject obj = new CSObject () {
 				_node = node,
 					_object = val,
 					_type = type,
-					_objectType = ObjectType.VARIABLE,
+					_objectType = ObjectType.TEMP,
 					_name = "temp",
+					_staticType = null,
 			};
 
-			if (selectors != null && selectors.Length > 0) {
-				CSLog.E (node, "implement me!!!");
-			}
 			return obj;
+		}
+
+		public static CSObject StaticVariableObject (CSNode node, System.Type type, System.Type staticType, string name) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = null,
+					_type = type,
+					_objectType = ObjectType.STATIC,
+					_name = name,
+					_staticType = staticType,
+			};
+
+			return obj;
+		}
+
+		public object Value {
+			get {
+				switch (ObjectType) {
+					case ObjectType.VARIABLE:
+						return ReflectionUtil.Get (_object, _name);
+					case ObjectType.STATIC:
+						return ReflectionUtil.Get (_staticType, _name);
+					case ObjectType.TEMP:
+					case ObjectType.LOCAL:
+					case ObjectType.IMMEDIATE:
+						return _object;
+					default:
+						CSLog.E (_node, "cannot assign to " + _objectType.ToString ());
+						return null;
+				}
+			}
 		}
 
 		public CSObject Assign (CSObject obj) {
 
-			if (ObjectType == ObjectType.VARIABLE) {
-				if (_type == null) {
-					_object = obj.Value;
-					_type = obj.Type;
-				} else {
-					_object = obj.GetAs (_type);
-				}
-			} else {
-				CSLog.E (_node, "cannot assign to " + _objectType.ToString ());
+			switch (ObjectType) {
+				case ObjectType.VARIABLE:
+					ReflectionUtil.Set (_object, _name, obj.GetAs (_type));
+					break;
+				case ObjectType.STATIC:
+					ReflectionUtil.Set (_staticType, _name, obj.GetAs (_type));
+					break;
+				case ObjectType.TEMP:
+				case ObjectType.LOCAL:
+					if (_type == null) {
+						_object = obj.Value;
+						_type = obj.Type;
+					} else {
+						_object = obj.GetAs (_type);
+					}
+					break;
+				default:
+					CSLog.E (_node, "cannot assign to " + _objectType.ToString ());
+					break;
 			}
+
 			return this;
 		}
 
