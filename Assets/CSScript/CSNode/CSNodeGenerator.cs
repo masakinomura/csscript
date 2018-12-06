@@ -222,10 +222,6 @@ namespace CSScript {
 			return typeString;
 		}
 
-		CSNode ProcessDot (CSNode left, CSNode right) {
-			return null;
-		}
-
 		// string[] GetSelector(CSScriptParser.VartypeContext[] vartypes, int start) {
 		// 	List<string> selectors = new List<string>();
 		// 	int len = vartypes.Length;

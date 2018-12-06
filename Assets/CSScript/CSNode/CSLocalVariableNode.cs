@@ -14,7 +14,7 @@ namespace CSScript {
 
 		public override CSObject Evaluate (CSState state) {
 			state.AddVariable (_variableName);
-			return CSObject.LocalVariableObject (this, _type, state.Current, _variableName);
+			return CSObject.LocalVariableObject (this, _type, _variableName, null);
 		}
 	}
 

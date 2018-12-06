@@ -36,9 +36,9 @@ namespace CSScript {
 			return Current;
 		}
 
-		public object GetVariable (string variableName) {
+		public CSObject GetVariable (string variableName) {
 			CSScope next = Current;
-			object val;
+			CSObject val;
 			while (next != null) {
 				if (next.TryGetVariable (variableName, out val)) {
 					return val;
@@ -47,6 +47,20 @@ namespace CSScript {
 			}
 			CSLog.E ("Variable: " + variableName + " does not exist...");
 			return null;
+		}
+
+		public bool TryGetVariable (string variableName, out CSObject obj) {
+			CSScope next = Current;
+			CSObject val;
+			while (next != null) {
+				if (next.TryGetVariable (variableName, out val)) {
+					obj = val;
+					return true;
+				}
+				next = next._parent;
+			}
+			obj = null;
+			return false;
 		}
 	}
 }

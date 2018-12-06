@@ -6,7 +6,7 @@ namespace CSScript {
 	public class CSScope {
 		public CSScope _parent;
 
-		Dictionary<string, object> _variables = new Dictionary<string, object> ();
+		Dictionary<string, CSObject> _variables = new Dictionary<string, CSObject> ();
 
 		public void AddVarible (string variableName) {
 			if (_variables.ContainsKey (variableName)) {
@@ -20,19 +20,19 @@ namespace CSScript {
 			return _variables.ContainsKey (variableName);
 		}
 
-		public bool TryGetVariable (string variableName, out object val) {
+		public bool TryGetVariable (string variableName, out CSObject val) {
 			return _variables.TryGetValue (variableName, out val);
 		}
 
 		public object GetVariable (string variableName) {
-			object val = null;
+			CSObject val = null;
 			if (!_variables.TryGetValue (variableName, out val)) {
 				CSLog.E ("Variable: " + variableName + " does not exist...");
 			}
 			return val;
 		}
 
-		public object SetVariable (string variableName, object val) {
+		public object SetVariable (string variableName, CSObject val) {
 			if (!_variables.ContainsKey (variableName)) {
 				CSLog.E ("Variable " + variableName + " does not exist...");
 				return null;

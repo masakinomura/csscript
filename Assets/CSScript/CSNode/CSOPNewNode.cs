@@ -109,7 +109,7 @@ namespace CSScript {
 				}
 			}
 
-			CSObject obj = CSObject.TempVariableObject (this, type, newInstance);
+			CSObject obj = CSObject.VariableObject (this, type, newInstance);
 			return obj;
 		}
 	}

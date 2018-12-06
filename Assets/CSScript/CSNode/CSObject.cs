@@ -4,18 +4,15 @@ using UnityEngine;
 
 namespace CSScript {
 	public enum ObjectType {
-		LOCAL_VARIABLE,
-		TEMP_VARIABLE,
+		VARIABLE,
 		IMMEDIATE,
 	}
-
 
 	public class CSObject {
 		CSNode _node;
 		object _object;
 
-		CSScope _scope;
-		string _selector;
+		string _name = "unknown";
 
 		System.Type _type;
 
@@ -23,66 +20,11 @@ namespace CSScript {
 
 		public ObjectType ObjectType { get { return _objectType; } }
 
-		public string Name {
-			get {
-				switch (_objectType) {
-					case ObjectType.LOCAL_VARIABLE:
-						return _selector;
-					case ObjectType.IMMEDIATE:
-						return "Immedidate";
-					default:
-						return "unknown";
-				}
-			}
-		}
-
-		public object Value {
-			get {
-				switch (_objectType) {
-					case ObjectType.LOCAL_VARIABLE:
-						return _scope.GetVariable (_selector);
-					case ObjectType.IMMEDIATE:
-						return _object;
-					case ObjectType.TEMP_VARIABLE:
-						return _object;
-					default:
-						return _object;
-				}
-			}
-
-			// set {
-			// 	switch (_objectType) {
-			// 		case ObjectType.VARIABLE:
-			// 			_scope.SetVariable (_nameInScope, value);
-			// 			break;
-			// 		case ObjectType.TYPE:
-			// 			CSLog.E (_node, "you cannot assign value to type");
-			// 			break;
-			// 		case ObjectType.IMMEDIATE:
-			// 			CSLog.E (_node, "you cannot assign value to immediate");
-			// 			break;
-			// 		default:
-			// 			_object = value;
-			// 			break;
-			// 	}
-			// }
-		}
-
+		public string Name { get { return _name; } }
+		public object Value { get { return _object; } }
 		public System.Type Type { get { return _type; } }
 
 		private CSObject () { }
-
-		public static CSObject LocalVariableObject (CSNode node, System.Type type, CSScope scope, string name) {
-			CSObject obj = new CSObject () {
-				_node = node,
-					_object = null,
-					_scope = scope,
-					_selector = name,
-					_type = type,
-					_objectType = ObjectType.LOCAL_VARIABLE,
-			};
-			return obj;
-		}
 
 		public T GetAs<T> () {
 			if (typeof (T) == typeof (object) || typeof (T) == Type) {
@@ -100,6 +42,17 @@ namespace CSScript {
 			}
 		}
 
+		public static CSObject LocalVariableObject (CSNode node, System.Type type, string name, object val) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = val,
+					_type = type,
+					_objectType = ObjectType.VARIABLE,
+					_name = name,
+			};
+			return obj;
+		}
+
 		public static CSObject ImmediateObject (CSNode node, System.Type type, object val) {
 			if (val == null) {
 				CSLog.E (node, "val cannot be null");
@@ -109,37 +62,19 @@ namespace CSScript {
 				_node = node,
 					_object = val,
 					_type = val.GetType (),
-					_scope = null,
-					_selector = null,
 					_objectType = ObjectType.IMMEDIATE,
+					_name = "immedidate",
 			};
 			return obj;
 		}
 
-		public static CSObject TempVariableObject (CSNode node, System.Type type, object val, params string[] selectors) {
+		public static CSObject VariableObject (CSNode node, System.Type type, object val, params string[] selectors) {
 			CSObject obj = new CSObject () {
 				_node = node,
 					_object = val,
-					_scope = null,
 					_type = type,
-					_selector = null,
-					_objectType = ObjectType.TEMP_VARIABLE,
-			};
-
-			if (selectors != null && selectors.Length > 0) {
-				CSLog.E (node, "implement me!!!");
-			}
-			return obj;
-		}
-
-		public static CSObject TempVariableObject (CSNode node, CSObject inObj, params string[] selectors) {
-			CSObject obj = new CSObject () {
-				_node = node,
-					_object = inObj.Value,
-					_scope = null,
-					_type = inObj.Type,
-					_selector = null,
-					_objectType = ObjectType.TEMP_VARIABLE,
+					_objectType = ObjectType.VARIABLE,
+					_name = "temp",
 			};
 
 			if (selectors != null && selectors.Length > 0) {
@@ -150,22 +85,13 @@ namespace CSScript {
 
 		public CSObject Assign (CSObject obj) {
 
-			if (ObjectType == ObjectType.LOCAL_VARIABLE) {
-
-				if (_type == null) {
-					_scope.SetVariable (_selector, obj.Value);
-					_type = obj.Type;
-				} else {
-					_scope.SetVariable (_selector, obj.GetAs (_type));
-				}
-
-			} else if (ObjectType == ObjectType.TEMP_VARIABLE) {
+			if (ObjectType == ObjectType.VARIABLE) {
 				if (_type == null) {
 					_object = obj.Value;
 					_type = obj.Type;
 				} else {
-					_object = obj.GetAs(_type);	
-				}								
+					_object = obj.GetAs (_type);
+				}
 			} else {
 				CSLog.E (_node, "cannot assign to " + _objectType.ToString ());
 			}
