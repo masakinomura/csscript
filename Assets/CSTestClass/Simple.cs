@@ -12,6 +12,8 @@ namespace CSScript.Test {
 			public int _a = 0;
 		}
 
+		static string Hoge { get; set; }
+
 		static string HELLO = "HELLO";
 		public int _a = 1;
 		public float _b = 2.0f;
