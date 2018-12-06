@@ -5,6 +5,13 @@ using UnityEngine;
 namespace CSScript.Test {
 	public class Simple {
 
+		public class Inner {
+			public Inner (int a) {
+				_a = a;
+			}
+			public int _a = 0;
+		}
+
 		static string HELLO = "HELLO";
 		public int _a = 1;
 		public float _b = 2.0f;
@@ -77,6 +84,16 @@ namespace CSScript.Test {
 	}
 
 	public class GenericOne<T> {
+
+		public class Inner<A, B> {
+			public Inner (A a, B b) {
+				_a = a;
+				_b = b;
+			}
+			public A _a;
+			public B _b;
+		}
+
 		public T _pa;
 
 		public int GetInt () {
@@ -118,4 +135,5 @@ namespace CSScript.Test {
 	public class GroundChildClass : ChildClass {
 
 	}
+
 }

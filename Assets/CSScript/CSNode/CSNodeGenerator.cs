@@ -171,7 +171,7 @@ namespace CSScript {
 			return node;
 		}
 
-		string GetTypeString (CSScriptParser.VartypeContext[] vartypes, int varCount) {
+		string GetTypeString (CSScriptParser.VartypeContext[] vartypes, int varCount, int typeStart) {
 			System.Text.StringBuilder sb = new System.Text.StringBuilder ();
 			System.Text.StringBuilder sbTemplate = new System.Text.StringBuilder ();
 
@@ -182,7 +182,11 @@ namespace CSScript {
 			for (int i = 0; i < varCount; ++i) {
 				CSScriptParser.VartypeContext next = vartypes[i];
 				if (i != 0) {
-					sb.Append ('.');
+					if (typeStart >= 0 && typeStart < i) {
+						sb.Append ('+');
+					} else {
+						sb.Append ('.');
+					}
 				}
 
 				sb.Append (ReflectionUtil.GetCleanNameIfPrimitive (next.NAME ().GetText ()));
@@ -295,34 +299,17 @@ namespace CSScript {
 			CSScriptParser.VartypeContext[] vartypes = context.vartype ();
 			int varLen = vartypes.Length;
 
-			bool isVariable = false;
-			List<string> selector = new List<string> ();
 			string currentTypeString = null;
 			System.Type currentType = null;
-			int typeCount = varLen;
+			int typeStart = -1;
 
 			for (int i = 0; i < varLen; ++i) {
 				CSScriptParser.VartypeContext next = vartypes[i];
 				string name = next.NAME ().GetText ();
-				if (i == 0) {
-					if (_state.HasVariable (name)) {
-						isVariable = true;
-						typeCount = i;
-					}
-				}
-
-				if (currentType != null) {
-					if (ReflectionUtil.HasField (currentType, name)) {
-						isVariable = true;
-						typeCount = i;
-					}
-				}
-
-				if (isVariable) {
-					selector.Add (name);
-				} else {
-					currentTypeString = GetTypeString (vartypes, varLen);
-					currentType = ReflectionUtil.GetType (currentTypeString);
+				currentTypeString = GetTypeString (vartypes, i + 1, typeStart);
+				currentType = ReflectionUtil.GetType (currentTypeString);
+				if (typeStart == -1 && currentType != null) {
+					typeStart = i;
 				}
 			}
 

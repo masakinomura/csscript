@@ -260,5 +260,19 @@ namespace CSScript.Test {
 			Assert.True (ReflectionUtil.HasField (s, "_s"));
 			Assert.False (ReflectionUtil.HasField (s, "_ssss"));
 		}
+
+		[Test]
+		public void TestGetTypeInnerClass () {
+			Assert.AreEqual (typeof (CSScript.Test.Simple.Inner), ReflectionUtil.GetType ("CSScript.Test.Simple+Inner"));
+		}
+
+		[Test]
+		public void TestGetTypeInnerGenericClass () {
+			Debug.Log (">" + typeof (CSScript.Test.GenericOne<int>.Inner<float, string>).AssemblyQualifiedName + "<");
+			Assert.AreEqual (typeof (CSScript.Test.GenericOne<int>.Inner<float, string>),
+				ReflectionUtil.GetType ("CSScript.Test.GenericOne`1+Inner`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]")
+			);
+		}
+
 	}
 }

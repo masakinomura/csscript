@@ -211,5 +211,22 @@ namespace CSScript.Test {
 			Assert.AreEqual (typeof (System.Collections.Generic.Dictionary<string, int>[]), obj.Type);
 			Assert.AreEqual (3, obj.GetAs<System.Collections.Generic.Dictionary<string, int>[]> ().Length);
 		}
+
+		[Test]
+		public void TestNewInnerClass () {
+			CSNode root = ParseScript ("CSScript.Test.Simple.Inner a = new CSScript.Test.Simple.Inner (33);");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (CSScript.Test.Simple.Inner), obj.Type);
+			Assert.AreEqual (33, obj.GetAs<CSScript.Test.Simple.Inner> ()._a);
+		}
+
+		[Test]
+		public void TestNewInnerGenericClass () {
+			CSNode root = ParseScript ("CSScript.Test.GenericOne<int>.Inner<float, string> a = new CSScript.Test.GenericOne<int>.Inner<float, string>(3.3f, \"hoge\");");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual (typeof (CSScript.Test.GenericOne<int>.Inner<float, string>), obj.Type);
+			Assert.AreEqual (3.3f, obj.GetAs<CSScript.Test.GenericOne<int>.Inner<float, string>> ()._a);
+			Assert.AreEqual ("hoge", obj.GetAs<CSScript.Test.GenericOne<int>.Inner<float, string>> ()._b);
+		}
 	}
 }
