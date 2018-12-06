@@ -97,34 +97,44 @@ namespace CSScript.Test {
 		[Test]
 		public void TestStaticVariable () {
 			CSNode root = ParseScript ("CSScript.Test.Simple.HELLO = \"HelloWorld\"; CSScript.Test.Simple.HELLO;");
-			CSObject obj = root.Evaluate();
-			Assert.AreEqual("HELLO", obj.Name);
-			Assert.AreEqual("HelloWorld", obj.GetAs<string>());
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("HELLO", obj.Name);
+			Assert.AreEqual ("HelloWorld", obj.GetAs<string> ());
 		}
 
 		[Test]
 		public void TestStaticProperty () {
 			CSNode root = ParseScript ("CSScript.Test.Simple.Hoge = \"HelloWorld\"; CSScript.Test.Simple.Hoge;");
-			CSObject obj = root.Evaluate();
-			Assert.AreEqual("Hoge", obj.Name);
-			Assert.AreEqual("HelloWorld", obj.GetAs<string>());
-		}		
-	
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("Hoge", obj.Name);
+			Assert.AreEqual ("HelloWorld", obj.GetAs<string> ());
+		}
+
 		[Test]
 		public void TestLocalVariable () {
 			CSNode root = ParseScript ("int a = 33; int b = a;");
-			CSObject obj = root.Evaluate();
-			Assert.AreEqual("b", obj.Name);
-			Assert.AreEqual(33, obj.GetAs<int>());
-		}			
-
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("b", obj.Name);
+			Assert.AreEqual (33, obj.GetAs<int> ());
+		}
 
 		[Test]
 		public void TestLocalVariable2 () {
 			CSNode root = ParseScript ("CSScript.Test.Simple s = new CSScript.Test.Simple(33); int b = s._a;");
-			CSObject obj = root.Evaluate();
-			Assert.AreEqual("b", obj.Name);
-			Assert.AreEqual(33, obj.GetAs<int>());
-		}			
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("b", obj.Name);
+			Assert.AreEqual (33, obj.GetAs<int> ());
+		}
+
+		[Test]
+		public void TestLocalVariable3 () {
+			CSNode root = ParseScript (
+				"CSScript.Test.Simple s = new CSScript.Test.Simple(33);\n" +
+				"CSScript.Test.GenericOne<CSScript.Test.Simple> g = new CSScript.Test.GenericOne<CSScript.Test.Simple>(s);\n" +
+				"int b = g._pa._a;");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("b", obj.Name);
+			Assert.AreEqual (33, obj.GetAs<int> ());
+		}
 	}
 }

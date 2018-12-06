@@ -96,6 +96,12 @@ namespace CSScript.Test {
 			public B _b;
 		}
 
+		public GenericOne () { }
+
+		public GenericOne (T pa) {
+			_pa = pa;
+		}
+
 		public T _pa;
 
 		public int GetInt () {

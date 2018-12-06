@@ -1,4 +1,8 @@
-﻿CSScript.Test.Simple s = new CSScript.Test.Simple(33); int b = s._a;
+﻿CSScript.Test.Simple s = new CSScript.Test.Simple(33);
+CSScript.Test.GenericOne<CSScript.Test.Simple> g = new CSScript.Test.GenericOne<CSScript.Test.Simple>(s);
+int b = g._pa._a;
+
+CSScript.Test.Simple s = new CSScript.Test.Simple(33); int b = s._a;
 
 123;
 
