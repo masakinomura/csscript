@@ -157,7 +157,6 @@ namespace CSScript.Test {
 
 		[Test]
 		public void NewInitializerDictionary () {
-			Debug.Log (typeof (Dictionary<string, Simple>));
 			CSNode root = ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>(){" +
 				"	{\"hoge\", new CSScript.Test.Simple (1)}," +
 				"	{\"moge\", new CSScript.Test.Simple (2)}," +
@@ -174,14 +173,12 @@ namespace CSScript.Test {
 
 		[Test]
 		public void TestParserError () {
-			Debug.Log (typeof (Dictionary<string, Simple>));
 			ParseScript ("var a = new  System.Collections.Generic.Dictionary<string, CSScript.Test.Simple>;");
 			LogAssert.Expect (LogType.Error, "[CSScript line: 1 col: 80] extraneous input ';' expecting {'(', '[', '.'}");
 		}
 
 		[Test]
 		public void NewInitializerClass () {
-			Debug.Log (typeof (Dictionary<string, Simple>));
 			CSNode root = ParseScript ("var a = new  CSScript.Test.Simple(){" +
 				"_a = 4," +
 				"_s = \"doge\"," +

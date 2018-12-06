@@ -35,11 +35,11 @@ namespace CSScript.Test {
 		}
 
 		public Simple (int a) {
-			CSLog.D ("int one");
+			//CSLog.D ("int one");
 			_a = a;
 		}
 		public Simple (float b) {
-			CSLog.D ("float one");
+			//CSLog.D ("float one");
 			_b = b;
 		}
 
@@ -49,13 +49,13 @@ namespace CSScript.Test {
 		}
 
 		public Simple (string s) {
-			CSLog.D ("sting one");
+			//CSLog.D ("sting one");
 			_s = s;
 
 		}
 
 		public Simple (Simple i) {
-			CSLog.D ("instance one");
+			//CSLog.D ("instance one");
 			_i = i;
 		}
 
@@ -86,6 +86,8 @@ namespace CSScript.Test {
 	}
 
 	public class GenericOne<T> {
+
+		public static Simple _s;
 
 		public class Inner<A, B> {
 			public Inner (A a, B b) {

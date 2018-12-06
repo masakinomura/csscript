@@ -353,6 +353,10 @@ namespace CSScript {
 				node._staticType = currentType;
 				node._type = ReflectionUtil.GetFieldType (currentType, varName);
 
+				if (node._type == null) {
+					CSLog.E (node, "type: " + currentType.FullName + " doesn't have: " + varName);
+				}
+
 				if (selectorLen == typeEnd + 1) {
 					return node;
 				} else {

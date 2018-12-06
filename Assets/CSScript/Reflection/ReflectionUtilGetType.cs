@@ -47,9 +47,9 @@ namespace CSScript {
 				}
 			}
 
-			if (type == null) {
-				CSLog.D ("type: " + typeName + " cannot be found");
-			}
+			// if (type == null) {
+			// 	CSLog.D ("type: " + typeName + " cannot be found");
+			// }
 
 			return type;
 		}

@@ -64,8 +64,7 @@ namespace CSScript.Test {
 
 		[Test]
 		public void TestGetTypeGenericSpecific () {
-			Debug.Log (typeof (List<int>).FullName);
-			Debug.Log (typeof (A<int, List<int>>.B<string>.C).FullName);
+
 			Assert.AreEqual (typeof (List<string>), ReflectionUtil.GetType ("System.Collections.Generic.List`1[[System.String]]", "System.Collections.Generic"));
 			Assert.AreEqual (typeof (List<int>), ReflectionUtil.GetType ("System.Collections.Generic.List`1[[System.Int32]]", "System.Collections.Generic"));
 
@@ -268,7 +267,6 @@ namespace CSScript.Test {
 
 		[Test]
 		public void TestGetTypeInnerGenericClass () {
-			Debug.Log (">" + typeof (CSScript.Test.GenericOne<int>.Inner<float, string>).AssemblyQualifiedName + "<");
 			Assert.AreEqual (typeof (CSScript.Test.GenericOne<int>.Inner<float, string>),
 				ReflectionUtil.GetType ("CSScript.Test.GenericOne`1+Inner`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]")
 			);

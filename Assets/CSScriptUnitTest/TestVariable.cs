@@ -103,6 +103,16 @@ namespace CSScript.Test {
 		}
 
 		[Test]
+		public void TestStaticVariable2 () {
+			CSNode root = ParseScript (
+				"CSScript.Test.GenericOne<int>._s = new CSScript.Test.Simple (34);" +
+				"int a = CSScript.Test.GenericOne<int>._s._a;");
+			CSObject obj = root.Evaluate ();
+			Assert.AreEqual ("a", obj.Name);
+			Assert.AreEqual (34, obj.GetAs<int> ());
+		}
+
+		[Test]
 		public void TestStaticProperty () {
 			CSNode root = ParseScript ("CSScript.Test.Simple.Hoge = \"HelloWorld\"; CSScript.Test.Simple.Hoge;");
 			CSObject obj = root.Evaluate ();
