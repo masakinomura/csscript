@@ -167,17 +167,23 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParameters([NotNull] CSScriptParser.ParametersContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.vartypes"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitVartypes([NotNull] CSScriptParser.VartypesContext context);
+	Result VisitType([NotNull] CSScriptParser.TypeContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.vartype"/>.
+	/// Visit a parse tree produced by <see cref="CSScriptParser.type_elements"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitVartype([NotNull] CSScriptParser.VartypeContext context);
+	Result VisitType_elements([NotNull] CSScriptParser.Type_elementsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CSScriptParser.type_element"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitType_element([NotNull] CSScriptParser.Type_elementContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.arraytype"/>.
 	/// </summary>
@@ -190,12 +196,6 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitSelector([NotNull] CSScriptParser.SelectorContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="CSScriptParser.generictype"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitGenerictype([NotNull] CSScriptParser.GenerictypeContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CSScriptParser.generic_parameters"/>.
 	/// </summary>

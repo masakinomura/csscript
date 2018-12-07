@@ -13,35 +13,34 @@ line: (expression+ ';'); // | block;
 block: CURLY_BRACE_START line* CURLY_BRACE_END;
 
 expression:
-	'(' expression ')'										# parenthesisExp
-	| NEW vartypes (parameters | array_index) initializer?	# newExp
-	| (VAR | (vartypes arraytype?)) NAME					# varDeclExp
-	| USING namespace										# usingNamespaceExp
-	| expression DOT expression								# dotExp
-	| selector ('.' selector)*								# selectorExp
-	| NAME generic_parameters? parameters					# funcExp
-	| expression array_index								# arrayIndexExp
-	| expression OP_ASSIGN expression						# assignmentExp
-	| LONG													# longAtomExp
-	| ULONG													# ulongAtomExp
-	| INT													# intAtomExp
-	| UINT													# uintAtomExp
-	| DECIMAL												# doubleAtomExp
-	| DOUBLE												# doubleAtomExp
-	| FLOAT													# floatAtomExp
-	| STRING												# stringAtomExp;
+	'(' expression ')'											# parenthesisExp
+	| NEW type_elements (parameters | array_index) initializer?	# newExp
+	| (VAR | type) NAME											# varDeclExp
+	| USING namespace											# usingNamespaceExp
+	| expression DOT expression									# dotExp
+	| selector ('.' selector)*									# selectorExp
+	| NAME generic_parameters? parameters						# funcExp
+	| expression array_index									# arrayIndexExp
+	| expression OP_ASSIGN expression							# assignmentExp
+	| LONG														# longAtomExp
+	| ULONG														# ulongAtomExp
+	| INT														# intAtomExp
+	| UINT														# uintAtomExp
+	| DECIMAL													# doubleAtomExp
+	| DOUBLE													# doubleAtomExp
+	| FLOAT														# floatAtomExp
+	| STRING													# stringAtomExp;
 
 parameters: '(' ')' | '(' expression (',' expression)* ')';
 
-vartypes: vartype ('.' vartype)*;
-vartype: NAME generic_parameters?;
+type: type_elements arraytype?;
+type_elements: type_element ('.' type_element)*;
+type_element: NAME generic_parameters?;
 arraytype: '[' ']';
 
 selector: NAME (generic_parameters)?;
 
-generictype: vartypes arraytype?;
-
-generic_parameters: '<' generictype (',' generictype)* '>';
+generic_parameters: '<' type (',' type)* '>';
 
 namespace: NAME (. NAME)*;
 array_index: '[' expression? ']';

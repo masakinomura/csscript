@@ -33,12 +33,12 @@ namespace CSScript {
 			}
 
 			object newInstance = null;
-			System.Type type = null;
+			System.Type type = NewType._type;
 			if (IsArray) {
-				type = NewType._arrayType;
+				System.Type innerType = type.GetElementType();
 				int count = ArrayIndex.EvaluateIndex (null, null);
 				if (ArrayInitializer != null) {
-					object[] elements = ArrayInitializer.EvaluateElements (state, curObj, NewType._type);
+					object[] elements = ArrayInitializer.EvaluateElements (state, curObj, innerType);
 					int len = elements.Length;
 					int allocCount = (len > count? len : count);
 					newInstance = System.Activator.CreateInstance (type, allocCount);
@@ -66,7 +66,6 @@ namespace CSScript {
 					}
 				}
 
-				type = NewType._type;
 				if (parameters == null) {
 					newInstance = System.Activator.CreateInstance (type);
 				} else {
