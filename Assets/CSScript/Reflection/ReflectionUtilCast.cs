@@ -42,7 +42,7 @@ namespace CSScript {
 				_dynamicCasts[key] = meth;
 			}
 
-			if (meth == null) throw new InvalidCastException ("Invalid Cast.");
+			if (meth == null) throw new InvalidCastException ("Invalid Cast from " + st.ToString () + " to " + dt.ToString ());
 
 			return (T) meth.Invoke (null, new object[] { o });
 		}
