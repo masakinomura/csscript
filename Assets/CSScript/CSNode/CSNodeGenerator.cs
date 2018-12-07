@@ -346,31 +346,35 @@ namespace CSScript {
 			}
 
 			if (currentType != null) {
-				if (selectorLen <= typeEnd) {
-					CSLog.E (context.Start.Line, context.Start.Column, "Type cannot be a variable");
-					return null;
-				}
-
-				CSStaticVariableNode node = new CSStaticVariableNode (context.Start.Line, context.Start.Column);
-				string varName = selectors[typeEnd].NAME ().GetText ();
-				node._variableName = varName;
-				node._staticType = currentType;
-				node._type = ReflectionUtil.GetFieldType (currentType, varName);
-
-				if (node._type == null) {
-					CSLog.E (node, "type: " + currentType.FullName + " doesn't have: " + varName);
-				}
-
-				if (selectorLen == typeEnd + 1) {
+				if (selectorLen == typeEnd) {
+					CSTypeNode node = new CSTypeNode (context.Start.Line, context.Start.Column);
+					node._typeString = currentTypeString;
+					node._type = currentType;
+					node._arrayType = null;
+					node._assemblyName = currentType.Assembly.GetCleanName ();
 					return node;
 				} else {
-					CSSelectorNode selectorNode = new CSSelectorNode (context.Start.Line, context.Start.Column);
-					selectorNode._selectors = GetSelectorStrings (selectors, typeEnd + 1);
-					CSOPDotNode dotNode = new CSOPDotNode (context.Start.Line, context.Start.Column);
-					dotNode._children = new CSNode[2];
-					dotNode._children[0] = node;
-					dotNode._children[1] = selectorNode;
-					return dotNode;
+					CSStaticVariableNode node = new CSStaticVariableNode (context.Start.Line, context.Start.Column);
+					string varName = selectors[typeEnd].NAME ().GetText ();
+					node._variableName = varName;
+					node._staticType = currentType;
+					node._type = ReflectionUtil.GetFieldType (currentType, varName);
+
+					if (node._type == null) {
+						CSLog.E (node, "type: " + currentType.FullName + " doesn't have: " + varName);
+					}
+
+					if (selectorLen == typeEnd + 1) {
+						return node;
+					} else {
+						CSSelectorNode selectorNode = new CSSelectorNode (context.Start.Line, context.Start.Column);
+						selectorNode._selectors = GetSelectorStrings (selectors, typeEnd + 1);
+						CSOPDotNode dotNode = new CSOPDotNode (context.Start.Line, context.Start.Column);
+						dotNode._children = new CSNode[2];
+						dotNode._children[0] = node;
+						dotNode._children[1] = selectorNode;
+						return dotNode;
+					}
 				}
 			} else {
 				CSSelectorNode node = new CSSelectorNode (context.Start.Line, context.Start.Column);
@@ -415,6 +419,10 @@ namespace CSScript {
 			node._children[1] = Visit (context.array_index ());
 
 			return node;
+		}
+
+		public override CSNode VisitFuncExp (CSScriptParser.FuncExpContext context) {
+			return VisitChildren (context);
 		}
 
 	}
