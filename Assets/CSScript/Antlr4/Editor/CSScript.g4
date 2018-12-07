@@ -70,9 +70,12 @@ dictionary_initializer_element:
  */
 fragment LOWERCASE: [a-z];
 fragment UPPERCASE: [A-Z];
+fragment LETTER: (LOWERCASE | UPPERCASE | '_');
 fragment WORD: (LOWERCASE | UPPERCASE | '_')+;
 fragment ESCAPED_QUOTE: '\\"';
+fragment NUMBER: [0-9];
 fragment FNUMBER: [0-9]+ ('.' [0-9]+)?;
+fragment AT: '@';
 
 EOL: ';';
 VAR: 'var';
@@ -92,8 +95,8 @@ CURLY_BRACE_END: '}';
 COMMA: ',';
 DOT: '.';
 
-NAME: WORD (WORD | [0-9])*;
-INT: [0-9]+;
+NAME: AT? LETTER (LETTER | NUMBER)*;
+INT: NUMBER+;
 UINT: INT ('u' | 'U');
 LONG: INT ('l' | 'L');
 ULONG: INT ('ul' | 'UL' | 'uL' | 'Ul');
