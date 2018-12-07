@@ -13,14 +13,14 @@ line: (expression+ ';'); // | block;
 block: CURLY_BRACE_START line* CURLY_BRACE_END;
 
 expression:
-	NEW vartypes (parameters | array_index) initializer?	# newExp
+	'(' expression ')'										# parenthesisExp
+	| NEW vartypes (parameters | array_index) initializer?	# newExp
 	| (VAR | (vartypes arraytype?)) NAME					# varDeclExp
 	| USING namespace										# usingNamespaceExp
 	| expression DOT expression								# dotExp
 	| selector ('.' selector)*								# selectorExp
 	| NAME generic_parameters? parameters					# funcExp
 	| expression array_index								# arrayIndexExp
-	| '(' expression ')'									# parenthesisExp
 	| expression OP_ASSIGN expression						# assignmentExp
 	| LONG													# longAtomExp
 	| ULONG													# ulongAtomExp
@@ -70,7 +70,7 @@ fragment LOWERCASE: [a-z];
 fragment UPPERCASE: [A-Z];
 fragment WORD: (LOWERCASE | UPPERCASE | '_')+;
 fragment ESCAPED_QUOTE: '\\"';
-fragment FNUMBER: [0-9]+ ('\.' [0-9]+)?;
+fragment FNUMBER: [0-9]+ ('.' [0-9]+)?;
 
 EOL: ';';
 OP_MUL: '*';
