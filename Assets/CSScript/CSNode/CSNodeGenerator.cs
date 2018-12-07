@@ -328,21 +328,20 @@ namespace CSScript {
 			return strings.ToArray ();
 		}
 
-		public override CSNode VisitSelectorExp (CSScriptParser.SelectorExpContext context) {
-			CSScriptParser.SelectorContext[] selectors = context.selector ();
+		CSNode VisitSelectors (CSScriptParser.SelectorContext[] selectors, int line, int col) {
 			int selectorLen = selectors.Length;
 
 			string firstName = selectors[0].NAME ().GetText ();
 			if (_state.HasVariable (firstName)) {
-				CSLocalVariableNode node = new CSLocalVariableNode (context.Start.Line, context.Start.Column);
+				CSLocalVariableNode node = new CSLocalVariableNode (line, col);
 				node._declaration = false;
 				node._variableName = firstName;
 				if (selectorLen == 1) {
 					return node;
 				} else {
-					CSSelectorNode selectorNode = new CSSelectorNode (context.Start.Line, context.Start.Column);
+					CSSelectorNode selectorNode = new CSSelectorNode (line, col);
 					selectorNode._selectors = GetSelectorStrings (selectors, 1);
-					CSOPDotNode dotNode = new CSOPDotNode (context.Start.Line, context.Start.Column);
+					CSOPDotNode dotNode = new CSOPDotNode (line, col);
 					dotNode._children = new CSNode[2];
 					dotNode._children[0] = node;
 					dotNode._children[1] = selectorNode;
@@ -373,14 +372,14 @@ namespace CSScript {
 			}
 
 			if (currentType != null) {
-				if (selectorLen == typeEnd) {
-					CSTypeNode node = new CSTypeNode (context.Start.Line, context.Start.Column);
+				if (typeEnd == 0) {
+					CSTypeNode node = new CSTypeNode (line, col);
 					node._typeString = currentTypeString;
 					node._type = currentType;
 					node._assemblyName = currentType.Assembly.GetCleanName ();
 					return node;
 				} else {
-					CSStaticVariableNode node = new CSStaticVariableNode (context.Start.Line, context.Start.Column);
+					CSStaticVariableNode node = new CSStaticVariableNode (line, col);
 					string varName = selectors[typeEnd].NAME ().GetText ();
 					node._variableName = varName;
 					node._staticType = currentType;
@@ -393,9 +392,9 @@ namespace CSScript {
 					if (selectorLen == typeEnd + 1) {
 						return node;
 					} else {
-						CSSelectorNode selectorNode = new CSSelectorNode (context.Start.Line, context.Start.Column);
+						CSSelectorNode selectorNode = new CSSelectorNode (line, col);
 						selectorNode._selectors = GetSelectorStrings (selectors, typeEnd + 1);
-						CSOPDotNode dotNode = new CSOPDotNode (context.Start.Line, context.Start.Column);
+						CSOPDotNode dotNode = new CSOPDotNode (line, col);
 						dotNode._children = new CSNode[2];
 						dotNode._children[0] = node;
 						dotNode._children[1] = selectorNode;
@@ -403,11 +402,14 @@ namespace CSScript {
 					}
 				}
 			} else {
-				CSSelectorNode node = new CSSelectorNode (context.Start.Line, context.Start.Column);
+				CSSelectorNode node = new CSSelectorNode (line, col);
 				node._selectors = GetSelectorStrings (selectors, 0);
 				return node;
 			}
+		}
 
+		public override CSNode VisitSelectorExp (CSScriptParser.SelectorExpContext context) {
+			return VisitSelectors (context.selector (), context.Start.Line, context.Start.Column);
 		}
 
 		public override CSNode VisitDotExp (CSScriptParser.DotExpContext context) {
@@ -447,15 +449,15 @@ namespace CSScript {
 			return node;
 		}
 
-		System.Type[] GetGenericParameters (CSScriptParser.Generic_parametersContext context) {
+		CSTypeNode[] GetGenericParameters (CSScriptParser.Generic_parametersContext context) {
 
 			CSScriptParser.TypeContext[] genericTypes = context.type ();
 			int tempVarCount = genericTypes.Length;
-			System.Type[] types = new System.Type[tempVarCount];
+			CSTypeNode[] types = new CSTypeNode[tempVarCount];
 
 			for (int i = 0; i < tempVarCount; ++i) {
 				CSTypeNode child = VisitType (genericTypes[i]) as CSTypeNode;
-				types[i] = child._type;
+				types[i] = child;
 			}
 
 			return types;
@@ -464,8 +466,9 @@ namespace CSScript {
 		public override CSNode VisitFuncExp (CSScriptParser.FuncExpContext context) {
 			CSFunctionNode node = new CSFunctionNode (context.Start.Line, context.Start.Column);
 			node._functionName = context.NAME ().GetText ();
-			node._children = new CSNode[1];
-			node._children[0] = Visit (context.parameters ());
+			node._children = new CSNode[2];
+			node._children[0] = VisitSelectors (context.selector (), context.Start.Line, context.Start.Column);
+			node._children[1] = Visit (context.parameters ());
 
 			CSScriptParser.Generic_parametersContext generic = context.generic_parameters ();
 			if (generic != null) {

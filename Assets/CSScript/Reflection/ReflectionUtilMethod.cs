@@ -17,6 +17,9 @@ namespace CSScript {
 	public partial class ReflectionUtil {
 
 		object[] CastArgsIfNeeded (ParameterInfo[] parameters, object[] args) {
+			if (args == null) {
+				return null;
+			}
 			int len = args.Length;
 			for (int i = 0; i < len; ++i) {
 				if (args[i] is NullWithType) {
@@ -28,7 +31,10 @@ namespace CSScript {
 			return args;
 		}
 
-		object _CallMethod (object target, string methodName, BindingFlags bindingFlags, Type[] genericTypes, params object[] args) {
+		object _CallMethod (object target, string methodName, BindingFlags bindingFlags, Type[] genericTypes, out System.Type retType, params object[] args) {
+			if (args == null) {
+				args = new object[0];
+			}
 			Type targetType;
 			bool isStatic;
 			if (target is Type) {
@@ -45,8 +51,11 @@ namespace CSScript {
 
 			MethodInfo method = _GetCallableMethod (targetType, methodName, bindingFlags, genericTypes, args);
 			if (method == null) {
-				throw new System.MissingMethodException (methodName + " cannot be found..");
+				throw new System.MissingMethodException ((isStatic? "static": "instance") + " method: " + methodName + " cannot be found in " + targetType.ToString ());
 			}
+
+			retType = method.ReturnType;
+
 			if (isStatic) {
 				return method.Invoke (null, CastArgsIfNeeded (method.GetParameters (), args));
 			} else {

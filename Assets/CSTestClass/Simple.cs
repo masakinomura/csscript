@@ -75,6 +75,10 @@ namespace CSScript.Test {
 			_i = s;
 		}
 
+		public static string StaticMethod (string arg) {
+			return arg;
+		}
+
 		public G GetG<G> (G g) {
 			return g;
 		}

@@ -1,4 +1,10 @@
-﻿System.Collections.Generic.Dictionary<string, Simple> aa = new System.Collections.Generic.Dictionary<string, Simple> () { 
+﻿int a = (b.c + d.e) + a.func();
+
+string a = CSScript.Test.Simple.StaticMethod ("moge");
+
+int a = CSScript.Test.Simple.GetInt();
+
+System.Collections.Generic.Dictionary<string, Simple> aa = new System.Collections.Generic.Dictionary<string, Simple> () { 
 	{ "hoge", new Simple (33) }, 
 	{ "moge", new Simple (44) }, 
 };

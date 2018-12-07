@@ -84,6 +84,13 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFuncExp([NotNull] CSScriptParser.FuncExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>plusExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPlusExp([NotNull] CSScriptParser.PlusExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>selectorExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
 	/// </summary>
@@ -97,6 +104,13 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAssignmentExp([NotNull] CSScriptParser.AssignmentExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>parenthesisaExp</c>
+	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParenthesisaExp([NotNull] CSScriptParser.ParenthesisaExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>stringAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
@@ -139,13 +153,6 @@ public interface ICSScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitDoubleAtomExp([NotNull] CSScriptParser.DoubleAtomExpContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>parenthesisExp</c>
-	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitParenthesisExp([NotNull] CSScriptParser.ParenthesisExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>uintAtomExp</c>
 	/// labeled alternative in <see cref="CSScriptParser.expression"/>.
