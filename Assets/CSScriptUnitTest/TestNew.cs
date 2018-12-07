@@ -225,5 +225,13 @@ namespace CSScript.Test {
 			Assert.AreEqual (3.3f, obj.GetAs<CSScript.Test.GenericOne<int>.Inner<float, string>> ()._a);
 			Assert.AreEqual ("hoge", obj.GetAs<CSScript.Test.GenericOne<int>.Inner<float, string>> ()._b);
 		}
+
+		[Test]
+		public void TestNewGenericWithArrayType () {
+			CSNode root = ParseScript ("CSScript.Test.GenericOne<int[]> a = new CSScript.Test.GenericOne<int[]>(new int[] {1,2,3});");
+			CSObject obj = root.Evaluate ();
+
+			Assert.AreEqual (typeof (CSScript.Test.GenericOne<int[]>), obj.Type);
+		}
 	}
 }

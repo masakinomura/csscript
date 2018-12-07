@@ -89,7 +89,7 @@ namespace CSScript {
 			return obj;
 		}
 
-		public static CSObject VariableObject (CSNode node, System.Type type, object parent, string name) {
+		public static CSObject InstanceVariableObject (CSNode node, System.Type type, object parent, string name) {
 			CSObject obj = new CSObject () {
 				_node = node,
 					_object = parent,

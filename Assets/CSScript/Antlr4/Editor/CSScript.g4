@@ -39,7 +39,9 @@ arraytype: '[' ']';
 
 selector: NAME (generic_parameters)?;
 
-generic_parameters: '<' vartypes (',' vartypes)* '>';
+generictype: vartypes arraytype?;
+
+generic_parameters: '<' generictype (',' generictype)* '>';
 
 namespace: NAME (. NAME)*;
 array_index: '[' expression? ']';

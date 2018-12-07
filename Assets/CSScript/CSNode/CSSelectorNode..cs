@@ -35,7 +35,7 @@ namespace CSScript {
 			string variableName = _selectors[len - 1];
 			System.Type type = ReflectionUtil.GetFieldType (obj, variableName);
 
-			return CSObject.VariableObject (this, type, obj, variableName);
+			return CSObject.InstanceVariableObject (this, type, obj, variableName);
 		}
 	}
 

@@ -227,8 +227,8 @@ namespace CSScript {
 
 				CSScriptParser.Generic_parametersContext genericParameters = getGenericParams (next);
 				if (genericParameters != null) {
-					CSScriptParser.VartypesContext[] templatetypes = genericParameters.vartypes ();
-					int tempVarCount = templatetypes.Length;
+					CSScriptParser.GenerictypeContext[] genericTypes = genericParameters.generictype ();
+					int tempVarCount = genericTypes.Length;
 					if (tempVarCount > 0) {
 						if (isThereTemplate) {
 							sbTemplate.Append (',');
@@ -243,8 +243,12 @@ namespace CSScript {
 							if (j != 0) {
 								sbTemplate.Append ("], [");
 							}
-							CSTypeNode child = VisitVartypes (templatetypes[j]) as CSTypeNode;
-							sbTemplate.Append (child._typeString);
+							CSTypeNode child = VisitVartypes (genericTypes[j].vartypes ()) as CSTypeNode;
+							if (genericTypes[j].arraytype () != null) {
+								sbTemplate.Append (child._arrayTypeString);
+							} else {
+								sbTemplate.Append (child._typeString);
+							}
 						}
 						sbTemplate.Append (']');
 					}
@@ -286,6 +290,7 @@ namespace CSScript {
 			node._type = currentType;
 			node._arrayType = ReflectionUtil.GetType (currentTypeString + "[]");
 			node._typeString = currentType.AssemblyQualifiedName;
+			node._arrayTypeString = node._arrayType.AssemblyQualifiedName;
 			node._assemblyName = currentType.Assembly.GetCleanName ();
 			//CSLog.D ("full name: " + node._typeString + " in the assembly: " + node._assemblyName);
 
@@ -351,6 +356,7 @@ namespace CSScript {
 					node._typeString = currentTypeString;
 					node._type = currentType;
 					node._arrayType = null;
+					node._arrayTypeString = null;
 					node._assemblyName = currentType.Assembly.GetCleanName ();
 					return node;
 				} else {
@@ -421,9 +427,35 @@ namespace CSScript {
 			return node;
 		}
 
-		public override CSNode VisitFuncExp (CSScriptParser.FuncExpContext context) {
-			return VisitChildren (context);
+		System.Type[] GetGenericParameters (CSScriptParser.Generic_parametersContext context) {
+
+			CSScriptParser.GenerictypeContext[] genericTypes = context.generictype ();
+			int tempVarCount = genericTypes.Length;
+			System.Type[] types = new System.Type[tempVarCount];
+
+			for (int i = 0; i < tempVarCount; ++i) {
+				CSTypeNode child = VisitVartypes (genericTypes[i].vartypes ()) as CSTypeNode;
+				if (genericTypes[i].arraytype () != null) {
+					types[i] = child._arrayType;
+				} else {
+					types[i] = child._type;
+				}
+			}
+
+			return types;
 		}
 
+		public override CSNode VisitFuncExp (CSScriptParser.FuncExpContext context) {
+			CSFunctionNode node = new CSFunctionNode (context.Start.Line, context.Start.Column);
+			node._functionName = context.NAME ().GetText ();
+			node._children = new CSNode[1];
+			node._children[0] = Visit (context.parameters ());
+
+			CSScriptParser.Generic_parametersContext generic = context.generic_parameters ();
+			if (generic != null) {
+				node._genericParameters = GetGenericParameters (generic);
+			}
+			return node;
+		}
 	}
 }
