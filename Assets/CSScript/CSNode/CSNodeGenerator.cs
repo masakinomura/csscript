@@ -278,6 +278,10 @@ namespace CSScript {
 				}
 			}
 
+			if (currentType == null) {
+				CSLog.E (context.Start.Line, context.Start.Column, "unknown type: " + currentTypeString);
+			}
+
 			CSTypeNode node = new CSTypeNode (context.Start.Line, context.Start.Column);
 			node._type = currentType;
 			node._arrayType = ReflectionUtil.GetType (currentTypeString + "[]");
@@ -377,15 +381,17 @@ namespace CSScript {
 		}
 
 		public override CSNode VisitDotExp (CSScriptParser.DotExpContext context) {
+			CSOPDotNode node = new CSOPDotNode (context.Start.Line, context.Start.Column);
 			CSScriptParser.ExpressionContext[] expressions = context.expression ();
 			if (expressions == null || expressions.Length != 2) {
 				CSLog.E (context.Start.Line, context.Start.Column, "invalid # of children...");
 				return null;
 			}
-			CSNode left = Visit (expressions[0]);
-			CSNode right = Visit (expressions[1]);
+			node._children = new CSNode[2];
+			node._children[0] = Visit (expressions[0]);
+			node._children[1] = Visit (expressions[1]);
 
-			return null;
+			return node;
 		}
 
 		public override CSNode VisitArray_index (CSScriptParser.Array_indexContext context) {
@@ -397,6 +403,16 @@ namespace CSScript {
 			} else {
 				node._children = null;
 			}
+
+			return node;
+		}
+
+		public override CSNode VisitArrayIndexExp (CSScriptParser.ArrayIndexExpContext context) {
+			CSOPArrayIndexNode node = new CSOPArrayIndexNode (context.Start.Line, context.Start.Column);
+
+			node._children = new CSNode[2];
+			node._children[0] = Visit (context.expression ());
+			node._children[1] = Visit (context.array_index ());
 
 			return node;
 		}

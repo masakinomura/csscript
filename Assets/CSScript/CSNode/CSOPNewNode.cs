@@ -36,7 +36,7 @@ namespace CSScript {
 			System.Type type = null;
 			if (IsArray) {
 				type = NewType._arrayType;
-				int count = ArrayIndex.EvaluateIndex ();
+				int count = ArrayIndex.EvaluateIndex (null, null);
 				if (ArrayInitializer != null) {
 					object[] elements = ArrayInitializer.EvaluateElements (state, curObj, NewType._type);
 					int len = elements.Length;
@@ -105,6 +105,24 @@ namespace CSScript {
 					for (int i = 0; i < len; ++i) {
 						KeyValuePair<string, object> element = classInitializer.Evaluate (state, curObj, i, newInstance);
 						ReflectionUtil.Set (newInstance, element.Key, element.Value);
+					}
+				}
+
+				CSArrayInitializerNode arrayInitializer = ArrayInitializer;
+				IList list = newInstance as IList;
+				if (ArrayInitializer != null) {
+					if (list == null) {
+						CSLog.E ("array initializer cannot used for : " + type.ToString ());
+					} else {
+						System.Type elementType = ReflectionUtil.GetIListElementType (NewType._type);
+						if (elementType == null) {
+							CSLog.E ("array initializer cannot used for : " + type.ToString ());
+						}
+						object[] elements = ArrayInitializer.EvaluateElements (state, curObj, elementType);
+						int len = elements.Length;
+						for (int i = 0; i < len; ++i) {
+							list.Add (elements[i]);
+						}
 					}
 				}
 			}

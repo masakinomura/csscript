@@ -140,6 +140,21 @@ namespace CSScript {
 			return _inst._CallMethod (target, methodName, bindingFlags, genericTypes, args);
 		}
 
+		public static Type GetIListElementType (Type type) {
+			System.Type elementType = type.GetElementType ();
+			if (elementType == null && type.IsGenericType) {
+				elementType = type.GenericTypeArguments[0];
+			}
+			return elementType;
+		}
+
+		public static Type GetIDictionaryElementType (Type type) {
+			if (type.IsGenericType && type.GenericTypeArguments.Length >= 2) {
+				return type.GenericTypeArguments[1];
+			}
+			return typeof (object);
+		}
+
 		#endregion
 
 		public class AsmInfo {

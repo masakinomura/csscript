@@ -9,6 +9,8 @@ namespace CSScript {
 		STATIC,
 		TEMP,
 		LOCAL,
+		ARRAY,
+		DICTIONARY,
 	}
 
 	public class CSObject {
@@ -23,6 +25,8 @@ namespace CSScript {
 
 		ObjectType _objectType;
 
+		int _arrayIndex;
+
 		public ObjectType ObjectType { get { return _objectType; } }
 
 		public string Name { get { return _name; } }
@@ -30,6 +34,14 @@ namespace CSScript {
 		public System.Type Type { get { return _type; } }
 
 		private CSObject () { }
+
+		public bool CanCast<T> () {
+			return ReflectionUtil.CanCast (typeof (T), Value);
+		}
+
+		public bool CanCast (System.Type type) {
+			return ReflectionUtil.CanCast (type, Value);
+		}
 
 		public T GetAs<T> () {
 			if (typeof (T) == typeof (object) || typeof (T) == Type) {
@@ -55,6 +67,7 @@ namespace CSScript {
 					_objectType = ObjectType.LOCAL,
 					_name = name,
 					_staticType = null,
+					_arrayIndex = -1,
 			};
 			return obj;
 		}
@@ -71,6 +84,7 @@ namespace CSScript {
 					_objectType = ObjectType.IMMEDIATE,
 					_name = "immedidate",
 					_staticType = null,
+					_arrayIndex = -1,
 			};
 			return obj;
 		}
@@ -83,6 +97,7 @@ namespace CSScript {
 					_objectType = ObjectType.VARIABLE,
 					_name = name,
 					_staticType = null,
+					_arrayIndex = -1,
 			};
 
 			return obj;
@@ -96,6 +111,7 @@ namespace CSScript {
 					_objectType = ObjectType.TEMP,
 					_name = "temp",
 					_staticType = null,
+					_arrayIndex = -1,
 			};
 
 			return obj;
@@ -109,6 +125,35 @@ namespace CSScript {
 					_objectType = ObjectType.STATIC,
 					_name = name,
 					_staticType = staticType,
+					_arrayIndex = -1,
+			};
+
+			return obj;
+		}
+
+		public static CSObject ArrayVariableObject (CSNode node, System.Type type, object array, int index) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = array,
+					_type = type,
+					_objectType = ObjectType.ARRAY,
+					_name = "array",
+					_staticType = null,
+					_arrayIndex = index,
+			};
+
+			return obj;
+		}
+
+		public static CSObject DictionaryVariableObject (CSNode node, System.Type type, object dictionary, string name) {
+			CSObject obj = new CSObject () {
+				_node = node,
+					_object = dictionary,
+					_type = type,
+					_objectType = ObjectType.DICTIONARY,
+					_name = name,
+					_staticType = null,
+					_arrayIndex = -1,
 			};
 
 			return obj;
@@ -121,6 +166,10 @@ namespace CSScript {
 						return ReflectionUtil.Get (_object, _name);
 					case ObjectType.STATIC:
 						return ReflectionUtil.Get (_staticType, _name);
+					case ObjectType.ARRAY:
+						return ((IList) _object) [_arrayIndex];
+					case ObjectType.DICTIONARY:
+						return ((IDictionary) _object) [_name];
 					case ObjectType.TEMP:
 					case ObjectType.LOCAL:
 					case ObjectType.IMMEDIATE:
@@ -141,6 +190,14 @@ namespace CSScript {
 				case ObjectType.STATIC:
 					ReflectionUtil.Set (_staticType, _name, obj.GetAs (_type));
 					break;
+				case ObjectType.ARRAY:
+					IList array = (IList) _object;
+					array[_arrayIndex] = obj.GetAs (_type);
+					break;
+				case ObjectType.DICTIONARY:
+					IDictionary dictionary = (IDictionary) _object;
+					dictionary[_name] = obj.GetAs (_type);
+					break;					
 				case ObjectType.TEMP:
 				case ObjectType.LOCAL:
 					if (_type == null) {

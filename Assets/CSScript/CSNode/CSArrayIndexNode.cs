@@ -19,8 +19,12 @@ namespace CSScript {
 			}
 		}
 
-		public int EvaluateIndex () {
-			return Evaluate ().GetAs<int> ();
+		public int EvaluateIndex (CSState state, CSObject curObj) {
+			return Evaluate (state, curObj).GetAs<int> ();
+		}
+
+		public string EvaluateKey (CSState state, CSObject curObj) {
+			return Evaluate (state, curObj).GetAs<string> ();
 		}
 	}
 }

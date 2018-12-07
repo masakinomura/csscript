@@ -1,4 +1,11 @@
-﻿CSScript.Test.Simple s = new CSScript.Test.Simple(33);
+﻿System.Collections.Generic.Dictionary<string, Simple> aa = new System.Collections.Generic.Dictionary<string, Simple> () { 
+	{ "hoge", new Simple (33) }, 
+	{ "moge", new Simple (44) }, 
+};
+int a = aa["moge"]._a;
+
+
+pCSScript.Test.Simple s = new CSScript.Test.Simple(33);
 CSScript.Test.GenericOne<CSScript.Test.Simple> g = new CSScript.Test.GenericOne<CSScript.Test.Simple>(s);
 int b = g._pa._a;
 
